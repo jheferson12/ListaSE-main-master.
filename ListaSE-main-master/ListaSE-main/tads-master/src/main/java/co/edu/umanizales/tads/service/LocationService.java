@@ -1,4 +1,6 @@
 package co.edu.umanizales.tads.service;
+import co.edu.umanizales.tads.exception.ListSEException;
+import co.edu.umanizales.tads.model.Node;
 import lombok.Data;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
@@ -39,6 +41,21 @@ public class LocationService {
         }
 
 
+    public Location getLocationByCode(String codeLocation) throws ListSEException {
+        if (codeLocation == null || codeLocation.isEmpty()) {
+            throw new IllegalArgumentException("El código de ubicación no puede ser nulo o vacío");
+        }
+        Node head=null;
+        Node current = head;
+        while (current != null) {
+            Location currentLocation = current.getData().getLocation();
+            if (currentLocation != null && currentLocation.getCode().equals(codeLocation)) {
+                return currentLocation;
+            }
+            current = current.getNext();
+        }
+        throw new ListSEException("No se encontró ninguna ubicación con el código proporcionado");
+    }
 
 }
 

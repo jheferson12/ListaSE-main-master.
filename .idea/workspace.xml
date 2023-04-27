@@ -4,7 +4,21 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3d9acaf8-3970-42ce-9807-f484eb5c0667" name="Changes" comment="" />
+    <list default="true" id="3d9acaf8-3970-42ce-9807-f484eb5c0667" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/ListaSE-main-master/ListaSE-main/tads-master/src/main/java/co/edu/umanizales/tads/controller/dto/LocationGenderQuantityDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ListaSE-main-master/ListaSE-main/tads-master/src/main/java/co/edu/umanizales/tads/controller/dto/ReportKidsLocationGenderDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ListaSE-main-master/ListaSE-main/tads-master/src/main/java/co/edu/umanizales/tads/exception/ListSEException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ListaSE-main-master/ListaSE-main/tads-master/src/main/java/co/edu/umanizales/tads/controller/ChildController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ListaSE-main-master/ListaSE-main/tads-master/src/main/java/co/edu/umanizales/tads/controller/ListSEController.java" beforeDir="false" afterPath="$PROJECT_DIR$/ListaSE-main-master/ListaSE-main/tads-master/src/main/java/co/edu/umanizales/tads/controller/ListSEController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ListaSE-main-master/ListaSE-main/tads-master/src/main/java/co/edu/umanizales/tads/controller/LocationController.java" beforeDir="false" afterPath="$PROJECT_DIR$/ListaSE-main-master/ListaSE-main/tads-master/src/main/java/co/edu/umanizales/tads/controller/LocationController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ListaSE-main-master/ListaSE-main/tads-master/src/main/java/co/edu/umanizales/tads/controller/dto/KidDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/ListaSE-main-master/ListaSE-main/tads-master/src/main/java/co/edu/umanizales/tads/controller/dto/KidDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ListaSE-main-master/ListaSE-main/tads-master/src/main/java/co/edu/umanizales/tads/model/Kid.java" beforeDir="false" afterPath="$PROJECT_DIR$/ListaSE-main-master/ListaSE-main/tads-master/src/main/java/co/edu/umanizales/tads/model/Kid.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ListaSE-main-master/ListaSE-main/tads-master/src/main/java/co/edu/umanizales/tads/model/ListSE.java" beforeDir="false" afterPath="$PROJECT_DIR$/ListaSE-main-master/ListaSE-main/tads-master/src/main/java/co/edu/umanizales/tads/model/ListSE.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ListaSE-main-master/ListaSE-main/tads-master/src/main/java/co/edu/umanizales/tads/model/Node.java" beforeDir="false" afterPath="$PROJECT_DIR$/ListaSE-main-master/ListaSE-main/tads-master/src/main/java/co/edu/umanizales/tads/model/Node.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ListaSE-main-master/ListaSE-main/tads-master/src/main/java/co/edu/umanizales/tads/service/ListSEService.java" beforeDir="false" afterPath="$PROJECT_DIR$/ListaSE-main-master/ListaSE-main/tads-master/src/main/java/co/edu/umanizales/tads/service/ListSEService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ListaSE-main-master/ListaSE-main/tads-master/src/main/java/co/edu/umanizales/tads/service/LocationService.java" beforeDir="false" afterPath="$PROJECT_DIR$/ListaSE-main-master/ListaSE-main/tads-master/src/main/java/co/edu/umanizales/tads/service/LocationService.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -16,6 +30,9 @@
         <option value="Class" />
       </list>
     </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -31,6 +48,7 @@
     <option name="selectedTabId" value="CurrentFile" />
   </component>
   <component name="ProjectId" id="2OZc8D2bo30pmInQGDIVFWXJcTE" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -93,11 +111,30 @@
       <workItem from="1682199376862" duration="3368000" />
       <workItem from="1682275172782" duration="13093000" />
       <workItem from="1682289838340" duration="2316000" />
-      <workItem from="1682301872643" duration="7210000" />
+      <workItem from="1682301872643" duration="8797000" />
+      <workItem from="1682385340565" duration="7320000" />
+      <workItem from="1682449899021" duration="6011000" />
+      <workItem from="1682466078112" duration="17186000" />
+      <workItem from="1682522464323" duration="3687000" />
+      <workItem from="1682537365525" duration="454000" />
+      <workItem from="1682538501350" duration="123000" />
+      <workItem from="1682539498321" duration="1118000" />
+      <workItem from="1682552310764" duration="7821000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
 </project>

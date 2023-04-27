@@ -17,8 +17,7 @@ public class LocationController {
 
         @Autowired
         private LocationService locationService;
-        @Autowired
-        private ListSEService listSEService;
+
         @GetMapping
         public ResponseEntity<ResponseDTO>getAllLocations(){
             return new ResponseEntity<>(new ResponseDTO(200,

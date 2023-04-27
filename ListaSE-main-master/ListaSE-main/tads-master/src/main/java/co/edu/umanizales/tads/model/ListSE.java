@@ -1,13 +1,10 @@
 package co.edu.umanizales.tads.model;
-import co.edu.umanizales.tads.controller.ChildController;
 import co.edu.umanizales.tads.controller.dto.ReportDTO;
+import co.edu.umanizales.tads.controller.dto.ReportKidsLocationGenderDTO;
 import lombok.Data;
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.HashMap;
-
+import co.edu.umanizales.tads.exception.ListSEException;
 
 
 @Data
@@ -17,22 +14,42 @@ public class ListSE {
     public Kid kid;
     List<Kid> kids = new ArrayList<>();
 
-//all the constructor said getters and setters
-
-
-    public void add(Kid kid) {
-        if (head != null) {
+    public void add(Kid kid) throws ListSEException {
+        if(head != null){
             Node temp = head;
-            while (temp.getNext() != null) {
+            while(temp.getNext() !=null)
+            {
+                if(temp.getData().getId().equals(kid.getId())){
+                    throw new ListSEException("Ya existe un niño");
+                }
                 temp = temp.getNext();
+
+            }
+            if(temp.getData().getId().equals(kid.getId())){
+                throw new ListSEException("Ya existe un niño");
             }
             /// Parado en el último
             Node newNode = new Node(kid);
             temp.setNext(newNode);
-        } else {
+        }
+        else {
             head = new Node(kid);
         }
-        size++;
+        size ++;
+    }
+    //------------
+    public void getReportKidsByLocationGendersByAge(byte age, ReportKidsLocationGenderDTO report) {
+        if (head != null) {
+            Node temp = this.head;
+            while (temp != null) {
+                if (temp.getData().getAge() > age) {
+                    report.updateQuantity(
+                            temp.getData().getLocation().getName(),
+                            temp.getData().getGender());
+                }
+                temp = temp.getNext();
+            }
+        }
     }
 
     /* Adicionar al inicio
@@ -91,62 +108,96 @@ public class ListSE {
         return size;
     }
 
-    /* public void invert() {
-        Node prev = null;
-        Node current = head;
-        while (current != null) {
-            Node next = current.getNext();
-            current.setNext(prev);
-            prev = current;
-            current = next;
-        }
-        head=prev;
-    }
-
-     */
-
-
-
-    /*public void addInPosition(int position, Kid kid) {
-
-        if (size() >= position) {
-
-
-            if (position == 0) {
-                addToStart(kid);
-            } else {
-                Node temp = head;
-                for (int i = 0; i < position - 1; i++) {
-                    temp = temp.getNext();
-                }
-                Node newNode = new Node(kid);
-                newNode.setNext(temp.getNext());
-                temp.setNext(newNode);
-
+    //---------------------------------CODIGO 1 INVERTIR LA LISTA-------------------------------------------------
+    public void invert() throws NullPointerException{
+        if (this.head != null) {
+            ListSE listCp = new ListSE();
+            Node temp = this.head;
+            while (temp != null) {
+                listCp.addToStart(temp.getData());
+                temp = temp.getNext();
             }
-        } else {
-            add(kid);
+            this.head = listCp.getHead();
+        }else {
+            throw new NullPointerException("Head es nulo");
         }
     }
 
-     */
+    //-----------------------------CODIGO 2 NIÑOS AL INCIO Y NIÑAS AL FINAL-------------------------------
+    public void getorderBoysToStart() throws ListSEException {
+        if (this.head != null) {
+            ListSE listSE = new ListSE();
+            Node temp = this.head;
+            Node lastBoy = null;
+            while (temp != null) {
+                if (temp.getData().getGender() == 'M') {
+                    if (lastBoy != null) {
+                        listSE.addToStart(lastBoy.getData());
+                    }
+                    lastBoy = temp;
+                } else {
+                    listSE.add(temp.getData());
+                }
+                temp = temp.getNext();
+            }
+            if (lastBoy != null) {
+                listSE.addToStart(lastBoy.getData());
+            }
+            this.head = listSE.getHead();
+        } else {
+            throw new ListSEException("La lista está vacía");
+        }
+    }
 
-    /*
-     * algoritmo para eliminar por id
-     * se crea una mensajero que sea igual a la cabeza
-     * y otro nodo el cual sera para indentificar al anterior nodo
-     * lugo se recorre la lista solo en caso de que el mensajer tenga algun valor y en caso de no se haya encontrado el niño con ese id
-     * a dentro del bucle el segudno nodo sera igual al mensajero y el mensajero para a otra niño asi hasta que termine el ciclo
-     * en caso de que el mensajero no haya quedado vacio
-     * entonces
-     *       si el nodo previous  es null es porque al que se quiere eliminar es a la cabeza  entonces nunca entraron al bulce
-     *           entonces la cabeza sera el valor que le seguia al mensajero o sea el valor sigueite a la cabeza
-     *
-     *
-     *    */
-    //Aqui empieza las codigos del 1 al 10
+    //----------------------CODIGO 3 INTERCALAR NIÑO-NIÑA-NIÑO-NIÑA-------------------------------
+    public void getAlternateKids() throws ListSEException {
+        Node boys = head;
+        Node girls = head.getNext();
+        Node girlsHead = girls;
+        if (head == null || head.getNext() == null) {
+            throw new ListSEException("La lista esta vacia o solo tiene un elemento");
+        }
+        while (girls != null && boys != null) {
+            boys.setNext(girls.getNext());
+            if (girls.getNext() != null) {
+                girls.setNext(girls.getNext().getNext());
+            }
+            boys = boys.getNext();
+            girls = girls.getNext();
+        }
+        if (girls == null) {
+            boys.setNext(girlsHead);
+        } else {
+            girls.setNext(girlsHead);
+        }
+    }
 
-    public int Length() {
+
+    //-------------------------CODIGO 4 DADA UNA EDAD ELIMINAR A LOS NIÑOS DE LA EDAD DADA -----------------
+
+    public void removeKidByAge(byte age) throws ListSEException {
+        if (age <= 0) {
+            throw new ListSEException("La edad debe ser un valor positivo mayor que cero");
+        }
+        Node current = head;
+        Node prev = null;
+        while (current != null) {
+            if (current.getData().getAge() == age) {
+                if (prev == null) {
+                    head = current.getNext();
+                } else {
+                    prev.setNext(current.getNext());
+                }
+            } else {
+                prev = current;
+            }
+            current = current.getNext();
+        }
+    }
+
+    //---------CODIGO 5 OBTENER EL PROMEDIO DE EDAD DE LOS NIÑOS DE LA LISTA -------------------
+
+    public int getLength() {
         int count = 0;
         Node current = head;
         while (current != null) {
@@ -156,62 +207,7 @@ public class ListSE {
         return count;
     }
 
-
-    //Este codigo es perteneciente al codigo numero 8
-    public int getPosById(String id) {
-        Node temp = head;
-        int acum = 0;
-        if (head != null) {
-            while (temp != null && !temp.getData().getIdentification().equals(id)) {
-                acum = acum + 1;
-                temp = temp.getNext();
-            }
-        }
-        return acum;
-    }
-
-    //Este codigo es perteneciente al codigo numero 8
-    /*  public Kid getKidById(String id) {
-        Node temp = head;
-        while (temp != null && !temp.getData().getIdentification().equals(id)) {
-            temp = temp.getNext();
-        }
-        if (temp != null && temp.getData() != null) {
-            return temp.getData();
-        } else {
-            return null;
-        }
-    }
-
-     */
-
-    public Kid getKidByIdentification(String id) {
-        return getKidByIdentification("123456");
-    }
-
-
-    //Codigo punto  añadir en posicion para perder (3)
-    public void addInPosForLose(Kid kid, int pos2) {
-        Node temp = head;
-        Node newNode = new Node(kid);
-        int listLength = getLength();
-        if (pos2 < 0 || pos2 >= listLength)//to do a validation and add the kid in the last position
-            add(kid);
-        if (pos2 == 0) {
-            newNode.setNext(head);//to actualize the head
-            head = newNode;
-
-        } else {
-            for (int i = 0; temp.getNext() != null && i < pos2 - 1; i++) {
-                temp = temp.getNext();
-            }
-            newNode.setNext(temp.getNext());
-            temp.setNext(newNode);
-        }
-    }
-
-    //Este codigo es promediar todos las edades de los niños punto 5
-    public double avergeAge() {
+    public double getAvergeAge() throws ListSEException {
         double averageAge = 0;
         Node temp = this.head;
         if (this.head != null) {
@@ -219,16 +215,20 @@ public class ListSE {
                 averageAge = averageAge + temp.getData().getAge();
                 temp = temp.getNext();
             }
+            averageAge = averageAge / getLength();
+            return averageAge;
 
+        }else {
+            throw new ListSEException("La lista está vacía");
         }
-        averageAge = averageAge / getLength();
-        return averageAge;
-
-
     }
 
-    //Aqui empieza el codigo de cantidad por niño en la ciudad 6
-        /*public int getCountKidsByLocationCode(String code) {
+    //-----------CODIGO 6 GENERAR UN REPORTE QUE ME DIGA CUANTOS NIÑOS HAY DE CADA CIUDAD-----------------
+
+    public int getCountKidsByLocationCode(String code) throws ListSEException {
+        if (code == null || code.isEmpty()){
+            throw new ListSEException("El código de ubicación no puede ser nulo o vacío");
+        }
         int count = 0;
         if (this.head != null) {
             Node temp = this.head;
@@ -238,45 +238,18 @@ public class ListSE {
                 }
                 temp = temp.getNext();
             }
-
+        } else {
+            return 0;
         }
         return count;
     }
 
-         */
+    //------------CODIGO 7 METODO QUE ME PERMITA DECIRLE A UN NIÑO DETERMINADO QUE PIERDA UN NUMERO DE POSICIONES DADAS---------
 
-
-    //Codigo cambio de extremos (1)
-    public void changeExtremes() {
-        if (this.head != null && this.head.getNext() != null) {
-            Node temp = this.head;
-            while (temp.getNext() != null) {
-                temp = temp.getNext();
-            }//temp está en el último
-            Kid copy = this.head.getData();
-            this.head.setData(temp.getData());
-            temp.setData(copy);
+    public void moveForward(int actualPlace, int finalPlace) throws ListSEException {
+        if (actualPlace < 1 || finalPlace < 1 || actualPlace >= finalPlace || head == null) {
+            throw new ListSEException("Los índices proporcionados no son válidos.");
         }
-
-
-    }
-    // Codigo de perder posiciones punto 8
-           /* public void losePositions(int lose) {
-                ListSE newList = new ListSE();
-                for (Node temp = head; temp != null; temp.getNext()) {
-                    if (!temp.getData().getIdentification().equals("123456")) {
-                        newList.add(temp.getData());
-                    }
-                }
-                newList.addInPosForLose(getKidById("1234566"),getPosById("435") +lose);
-                head=newList.getHead();
-            }
-
-            */
-
-
-    //Cambio de posicion (5)
-    public void move(int actualPlace, int finalPlace) {
         Node prev = null;
         Node actual = head;
 
@@ -300,48 +273,158 @@ public class ListSE {
         }
     }
 
+    //-----------------CODIGO 8 METODO QUE ME PERIMITA DECIRLE A UN NIÑO DETERMINADO QUE PIERDA UN NUMERO DE POSICIONES DADAS---------------
 
-    //Este codigo es promediar todos las edades de los niños
-    public double averageAge() {
+    public int getPostById(String id) throws ListSEException {
         if (head == null) {
-            return 0;
+            throw new ListSEException("La lista está vacía");
         }
-        double totalage = 0;
         int count = 0;
-        for (Node temp = head; temp != null; temp = temp.getNext()) {
-            totalage += temp.getData().getAge();
+        Node temp = head;
+        while (temp != null) {
+            if (temp.getData().getId().equals(id)) {
+                return count;
+            }
+            temp = temp.getNext();
             count++;
-
         }
-        return totalage / count;
+        return -1;
     }
 
+    //-------------------CODIGO 9 OBTENER UN INFORME DE NIÑOS POR RANGO DE EDADES--------------------
+
+    public void ReportByAge(byte minAge, byte maxAge) throws ListSEException {
+        Node current = head;
+        boolean found = false;
+        while (current != null) {
+            byte edad = current.getData().getAge();
+            if (edad >= minAge && edad <= maxAge) {
+                String name = current.getData().getName();
+                // Aquí puedes hacer lo que quieras con los datos del niño encontrado
+                found = true;
+            }
+            current = current.getNext();
+        }
+        if (!found) {
+            throw new ListSEException("No se encontraron niños dentro del rango de edad especificado.");
+        }
+    }
+
+    //------------CODIGO 10 IMPLEMENTAR UN METODO QUE ME PERMITA ENVIAR AL FINAL DE LA LISTA A LOS NIÑOS QUE SU NOMBRE INICIE  CON UNA LETRA DADA -----------
+
+    public void moveChildren(char letter) throws ListSEException {
+        if (head == null) {
+            throw new ListSEException("La lista está vacía");
+        }
+        Node prev = null;
+        Node current = head;
+        Node last = null;
+        while (current != null) {
+            if (current.name.startsWith(String.valueOf(letter))) {
+                if (prev == null) {
+                    head = current.getNext();
+                } else {
+                    prev.setNext(current.getNext());
+                }
+                if (last == null) {
+                    last = current;
+                } else {
+                    last.setNext(current);
+                    last = current;
+                }
+                current = current.getNext();
+                last.setNext(null);
+            } else {
+                prev = current;
+                current = current.getNext();
+            }
+        }
+    }
 
 /*
+    Estos codigo que se ven sobrantes los utilizare depronto por algun codigo que tengan complicaciones
+
+ */
+    public void addInPosition(int position, Kid kid) throws ListSEException {
+
+        if (size() >= position) {
+
+
+            if (position == 0) {
+                addToStart(kid);
+            } else {
+                Node temp = head;
+                for (int i = 0; i < position - 1; i++) {
+                    temp = temp.getNext();
+                }
+                Node newNode = new Node(kid);
+                newNode.setNext(temp.getNext());
+                temp.setNext(newNode);
+
+            }
+        } else {
+            add(kid);
+        }
+    }
 
 
 
+    /*
+     * algoritmo para eliminar por id
+     * se crea una mensajero que sea igual a la cabeza
+     * y otro nodo el cual sera para indentificar al anterior nodo
+     * lugo se recorre la lista solo en caso de que el mensajer tenga algun valor y en caso de no se haya encontrado el niño con ese id
+     * a dentro del bucle el segudno nodo sera igual al mensajero y el mensajero para a otra niño asi hasta que termine el ciclo
+     * en caso de que el mensajero no haya quedado vacio
+     * entonces
+     *       si el nodo previous  es null es porque al que se quiere eliminar es a la cabeza  entonces nunca entraron al bulce
+     *           entonces la cabeza sera el valor que le seguia al mensajero o sea el valor sigueite a la cabeza
+     *
+     *
+     *    */
 
+/*Estos codigos es por si esta malo los otros que estan organizados
+ en el comienzo se remplaza el codigo de arriba con estos
+    teniendo en cuenta los puntos pertenecientes
 
+ */
 
+    //Codigo punto  añadir en posicion para perder (3)
+    public void addInPosForLose(Kid kid, int pos2) throws ListSEException {
+        Node temp = head;
+        Node newNode = new Node(kid);
+        int listLength = getLength();
+        if (pos2 < 0 || pos2 >= listLength)//to do a validation and add the kid in the last position
+            add(kid);
+        if (pos2 == 0) {
+            newNode.setNext(head);//to actualize the head
+            head = newNode;
 
-//all the constructor said getters and setters
-
-
-    public void add(Kid kid) {
-        if (head != null) {
-            Node temp = head;
-            while (temp.getNext() != null) {
+        } else {
+            for (int i = 0; temp.getNext() != null && i < pos2 - 1; i++) {
                 temp = temp.getNext();
             }
-            /// Parado en el último
-            Node newNode = new Node(kid);
+            newNode.setNext(temp.getNext());
             temp.setNext(newNode);
-        } else {
-            head = new Node(kid);
         }
-        size++;
     }
+
+
+    //Codigo cambio de extremos (1)
+    public void changeExtremes() {
+        if (this.head != null && this.head.getNext() != null) {
+            Node temp = this.head;
+            while (temp.getNext() != null) {
+                temp = temp.getNext();
+            }//temp está en el último
+            Kid copy = this.head.getData();
+            this.head.setData(temp.getData());
+            temp.setData(copy);
+        }
+
+
+    }
+//all the constructor said getters and setters
 
     /* Adicionar al inicio
     si hay datos
@@ -388,7 +471,7 @@ public class ListSE {
 
     * */
 
-    public int Size() {
+    public int getSize() {
         int size = 0;
         Node temp = head;
         while (temp != null) {
@@ -399,17 +482,6 @@ public class ListSE {
         return size;
     }
 
-    public void invert() {
-        if (this.head != null) {
-            ListSE listCp = new ListSE();
-            Node temp = this.head;
-            while (temp != null) {
-                listCp.addToStart(temp.getData());
-                temp = temp.getNext();
-            }
-            this.head = listCp.getHead();
-        }
-    }
 
     public void mergeLists(ListSE listGirls) {
         if (this.head == null) {
@@ -423,45 +495,8 @@ public class ListSE {
         }
     }
 
-    /*public void orderBoysToStart() {
-        ListSE<Kid> listBoys = new ListSE<>();
-        ListSE<Kid> listGirls = new ListSE<>();
-        for (Node <Kid> temp = head; temp != null; temp = temp.getNext()) {
-            Kid kid = temp.getData();
-            if (kid.getGender() == 'M') {
-                listBoys.addToStart(new Node<>(kid,null));
-            } else {
-                listGirls.add(kid);
-            }
-        }
-        listBoys.mergeLists(listGirls);
-        head=listBoys.getHead();
-    }
-
-     */
 
 
-    public void addInPosition(int position, Kid kid) {
-
-        if (Size() >= position) {
-
-
-            if (position == 0) {
-                addToStart(kid);
-            } else {
-                Node temp = head;
-                for (int i = 0; i < position - 1; i++) {
-                    temp = temp.getNext();
-                }
-                Node newNode = new Node(kid);
-                newNode.setNext(temp.getNext());
-                temp.setNext(newNode);
-
-            }
-        } else {
-            add(kid);
-        }
-    }
 
     /*
      * algoritmo para eliminar por id
@@ -476,58 +511,26 @@ public class ListSE {
      *
      *
      *    */
-//AQUI COMEINZA LOS CODIGOS DEL 1 AL 10
-    //Esta parte diseñe este metodo para tener en cuenta
-    // el tema de getLength para que no me salga un error (codigo 3)
-    public int getLength() {
+
+    //Estos codigos lo tengo en cuenta depronto por algunos problemas que tengan los codigos en la parte principal
+
+
+    //Este codigo pertenece al codigo numero 8
+    public Kid getKidById(String id) throws ListSEException {
         Node temp = head;
-        int count = 0;
-        while (temp != null) {
-            count++;
+        while (temp != null && !temp.getData().getId().equals(id)) {
             temp = temp.getNext();
         }
-        return count;
-    }
-
-    //Este codigo es perteneciente al codigo numero 8
-        /*public int getPosById (String id){
-            Node temp = head;
-            int acum = 0;
-            if (head != null) {
-                while (temp != null && !temp.getData().getIdentification().equals(id)) {
-                    acum = acum + 1;
-                    temp = temp.getNext();
-                }
-            }
-            return acum;
+        if (temp != null && temp.getData() != null) {
+            return temp.getData();
+        } else {
+            throw new ListSEException("No se encontró el niño con ID " + id);
         }
-
-
-         */
-    //Este codigo pertenece al codigo numero 8
-        /*public Kid getKidById (String id){
-            Node temp = head;
-            while (temp != null && !temp.getData().getIdentification().equals(id)) {
-                temp = temp.getNext();
-            }
-            if (temp != null && temp.getData() != null) {
-                Kid kid = new Kid(temp.getData().getIdentification(), temp.getData().getName(),
-                        temp.getData().getAge(), temp.getData().getGender(),temp.getData().getGrade() );
-                return kid;
-            } else {
-                return null;
-            }
-
-         */
-
-
-    public int getCountKidsByLocationCode(String code) {
-        return getCountKidsByLocationCode("123456");
     }
 
-    public void deleteByIdentification(String id) {
 
-    }
+
+
     //----------------------------------Codigo de el dia 24/04/23------------------------------------
 
     //En este caso se puede comenzar diciendo que
@@ -545,7 +548,15 @@ public class ListSE {
            current.getData().setAge(age);
 
        }
-        return current.getData();
+        return getReport((byte) 12);
+    }
+
+    public void deleteByIdentifications(String id) {
+
+    }
+
+    public Kid moveForward() {
+        return  moveForward();
     }
 }
 
