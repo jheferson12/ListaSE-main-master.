@@ -1,8 +1,7 @@
 package co.edu.umanizales.tads.model;
-
 import lombok.Data;
 
-import java.util.Arrays;
+
 
 @Data
 public class Node {

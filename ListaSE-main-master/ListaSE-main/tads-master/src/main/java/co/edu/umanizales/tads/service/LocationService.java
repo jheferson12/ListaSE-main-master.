@@ -57,5 +57,18 @@ public class LocationService {
         throw new ListSEException("No se encontró ninguna ubicación con el código proporcionado");
     }
 
+    public List<Location> getLocationsByCodeSize(int size){
+        List<Location> listLocations = new ArrayList<>();
+        for(Location loc: locations){
+            if(loc.getCode().length()==size) {
+                listLocations.add(loc);
+            }
+        }
+        return listLocations;
+    }
+
+
+
 }
+
 

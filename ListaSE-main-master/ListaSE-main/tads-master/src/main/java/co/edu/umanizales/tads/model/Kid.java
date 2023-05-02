@@ -15,7 +15,11 @@ public class Kid {
     private Location location;
     private  String id;
 
+    public Kid(String id, String name, int sum) {
+    }
 
 
-
+    public int getPosition() {
+        return 0;
+    }
 }

@@ -1,4 +1,5 @@
 package co.edu.umanizales.tads.service;
+import co.edu.umanizales.tads.exception.ListSEException;
 import co.edu.umanizales.tads.model.Kid;
 import co.edu.umanizales.tads.model.ListSE;
 import lombok.Data;
@@ -10,6 +11,7 @@ import java.util.List;
 @Service
 @Data
 public class ListSEService {
+
 
 
     private ListSE kids;
@@ -25,7 +27,7 @@ public class ListSEService {
 
     }
     //---------------------------------------ESTE ES EL PRIMER METODO DE PROGRAMACION------------------------
-    public void invert() {
+    public void invert() throws ListSEException {
         kids.invert();
     }
     public void addToStartNameChar(String id,String name){
@@ -53,6 +55,16 @@ public class ListSEService {
     }
 
 
+    public void addKidAtPosForLose(Kid kid, int pos) {
+    }
+
+    public void winPositionKid(String id, int win) {
+    }
+
+
+    private double getAverageAge(double age) {
+        return getAverageAge(age);
+    }
 
 }
 

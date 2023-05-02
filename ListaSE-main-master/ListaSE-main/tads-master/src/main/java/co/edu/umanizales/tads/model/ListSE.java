@@ -109,7 +109,7 @@ public class ListSE {
     }
 
     //---------------------------------CODIGO 1 INVERTIR LA LISTA-------------------------------------------------
-    public void invert() throws NullPointerException{
+    public void invert() throws ListSEException{
         if (this.head != null) {
             ListSE listCp = new ListSE();
             Node temp = this.head;
@@ -119,12 +119,12 @@ public class ListSE {
             }
             this.head = listCp.getHead();
         }else {
-            throw new NullPointerException("Head es nulo");
+            throw new ListSEException("Head es nulo");
         }
     }
 
     //-----------------------------CODIGO 2 NIÑOS AL INCIO Y NIÑAS AL FINAL-------------------------------
-    public void getorderBoysToStart() throws ListSEException {
+    public void getOrderBoysToStart() throws ListSEException {
         if (this.head != null) {
             ListSE listSE = new ListSE();
             Node temp = this.head;
@@ -147,6 +147,19 @@ public class ListSE {
         } else {
             throw new ListSEException("La lista está vacía");
         }
+            }
+    public void addToStart(Kid kid) {
+        if (kid == null) {
+            return;
+        }
+        if (head != null) {
+            Node newNode = new Node(kid);
+            newNode.setNext(head);
+            head = newNode;
+        } else {
+            head = new Node(kid);
+        }
+
     }
 
     //----------------------CODIGO 3 INTERCALAR NIÑO-NIÑA-NIÑO-NIÑA-------------------------------
@@ -207,7 +220,7 @@ public class ListSE {
         return count;
     }
 
-    public double getAvergeAge() throws ListSEException {
+    public double getAverageAge() throws ListSEException {
         double averageAge = 0;
         Node temp = this.head;
         if (this.head != null) {
@@ -244,56 +257,63 @@ public class ListSE {
         return count;
     }
 
-    //------------CODIGO 7 METODO QUE ME PERMITA DECIRLE A UN NIÑO DETERMINADO QUE PIERDA UN NUMERO DE POSICIONES DADAS---------
+    //------------CODIGO 7 METODO QUE ME PERMITA DECIRLE A UN NIÑO DETERMINADO QUE ADELANTE  UN NUMERO DE POSICIONES DADAS---------
 
-    public void moveForward(int actualPlace, int finalPlace) throws ListSEException {
-        if (actualPlace < 1 || finalPlace < 1 || actualPlace >= finalPlace || head == null) {
-            throw new ListSEException("Los índices proporcionados no son válidos.");
-        }
-        Node prev = null;
-        Node actual = head;
-
-        for (int i = 1; i < actualPlace; i++) {
-            prev = actual;
-            actual = actual.getNext();
-
-        }
-        Node prevEnd = null;
-        Node end = head;
-        for (int i = 1; i < finalPlace; i++) {
-            prevEnd = end;
-            end = end.getNext();
-        }
-        if (prev == null) {
-            head = actual.getNext();
+    public void winPositionKid(String id, int win) throws ListSEException {
+        Node temp = head;
+        int sum = 0;
+        ListSE listSE = new ListSE();
+        if (head != null) {
+            while (temp != null && !temp.getData().getId().equals(id)) {
+                listSE.add(temp.getData());
+                temp = temp.getNext();
+            }
+            if (temp == null) {
+                throw new ListSEException("No se encontró un niño con el ID " + id);
+            }
+            sum = temp.getData().getPosition() + win;
+            if (sum < 0) {
+                throw new ListSEException("No se puede mover el niño más allá de la primera posición");
+            } else if (sum > size()) {
+                throw new ListSEException("No se puede mover el niño más allá de la última posición");
+            }
+            listSE.add(new Kid(temp.getData().getId(), temp.getData().getName(), sum));
+            temp = temp.getNext();
+            while (temp != null) {
+                listSE.add(temp.getData());
+                temp = temp.getNext();
+            }
+            head = listSE.getHead();
         } else {
-            prev.setNext(actual.getNext());
-
-
+            throw new ListSEException("La lista está vacía");
         }
     }
 
+
     //-----------------CODIGO 8 METODO QUE ME PERIMITA DECIRLE A UN NIÑO DETERMINADO QUE PIERDA UN NUMERO DE POSICIONES DADAS---------------
 
-    public int getPostById(String id) throws ListSEException {
-        if (head == null) {
-            throw new ListSEException("La lista está vacía");
-        }
-        int count = 0;
+    public void addKidAtPosForLose(Kid kid, int pos2) throws ListSEException {
         Node temp = head;
-        while (temp != null) {
-            if (temp.getData().getId().equals(id)) {
-                return count;
+        Node newNode = new Node(kid);
+        int listLength = getLength();
+        if (pos2 < 0 || pos2 >= listLength)//to do a validation and add the kid in the last position
+            add(kid);
+        if (pos2 == 0) {
+            newNode.setNext(head);//to actualize the head
+            head = newNode;
+
+        } else {
+            for (int i = 0; temp.getNext() != null && i < pos2 - 1; i++) {
+                temp = temp.getNext();
             }
-            temp = temp.getNext();
-            count++;
+            newNode.setNext(temp.getNext());
+            temp.setNext(newNode);
         }
-        return -1;
     }
 
     //-------------------CODIGO 9 OBTENER UN INFORME DE NIÑOS POR RANGO DE EDADES--------------------
 
-    public void ReportByAge(byte minAge, byte maxAge) throws ListSEException {
+    public void reportByAge(byte minAge, byte maxAge) throws ListSEException {
         Node current = head;
         boolean found = false;
         while (current != null) {
@@ -312,7 +332,7 @@ public class ListSE {
 
     //------------CODIGO 10 IMPLEMENTAR UN METODO QUE ME PERMITA ENVIAR AL FINAL DE LA LISTA A LOS NIÑOS QUE SU NOMBRE INICIE  CON UNA LETRA DADA -----------
 
-    public void moveChildren(char letter) throws ListSEException {
+    public void addToStartNameChar(char letter) throws ListSEException {
         if (head == null) {
             throw new ListSEException("La lista está vacía");
         }
@@ -389,25 +409,8 @@ public class ListSE {
 
  */
 
-    //Codigo punto  añadir en posicion para perder (3)
-    public void addInPosForLose(Kid kid, int pos2) throws ListSEException {
-        Node temp = head;
-        Node newNode = new Node(kid);
-        int listLength = getLength();
-        if (pos2 < 0 || pos2 >= listLength)//to do a validation and add the kid in the last position
-            add(kid);
-        if (pos2 == 0) {
-            newNode.setNext(head);//to actualize the head
-            head = newNode;
 
-        } else {
-            for (int i = 0; temp.getNext() != null && i < pos2 - 1; i++) {
-                temp = temp.getNext();
-            }
-            newNode.setNext(temp.getNext());
-            temp.setNext(newNode);
-        }
-    }
+
 
 
     //Codigo cambio de extremos (1)
@@ -437,19 +440,7 @@ public class ListSE {
      */
 
 
-    public void addToStart(Kid kid) {
-        if (kid == null) {
-            return;
-        }
-        if (head != null) {
-            Node newNode = new Node(kid);
-            newNode.setNext(head);
-            head = newNode;
-        } else {
-            head = new Node(kid);
-        }
 
-    }
 
 
     /*algoritmo para adicionar en posicion
@@ -493,6 +484,22 @@ public class ListSE {
             }
             temp.setNext(listGirls.getHead());
         }
+    }
+    //-----------------------------Este metodo se usa para otro metodo-----------
+    public int getPostById(String id) throws ListSEException {
+        if (head == null) {
+            throw new ListSEException("La lista está vacía");
+        }
+        int count = 0;
+        Node temp = head;
+        while (temp != null) {
+            if (temp.getData().getId().equals(id)) {
+                return count;
+            }
+            temp = temp.getNext();
+            count++;
+        }
+        return -1;
     }
 
 
@@ -555,8 +562,9 @@ public class ListSE {
 
     }
 
-    public Kid moveForward() {
-        return  moveForward();
+
+    public ListDE toDoublyLinkedList() {
+        return null;
     }
 }
 
