@@ -8,6 +8,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class NodeDE {
+    public String name;
     private Pet data;
     private NodeDE next;
     private NodeDE previous;

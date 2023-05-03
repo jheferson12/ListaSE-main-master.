@@ -26,7 +26,6 @@ public class ListSEController {
     private LocationService locationService;
 
 
-
     //En este codigo vamos a ver
 
 
@@ -34,8 +33,6 @@ public class ListSEController {
 
 
     //todos los 12 metodos
-
-
 
 
     //----------------OBTENER NIÑOS--------------------------------
@@ -90,8 +87,6 @@ public class ListSEController {
     }
 
 
-
-
     //Esta parte lo que hace es ganar posiciciones
     @GetMapping(path = "/earn_positions")
     public ResponseEntity<ResponseDTO> earnPositions() {
@@ -117,7 +112,7 @@ public class ListSEController {
     }
 
     //------------------CODIGO PARA AÑADIR AL NIÑO-------------------------------------------
-    @PostMapping(path="addkid")
+    @PostMapping(path = "addkid")
     public ResponseEntity<ResponseDTO> addKid(@RequestBody KidDTO kidDTO) throws ListSEException {
         Location location = locationService.getLocationByCode(kidDTO.getCodeLocation());
         if (location == null) {
@@ -170,31 +165,24 @@ public class ListSEController {
                 null), HttpStatus.OK);
     }
 
-
     //--------------ESTE ES EL CONTROLER DE DADA UNA EDAD ELIMINAR A LOS NIÑOS DE LA EDAD DADA (4)-----------
 
     @GetMapping(path = "/removekidbyage/{age}")
     public ResponseEntity<ResponseDTO> removeKidByAge(@PathVariable byte age) throws ListSEException {
-        listSEService.getKids().removeKidByAge((byte) 12);
+        listSEService.getKids().removeKidByAge(age);
         return new ResponseEntity<>(new ResponseDTO(200,
-                "Se ha removido los niños por edad",null),HttpStatus.OK);
+                "Se ha removido los niños por edad", null), HttpStatus.OK);
     }
 
     //-----------------ESTE ES EL CONTROLER DE OBTENER EL PROMEDIO DE EDAD DE LOS NIÑOS DE LA LISTA (5)---------------
 
     @GetMapping(path = "/averageage")
-    public ResponseEntity<ResponseDTO> getAverageAge() {
-        List<Kid> kids = listSEService.getKids().getKids();
-        if (kids.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseDTO(404, "No se encontraron niños", null));
-        }
-        double sum = 0;
-        for (Kid kid : kids) {
-            sum += kid.getAge();
-        }
-        double averageAge = sum / kids.size();
-        return ResponseEntity.ok(new ResponseDTO(200, "La edad promedio de los niños es " + averageAge, null));
+    public ResponseEntity<ResponseDTO> getAverageAge() throws ListSEException {
+        double age = listSEService.getKids().getAverageAge();
+        return new ResponseEntity<>(new ResponseDTO(200,
+                "aqui esta el promedio de edad", null), HttpStatus.OK);
     }
+
     //-------------------ESTE ES EL CONTROLLER DE GENERAR UN REPORTE QUE ME DIGA CUANTOS NIÑOS HAY DE CADA CIUDAD (6)----------
 
     @GetMapping(path = "/get_count_kids_by_location_code")
@@ -227,8 +215,6 @@ public class ListSEController {
             current=current.getNext();
         }
         return KidByCity;
-
-
     }
 
      */
@@ -236,45 +222,36 @@ public class ListSEController {
     //-----------UN NUMERO DE POSICIONES DADAS(7)----------------------------------------------
     @GetMapping(path = "/winPositionKid/{id}/{win}")
     public ResponseEntity<ResponseDTO> winPositionKid(@PathVariable String id, @PathVariable int win) throws ListSEException {
-        try {
-            listSEService.winPositionKid(id, win);
-            return new ResponseEntity<>(new ResponseDTO(200,
-                    "El niño ha ganado " + win + " posición(es)", null), HttpStatus.OK);
-        } catch (Exception e) {
-            throw new ListSEException("Ha ocurrido un error en el servidor: " + e.getMessage());
-        }
+        listSEService.getKids().winPositionKid(id,win);
+        return new ResponseEntity<>(new ResponseDTO(200,
+                "el niño gano la posicion propuesta  ", null), HttpStatus.OK);
     }
-
 
     //-----------------ESTE ES EL CONTROLLER DE:METODO QUE ME PERMITA DECIRLE A UN NIÑO DETERMINADO QUE PIERDA UN NUMERO DE POSICIONES DADAS (8) -------------
 
     @PostMapping(path = "/kids/addkidatposforlose/{pos}")
-    public ResponseEntity<ResponseDTO> addKidAtPosForLose(@RequestBody Kid kid, @PathVariable int pos) {
-        listSEService.addKidAtPosForLose(kid, pos);
+    public ResponseEntity<ResponseDTO> addKidAtPosForLose(Kid kid, int pos2) {
+        listSEService.addKidAtPosForLose(kid, pos2);
         return new ResponseEntity<>(new ResponseDTO(200,
-                "Niño agregado exitosamente en la posición " + pos,null), HttpStatus.OK);
+                "Niño agregado exitosamente en la posición " + pos2,null), HttpStatus.OK);
     }
-
-
 
     //----------------ESTE ES EL CONTROLLER DE OBTENER UN INFORME DE NIÑOS POR RANGO DE EDADES(9)--------------
 
-    @GetMapping(path = "/reportbyage/{age}")
-    public ResponseEntity<ResponseDTO> reportByAge() throws ListSEException {
-        listSEService.getKids().reportByAge((byte) 2,(byte) 4);
+    @GetMapping(path = "/getagebyrange/{age}")
+    public ResponseEntity<ResponseDTO> getAgeByRange(byte minAge, byte maxAge) throws ListSEException {
+        listSEService.getKids().getAgeByRange(minAge,maxAge);
         return new ResponseEntity<>(new ResponseDTO(200,
-                "Este es el reporte de niños",null),HttpStatus.OK);
+                "Este es rango por edades ",null),HttpStatus.OK);
 
     }
-
-
 
     //------ESTE ES EL CONTROLLER DE IMPLEMENTAR UN METODO QUE ME PERMITA ENVIAR AL FINAL DE LA LISTA A LOS NIÑOS
 //----------QUE SU NOMBRE INICIE POR UNA LETRA DADA(10)---------------------
 
-    @GetMapping(path = "/addtostartnamechar/{id}")
-    public ResponseEntity<ResponseDTO> addToStartNameChar(@PathVariable String id, String name) {
-        listSEService.addToStartNameChar(id, name);
+    @GetMapping(path = "/addtostartnamechar/{letter}")
+    public ResponseEntity<ResponseDTO> addToStartNameChar(char letter) throws ListSEException {
+        listSEService.getKids().addToStartNameChar(letter);
         return new ResponseEntity<>(new ResponseDTO(200,
                 "el nombre fue agregado al principio de la lista", null), HttpStatus.OK);
     }

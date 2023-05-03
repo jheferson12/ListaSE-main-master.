@@ -201,7 +201,7 @@ public class ListSE {
                 } else {
                     prev.setNext(current.getNext());
                 }
-            } else {
+            }else{
                 prev = current;
             }
             current = current.getNext();
@@ -239,7 +239,7 @@ public class ListSE {
     //-----------CODIGO 6 GENERAR UN REPORTE QUE ME DIGA CUANTOS NIÑOS HAY DE CADA CIUDAD-----------------
 
     public int getCountKidsByLocationCode(String code) throws ListSEException {
-        if (code == null || code.isEmpty()){
+        if (code == null || code.isEmpty()){//Empty:vacio
             throw new ListSEException("El código de ubicación no puede ser nulo o vacío");
         }
         int count = 0;
@@ -277,7 +277,7 @@ public class ListSE {
             } else if (sum > size()) {
                 throw new ListSEException("No se puede mover el niño más allá de la última posición");
             }
-            listSE.add(new Kid(temp.getData().getId(), temp.getData().getName(), sum));
+            listSE.add(new Kid(temp.getData().getId(), temp.getData().getName(),sum));
             temp = temp.getNext();
             while (temp != null) {
                 listSE.add(temp.getData());
@@ -296,7 +296,7 @@ public class ListSE {
         Node temp = head;
         Node newNode = new Node(kid);
         int listLength = getLength();
-        if (pos2 < 0 || pos2 >= listLength)//to do a validation and add the kid in the last position
+        if (pos2 < 0 || pos2 >= listLength)
             add(kid);
         if (pos2 == 0) {
             newNode.setNext(head);//to actualize the head
@@ -313,7 +313,7 @@ public class ListSE {
 
     //-------------------CODIGO 9 OBTENER UN INFORME DE NIÑOS POR RANGO DE EDADES--------------------
 
-    public void reportByAge(byte minAge, byte maxAge) throws ListSEException {
+    public void getAgeByRange(byte minAge, byte maxAge) throws ListSEException {
         Node current = head;
         boolean found = false;
         while (current != null) {
@@ -414,7 +414,7 @@ public class ListSE {
 
 
     //Codigo cambio de extremos (1)
-    public void changeExtremes() {
+    public void changeExtremes()throws ListSEException {
         if (this.head != null && this.head.getNext() != null) {
             Node temp = this.head;
             while (temp.getNext() != null) {
@@ -423,6 +423,8 @@ public class ListSE {
             Kid copy = this.head.getData();
             this.head.setData(temp.getData());
             temp.setData(copy);
+        }else{
+            throw new ListSEException("hay un problema en cambiar los extremos");
         }
 
 

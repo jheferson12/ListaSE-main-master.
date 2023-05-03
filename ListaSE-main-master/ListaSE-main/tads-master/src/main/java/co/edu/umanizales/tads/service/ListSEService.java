@@ -30,9 +30,7 @@ public class ListSEService {
     public void invert() throws ListSEException {
         kids.invert();
     }
-    public void addToStartNameChar(String id,String name){
 
-    }
     public  void removeKidByAge(byte age) {
 
 
@@ -41,9 +39,7 @@ public class ListSEService {
     public void deleteKidByAge(byte age){
 
     }
-    public  String getAverageAge(){
-        return getAverageAge();
-    }
+
     public String changeExtremes(){
         return changeExtremes();
     }
