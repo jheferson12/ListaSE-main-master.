@@ -4,7 +4,9 @@ import co.edu.umanizales.tads.controller.dto.KidsByLocationDTO;
 import co.edu.umanizales.tads.controller.dto.ReportKidsLocationGenderDTO;
 import co.edu.umanizales.tads.controller.dto.ResponseDTO;
 import co.edu.umanizales.tads.model.Kid;
+import co.edu.umanizales.tads.model.ListSE;
 import co.edu.umanizales.tads.model.Location;
+import co.edu.umanizales.tads.model.Node;
 import co.edu.umanizales.tads.service.ListSEService;
 import co.edu.umanizales.tads.service.LocationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,25 +46,31 @@ public class ListSEController {
 
     //Esta parte es la cantidad de niños en la ciudad
     @GetMapping(path = "/kidsbylocations")
-    public ResponseEntity<ResponseDTO> getKidsByLocation() throws ListSEException {
-        List<KidsByLocationDTO> kidsByLocationDTOList = new ArrayList<>();
-        for (Location loc : locationService.getLocations()) {
-            int count = listSEService.getKids().getCountKidsByLocationCode(loc.getCode());
-            if (count > 0) {
-                kidsByLocationDTOList.add(new KidsByLocationDTO(loc, count));
-            } else if (count == 0) {
-                return new ResponseEntity<>(new ResponseDTO(409,
-                        "no existen niños con este codigo de localizacion  ", null),
-                        HttpStatus.BAD_REQUEST);
+    public ResponseEntity<ResponseDTO> getKidsByLocation() {
+        try {
+            List<KidsByLocationDTO> kidsByLocationDTOList = new ArrayList<>();
+            for (Location loc : locationService.getLocations()) {
+                int count = listSEService.getKids().getCountKidsByLocationCode(loc.getCode());
+                if (count > 0) {
+                    kidsByLocationDTOList.add(new KidsByLocationDTO(loc, count));
+                } else if (count == 0) {
+                    return new ResponseEntity<>(new ResponseDTO(409,
+                            "no existen niños con este codigo de localizacion  ", null),
+                            HttpStatus.BAD_REQUEST);
 
 
-            } else {
-                return new ResponseEntity<>(new ResponseDTO(
-                        200, kidsByLocationDTOList, null), HttpStatus.OK);
+                } else {
+                    return new ResponseEntity<>(new ResponseDTO(
+                            200, kidsByLocationDTOList, null), HttpStatus.OK);
+                }
             }
+            return new ResponseEntity<>(new ResponseDTO(200,
+                    kidsByLocationDTOList, null), HttpStatus.OK);
+        } catch (ListSEException e) {
+            return new ResponseEntity<>(new ResponseDTO(500,
+                    "No hay niños que podamos ingresar las localizaciones de los niños" + e.getMessage(),
+                    null), HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return new ResponseEntity<>(new ResponseDTO(200,
-                kidsByLocationDTOList, null), HttpStatus.OK);
     }
 
 
@@ -80,10 +88,9 @@ public class ListSEController {
     //Esta parte borra por edad
     @GetMapping(path = "/deletebyAge")
     public ResponseEntity<ResponseDTO> deleteByAge(@PathVariable byte age) {
-        listSEService.deleteKidByAge((byte) 12);
+        listSEService.deleteKidByAge(age);
         return new ResponseEntity<>(new ResponseDTO(200,
-                "Se elimino el niño por edad", null), HttpStatus.OK);
-
+                "Se eliminó el niño por edad", null), HttpStatus.OK);
     }
 
 
@@ -150,58 +157,97 @@ public class ListSEController {
 
     //--------------ESTE ES EL CONTROLER DE NIÑOS AL PRINCIPIO Y NIÑAS AL FINAL(2)----------------
     @GetMapping(path = "/orderboystostart")
-    public ResponseEntity<ResponseDTO> getOrderBoysToStart() throws ListSEException {
-        listSEService.getKids().getOrderBoysToStart();
-        return new ResponseEntity<>(new ResponseDTO(200, "Se ha intercambiado" +
-                " los niños al inicio y niñas al final ", null), HttpStatus.OK);
-
+    public ResponseEntity<ResponseDTO> getOrderBoysToStart() {
+        try {
+            listSEService.getKids().getOrderBoysToStart();
+            return new ResponseEntity<>(new ResponseDTO(200, "Se ha intercambiado" +
+                    " los niños al inicio y niñas al final ", null), HttpStatus.OK);
+        } catch (ListSEException e) {
+            return new ResponseEntity<>(new ResponseDTO(400, e.getMessage(), null), HttpStatus.BAD_REQUEST);
+        }
     }
+
 
     //-------------ESTE ES EL CONTROLLER DE INTERCALAR NIÑO,NIÑA,NIÑO (3)-------------------------
     @GetMapping(path = "/alternatekids")
-    public ResponseEntity<ResponseDTO> getAlternateKids() throws ListSEException {
-        listSEService.getKids().getAlternateKids();
-        return new ResponseEntity<>(new ResponseDTO(200, "Se ha alternado la lista",
-                null), HttpStatus.OK);
+    public ResponseEntity<ResponseDTO> getAlternateKids() {
+        try {
+            listSEService.getKids().getAlternateKids();
+            return new ResponseEntity<>(new ResponseDTO(200, "Se ha alternado la lista", null), HttpStatus.OK);
+        } catch (ListSEException e) {
+            return new ResponseEntity<>(new ResponseDTO(400, "No se encuentra niños o niñas para alternar" + e.getMessage(), null), HttpStatus.BAD_REQUEST);
+        }
     }
+
 
     //--------------ESTE ES EL CONTROLER DE DADA UNA EDAD ELIMINAR A LOS NIÑOS DE LA EDAD DADA (4)-----------
 
     @GetMapping(path = "/removekidbyage/{age}")
-    public ResponseEntity<ResponseDTO> removeKidByAge(@PathVariable byte age) throws ListSEException {
-        listSEService.getKids().removeKidByAge(age);
-        return new ResponseEntity<>(new ResponseDTO(200,
-                "Se ha removido los niños por edad", null), HttpStatus.OK);
+    public ResponseEntity<ResponseDTO> removeKidByAge(@PathVariable byte age) {
+        try {
+            listSEService.getKids().removeKidByAge(age);
+            return new ResponseEntity<>(new ResponseDTO(200,
+                    "Se ha removido los niños por edad", null), HttpStatus.OK);
+        } catch (ListSEException e) {
+            return new ResponseEntity<>(new ResponseDTO(400, "No se puede remover no se encuentra ninguna edad del niño " + e.getMessage(), null),
+                    HttpStatus.BAD_REQUEST);
+        }
     }
+
 
     //-----------------ESTE ES EL CONTROLER DE OBTENER EL PROMEDIO DE EDAD DE LOS NIÑOS DE LA LISTA (5)---------------
 
     @GetMapping(path = "/averageage")
-    public ResponseEntity<ResponseDTO> getAverageAge() throws ListSEException {
-        double age = listSEService.getKids().getAverageAge();
-        return new ResponseEntity<>(new ResponseDTO(200,
-                "aqui esta el promedio de edad", null), HttpStatus.OK);
+    public ResponseEntity<ResponseDTO> getAverageAge() {
+        try {
+            double age = listSEService.getKids().getAverageAge();
+            return new ResponseEntity<>(new ResponseDTO(200,
+                    "El promedio de edad es: " + age, null), HttpStatus.OK);
+        } catch (ListSEException e) {
+            return new ResponseEntity<>(new ResponseDTO(400, e.getMessage(), null),
+                    HttpStatus.BAD_REQUEST);
+        }
     }
+
 
     //-------------------ESTE ES EL CONTROLLER DE GENERAR UN REPORTE QUE ME DIGA CUANTOS NIÑOS HAY DE CADA CIUDAD (6)----------
 
     @GetMapping(path = "/get_count_kids_by_location_code")
-    public ResponseEntity<ResponseDTO> getCountKidsByLocationCode() throws ListSEException {
-        listSEService.getKids().getCountKidsByLocationCode("1");
-        return new ResponseEntity<>(new ResponseDTO(200,
-                "ya esta identificado por ciudad el niño", null), HttpStatus.OK);
-    }
-    @GetMapping(path = "/kidsbylocationgenders/{age}")
-    public ResponseEntity<ResponseDTO> getReportKisLocationGenders(@PathVariable byte age) {
-        ReportKidsLocationGenderDTO report =
-                new ReportKidsLocationGenderDTO(locationService.getLocationsByCodeSize(8));
-        listSEService.getKids()
-                .getReportKidsByLocationGendersByAge(age,report);
-        return new ResponseEntity<>(new ResponseDTO(
-                200,report,
-                null), HttpStatus.OK);
+    public ResponseEntity<ResponseDTO> getCountKidsByLocationCode() {
+        try {
+            listSEService.getKids().getCountKidsByLocationCode("1");
+            return new ResponseEntity<>(new ResponseDTO(200,
+                    "ya esta identificado por ciudad el niño", null), HttpStatus.OK);
+        } catch (ListSEException e) {
+            return new ResponseEntity<>(new ResponseDTO(404,
+                    "No se encuentra el niño para la ubicacion " + e.getMessage(), null),
+                    HttpStatus.BAD_REQUEST);
+        }
     }
 
+    @GetMapping(path = "/kidsbylocationgenders/{age}")
+    public ResponseEntity<ResponseDTO> getReportKidsByLocationGenderByAge(byte age, ReportKidsLocationGenderDTO report) {
+        try {
+            ReportKidsLocationGenderDTO report1 = new ReportKidsLocationGenderDTO(locationService.getLocationsByCodeSize(8));
+            listSEService.getKids().getReportKidsByLocationGendersByAge(age, report);
+            return new ResponseEntity<>(new ResponseDTO(200, report1, null), HttpStatus.OK);
+        } catch (ListSEException e) {
+            return new ResponseEntity<>(new ResponseDTO(400, "El reporte por edad no se a podido desarrollar " + e.getMessage(), null), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping(path = "/getcountkidsbydeptcode/{code}")
+    public ResponseEntity<ResponseDTO> getCountKidsByDeptCode(String code) {
+        try {
+            listSEService.getKids().getCountKidsByDeptCode(code);
+            return new ResponseEntity<>(new ResponseDTO(200,
+                    "ya esta identificado por departamento el niño", null), HttpStatus.OK);
+        } catch (ListSEException e) {
+            return new ResponseEntity<>(new ResponseDTO(404,
+                    "No se encuentra el niño para la ubicacion en departamento  " + e.getMessage(), null),
+                    HttpStatus.BAD_REQUEST);
+        }
+    }
     /*@GetMapping(path = "/count_kid_by_city")
     public Map<String, Integer> countKidByCity() {
         Map<String, Integer> KidByCity = new HashMap<>();
@@ -220,41 +266,65 @@ public class ListSEController {
      */
     //----------------ESTE ES EL CONTROLLER DE: METODO QUE ME PERMITA DECIRLE A UN NIÑO DETERMINADO QUE ADELANTE
     //-----------UN NUMERO DE POSICIONES DADAS(7)----------------------------------------------
-    @GetMapping(path = "/winPositionKid/{id}/{win}")
-    public ResponseEntity<ResponseDTO> winPositionKid(@PathVariable String id, @PathVariable int win) throws ListSEException {
-        listSEService.getKids().winPositionKid(id,win);
-        return new ResponseEntity<>(new ResponseDTO(200,
-                "el niño gano la posicion propuesta  ", null), HttpStatus.OK);
+
+    @GetMapping(path = "/win_position/{id}/{win}")
+    public ResponseEntity<ResponseDTO> winPositionKid( @PathVariable String id , @PathVariable  int positon, ListSE listSE) {
+        try {
+            listSEService.getKids().winPositionKid(id,positon,listSE);
+            return new ResponseEntity<>(new ResponseDTO(200, "El niño ganó la posición propuesta", null), HttpStatus.OK);
+        } catch (ListSEException e) {
+            return new ResponseEntity<>(new ResponseDTO(400, "Ingreso un dato inecesario intentalo de nuevo "+e.getMessage(), null), HttpStatus.BAD_REQUEST);
+        }
     }
+
 
     //-----------------ESTE ES EL CONTROLLER DE:METODO QUE ME PERMITA DECIRLE A UN NIÑO DETERMINADO QUE PIERDA UN NUMERO DE POSICIONES DADAS (8) -------------
 
     @PostMapping(path = "/kids/addkidatposforlose/{pos}")
-    public ResponseEntity<ResponseDTO> addKidAtPosForLose(Kid kid, int pos2) {
-        listSEService.addKidAtPosForLose(kid, pos2);
-        return new ResponseEntity<>(new ResponseDTO(200,
-                "Niño agregado exitosamente en la posición " + pos2,null), HttpStatus.OK);
+    public ResponseEntity<ResponseDTO> addKidAtPosForLose(@RequestBody Kid kid, @PathVariable int pos)throws ListSEException {
+        try {
+            listSEService.addKidAtPosForLose(kid, pos);
+            return new ResponseEntity<>(new ResponseDTO(
+                    200, "Niño agregado exitosamente en la posición " + pos, null), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new ResponseDTO(
+                    400,"Digito mal el niño intenta de nuevo "+ e.getMessage(), null), HttpStatus.BAD_REQUEST);
+        }
     }
+
+
 
     //----------------ESTE ES EL CONTROLLER DE OBTENER UN INFORME DE NIÑOS POR RANGO DE EDADES(9)--------------
 
     @GetMapping(path = "/getagebyrange/{age}")
-    public ResponseEntity<ResponseDTO> getAgeByRange(byte minAge, byte maxAge) throws ListSEException {
-        listSEService.getKids().getAgeByRange(minAge,maxAge);
-        return new ResponseEntity<>(new ResponseDTO(200,
-                "Este es rango por edades ",null),HttpStatus.OK);
-
+    public ResponseEntity<ResponseDTO> getAgeByRange(byte minAge, byte maxAge) {
+        try {
+            listSEService.getKids().getAgeByRange(minAge,maxAge);
+            return new ResponseEntity<>(new ResponseDTO(200,
+                    "Este es rango por edades ",null),HttpStatus.OK);
+        } catch (ListSEException e) {
+            return new ResponseEntity<>(new ResponseDTO(400, e.getMessage(), null),
+                    HttpStatus.BAD_REQUEST);
+        }
     }
+
 
     //------ESTE ES EL CONTROLLER DE IMPLEMENTAR UN METODO QUE ME PERMITA ENVIAR AL FINAL DE LA LISTA A LOS NIÑOS
 //----------QUE SU NOMBRE INICIE POR UNA LETRA DADA(10)---------------------
 
     @GetMapping(path = "/addtostartnamechar/{letter}")
-    public ResponseEntity<ResponseDTO> addToStartNameChar(char letter) throws ListSEException {
-        listSEService.getKids().addToStartNameChar(letter);
-        return new ResponseEntity<>(new ResponseDTO(200,
-                "el nombre fue agregado al principio de la lista", null), HttpStatus.OK);
+    public ResponseEntity<ResponseDTO> addToStartNameChar(char letter) {
+        try {
+            listSEService.getKids().addToStartNameChar(letter);
+            return new ResponseEntity<>(new ResponseDTO(200,
+                    "el nombre fue agregado al principio de la lista", null), HttpStatus.OK);
+        } catch (ListSEException e) {
+            return new ResponseEntity<>(new ResponseDTO(500,
+                    "Ha ocurrido un error al agregar el nombre al principio de la lista: " + e.getMessage(),
+                    null), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
+
 
 }
 

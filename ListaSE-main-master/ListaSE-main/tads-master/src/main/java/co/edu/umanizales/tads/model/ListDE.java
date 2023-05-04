@@ -1,10 +1,15 @@
 package co.edu.umanizales.tads.model;
+import co.edu.umanizales.tads.controller.dto.ReportKidsLocationGenderDTO;
+import co.edu.umanizales.tads.controller.dto.ReportPetsLocationGenderDTO;
 import co.edu.umanizales.tads.exception.ListDEException;
 import co.edu.umanizales.tads.exception.ListSEException;
 import lombok.*;
-
 import javax.swing.*;
+import javax.validation.Valid;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+
 
 @Data
 @Getter
@@ -34,7 +39,7 @@ public class ListDE {
 
     }
 
-    public void removeDE(Pet pet) {
+    public void removeDE(Pet pet) throws ListDEException {
         try {
             if (headDE == null) {
                 throw new ListDEException("La lista está vacía");
@@ -75,23 +80,23 @@ public class ListDE {
 
 
     //---------------------------------CODIGO 1 INVERTIR LA LISTA-------------------------------------------------
-    public void invertPet(@NotNull Pet pet) throws ListDEException {
+    public void getinvertPet() throws ListDEException {
         try {
-            if (this.headDE != null) {
-                ListDE listDE = new ListDE();
+            if (this.headDE == null) {
+                throw new ListDEException("No hay niños para poder invertir la lista");
+            } else {
+                ListDE listDE= new ListDE();
                 NodeDE temp = this.headDE;
                 while (temp != null) {
-                    listDE.insertFront(temp.getData());
+                    listDE.addToStart(temp.getData());
                     temp = temp.getNext();
                 }
                 this.headDE = listDE.getHead();
-            } else {
-                throw new ListDEException("La lista está vacía");
             }
         } catch (ListDEException e) {
-            JOptionPane.showMessageDialog(null, "Error al invertir la lista de mascotas: "
-                    + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-            // Aquí mostramos un cuadro de diálogo con el mensaje de error al usuario
+            // manejo de la excepción aquí
+            // por ejemplo, puedes imprimir el mensaje de error
+            throw new ListDEException("Se ha producido un error al invertir la lista: " + e.getMessage());
         }
     }
 
@@ -113,40 +118,31 @@ public class ListDE {
     En este codigo (2) vemos que lo que cambio es el head por headDE y el tem para diferenciar le añadi una "o"
     Tambien vemos que lo que cambio en la lista doblemente enlazada son las excepciones que son ListSEExeption.
      */
-    public void getOrderPetsToStart() {
+
+    public void getOrderBoysToStart() throws ListDEException {
         try {
             if (this.headDE != null) {
                 ListDE listDE = new ListDE();
-                NodeDE tempo = this.headDE;
-                NodeDE lastBoy1 = null;
-                while (tempo != null) {
-                    if (tempo.getData().getGender() == 'M') {
-                        if (lastBoy1 != null) {
-                            listDE.addToStart(lastBoy1.getData());
-                        }
-                        lastBoy1 = tempo;
+                NodeDE temp = this.headDE;
+
+                while (temp != null) {
+                    if (temp.getData().getGender() == 'M') {
+                        listDE.addToStart(temp.getData());
                     } else {
-                        listDE.add(tempo.getData());
+                        listDE.add(temp.getData());
                     }
-                    tempo = tempo.getNext();
-                }
-                if (lastBoy1 != null) {
-                    listDE.addToStart(lastBoy1.getData());
+                    temp = temp.getNext();
                 }
                 this.headDE = listDE.getHead();
             } else {
-                throw new ListDEException("La lista está vacía");
+                throw new ListDEException("No hay niños para completar esta operacion");
             }
         } catch (ListDEException e) {
-            System.out.println("Se lanzó una excepción de ListDE: " + e.getMessage());
-            // aquí podrías hacer algo más con la excepción, como registrarla en un archivo de registro o mostrar un mensaje de error al usuario
-        } catch (Exception e) {
-            System.out.println("Se lanzó una excepción inesperada: " + e.getMessage());
-            // aquí podrías hacer algo más con la excepción, como registrarla en un archivo de registro o mostrar un mensaje de error al usuario
+            // manejo de la excepción aquí
+            // por ejemplo, puedes imprimir el mensaje de error
+            throw new ListDEException("Se ha producido un error al ordenar la lista de niños: " + e.getMessage());
         }
     }
-
-
     /*
     En esta parte vemos que cambiamos el Kid por el pet ya que el kid pues lo usamos para la lista simplemente
     Enlazada,Tambien convertimos ese head por headDE ya que como tenemos una clase creada como el el NodeDE tenemos cread
@@ -166,62 +162,74 @@ public class ListDE {
     }
 
     //----------------------CODIGO 3 INTERCALAR NIÑO-NIÑA-NIÑO-NIÑA-------------------------------
-    public void getAlternatePets() throws ListDEException {
+    public void getAlternateKids() throws ListDEException {
         try {
-            if (headDE == null || headDE.getNext() == null) {
-                throw new ListDEException("La lista está vacía o solo tiene un elemento");
-            }
+            ListDE alternateList = new ListDE();
 
-            NodeDE petsMa = headDE;
-            NodeDE petsFe = headDE.getNext();
-            NodeDE petsFe1 = petsFe;
+            ListDE listBoys = new ListDE();
+            ListDE listGirls = new ListDE();
 
-            while (petsFe != null && petsMa != null) {
-                petsMa.setNext(petsFe.getNext());
-                if (petsMa.getNext() != null) {
-                    petsFe.setNext(petsFe.getNext().getNext());
-                }
-                petsMa = petsMa.getNext();
-                petsFe = petsMa.getNext();
-            }
+            NodeDE temp = headDE;
 
-            if (petsFe == null) {
-                petsMa.setNext(petsFe1);
+            if (this.headDE == null && this.headDE.getNext() == null) {
+                throw new ListDEException("No existen niños o no hay suficientes para alternar");
             } else {
-                petsFe.setNext(petsFe1);
+                while (temp != null) {
+                    if (temp.getData().getGender() == 'M') {
+                        listBoys.add(temp.getData());
+                    } else {
+                        if (temp.getData().getGender() == 'F') {
+                            listGirls.add(temp.getData());
+                        }
+                    }
+                    temp = temp.getNext();
+                }
+
+                NodeDE boysNode = listBoys.getHead();
+                NodeDE girlsNode = listGirls.getHead();
+
+                while (boysNode != null) {
+                    if (boysNode != null) {
+                        alternateList.add(boysNode.getData());
+                        boysNode = boysNode.getNext();
+                    }
+                    if (girlsNode != null) {
+                        alternateList.add(girlsNode.getData());
+                        girlsNode = girlsNode.getNext();
+                    }
+                }
+                this.headDE = alternateList.getHead();
             }
-        } catch (ListDEException e) {
-            throw new ListDEException("La lista está vacía");
-            // aquí podrías hacer algo más con la excepción, como registrarla en un archivo de registro o mostrar un mensaje de error al usuario
-        } catch (Exception e) {
-            throw new ListDEException("La lista está vacía");
-            // aquí podrías hacer algo más con la excepción, como registrarla en un archivo de registro o mostrar un mensaje de error al usuario
+        } catch (NullPointerException e) {
+            throw new ListDEException("Error de puntero nulo al tratar de alternar niños");
         }
     }
 
     //-------------------------CODIGO 4 DADA UNA EDAD ELIMINAR A LOS NIÑOS DE LA EDAD DADA -----------------
 
-    public void removePetByAge(byte age) throws ListDEException {
+    public void removeKidByAge(Byte age) throws ListDEException {
+        NodeDE temp = headDE;
+        ListDE listcopy = new ListDE();
         try {
             if (age <= 0) {
-                throw new ListDEException("La edad debe ser un valor positivo mayor que cero");
-            }
-            NodeDE current = headDE;
-            NodeDE prev = null;
-            while (current != null) {
-                if (current.getData().getAge() == age) {
-                    if (prev == null) {
-                        headDE = current.getNext();
-                    } else {
-                        prev.setNext(current.getNext());
-                    }
+                throw new ListDEException("La edad debe ser mayor que cero");
+            } else {
+                if (this.headDE == null) {
+                    throw new ListDEException("No existen niños para realizar la operación");
                 } else {
-                    prev = current;
+
+                    while (temp != null) {
+                        if (temp.getData().getAge() != age) {
+                            listcopy.addToStart(temp.getData());
+                        }
+                        temp = temp.getNext();
+                    }
+                    this.headDE = listcopy.getHead();
+
                 }
-                current = current.getNext();
             }
-        } catch (NullPointerException e) {
-            throw new ListDEException("La lista está vacía");
+        } catch (ListDEException e) {
+            throw new ListDEException("Error al remover niños por edad: " + e.getMessage());
         }
     }
 
@@ -237,34 +245,48 @@ public class ListDE {
         return count;
     }
 
-    public double getAverageAge() throws ListSEException {
+    public float getAverageAge() throws ListDEException {
         try {
-            double averageAge = 0;
-            NodeDE temp = this.headDE;
-            if (this.headDE != null) {
-                while (temp != null) {
-                    averageAge = averageAge + temp.getData().getAge();
+            if (headDE != null) {
+                NodeDE temp = headDE;
+                int count = 0;
+                int age = 0;
+                while (temp.getNext() != null) {
+                    count++;
+                    age = age + temp.getData().getAge();
                     temp = temp.getNext();
                 }
-                averageAge = averageAge / getLength();
-                return averageAge;
-
+                return (float) age / count;
             } else {
-                throw new ListSEException("La lista está vacía");
+                throw new ListDEException("No hay niños para poder hacer el promedio de edades");
             }
         } catch (ArithmeticException e) {
-            throw new ListSEException("La lista está vacía");
+            throw new ListDEException("No se pudo calcular el promedio de edades debido a una excepción aritmética: " + e.getMessage());
         }
     }
 
     //-----------CODIGO 6 GENERAR UN REPORTE QUE ME DIGA CUANTOS NIÑOS HAY DE CADA CIUDAD-----------------
 
-    public int getCountPetsByLocationCode(String code) throws ListSEException {
+    public void getReportKidsByLocationGendersByAge(byte age, ReportKidsLocationGenderDTO report) throws ListDEException {
         try {
-            if (code == null || code.isEmpty()) {
-                throw new ListSEException("El código de ubicación no puede ser nulo o vacío");
+            if (headDE != null) {
+                NodeDE temp = this.headDE;
+                while (temp != null) {
+                    if (temp.getData().getAge() > age) {
+                        report.updateQuantity(temp.getData().getLocation().getName(), temp.getData().getGender());
+                    }
+                    temp = temp.getNext();
+                }
+            } else {
+                throw new ListDEException("No existen niños para poder realizar la función");
             }
-            int count = 0;
+        } catch (ListDEException e) {
+            throw new ListDEException("Error al generar el reporte de niños por ubicación y género: " + e.getMessage());
+        }
+    }
+    public int getCountKidsByLocationCode(String code) throws ListDEException {
+        int count = 0;
+        try {
             if (this.headDE != null) {
                 NodeDE temp = this.headDE;
                 while (temp != null) {
@@ -274,61 +296,115 @@ public class ListDE {
                     temp = temp.getNext();
                 }
             } else {
-                return 0;
+                throw new ListDEException("No existen niños para poder realizar la operación");
             }
-            return count;
-        } catch (NullPointerException | IllegalArgumentException e) {
-            throw new ListSEException("Ha ocurrido un error en la lista: " + e.getMessage());
+        } catch (ListDEException e) {
+            throw new ListDEException("No puedo hacer esta operacion intentalo de nuevo " + e.getMessage());
         }
+        return count;
+    }
+
+    public int getCountKidsByDeptCode(String code) throws ListDEException {
+        try {
+            // Llamada al método que realiza el conteo de niños en un departamento específico
+            return count(code);
+        } catch (ListDEException e) {
+            throw new ListDEException("No se puede identificar la cantidad de niños " + e.getMessage());
+        }
+    }
+
+    private int count(String code) throws ListDEException {
+        int count = 0;
+        if (this.headDE != null) {
+            NodeDE temp = this.headDE;
+            while (temp != null) {
+                if (temp.getData().getLocation().getCode().substring(0, 5).equals(code)) {
+                    count++;
+                }
+                temp = temp.getNext();
+            }
+        } else {
+            throw new ListDEException("No existen niños para poder realizar la operación");
+        }
+        return count;
     }
 
     //------------CODIGO 7 METODO QUE ME PERMITA DECIRLE A UN NIÑO DETERMINADO QUE ADELANTE  UN NUMERO DE POSICIONES DADAS---------
 
-    public void winPositionPet(String id, int win) throws ListDEException {
+    public void winPositionKid(String id, int position, ListDE listDE) throws ListDEException {
         try {
-            NodeDE temp = headDE;
-            int sum = 0;
-            ListDE listDE = new ListDE();
-            int size = getLength();
+            if (!this.headDE.getData().getId().equals(id)) {
+                throw new ListDEException("No existe el niño que busca");
+            }
 
             if (headDE != null) {
+                NodeDE temp = this.headDE;
+                int count = 0;
+
                 while (temp != null && !temp.getData().getId().equals(id)) {
-                    listDE.add(temp.getData());
                     temp = temp.getNext();
+                    count++;
                 }
 
-                if (temp == null) {
-                    throw new ListDEException("No se encontró una mascota con el ID " + id);
+                if (count > size || count < size) {
+                    throw new ListDEException("No se puede realizar la accion por falta de niños");
                 }
 
-                sum = temp.getData().getPosition() + win;
+                int newPosition = count - position;
+                Pet listCopy = temp.getData();
+                listDE.deleteKidByIdentification(temp.getData().getId());
+                listDE.addKidsByPosition(listCopy, newPosition);
 
-                if (sum < 0) {
-                    throw new ListDEException("No se puede mover la mascota más allá de la primera posición");
-                } else if (sum > size) {
-                    throw new ListDEException("No se puede mover la mascota más allá de la última posición");
-                }
-
-                listDE.add(new Pet(temp.getData().getId(), temp.getData().getName(), sum));
-                temp = temp.getNext();
-
-                while (temp != null) {
-                    listDE.add(temp.getData());
-                    temp = temp.getNext();
-                }
-
-                headDE = listDE.getHead();
             } else {
-                throw new ListDEException("La lista está vacía");
+                throw new ListDEException("No existen niños para poder realizar la función");
             }
         } catch (ListDEException e) {
-            throw new ListDEException(e.getMessage());
+            throw new ListDEException("Error en el método winPositionKid(): " + e.getMessage());
+        }
+    }
+    public void addKidsByPosition(Pet pet, int pos) throws ListDEException {
+        NodeDE newNode = new NodeDE(pet);
+        try {
+            if (pos == 0) {
+                newNode.setNext(headDE);
+                headDE = newNode;
+            } else {
+                NodeDE current = headDE;
+                for (int i = 1; i < pos - 1; i++) {
+                    current = current.getNext();
+                }
+                newNode.setNext(current.getNext());
+                current.setNext(newNode);
+            }
+        } catch (Exception e) {
+            throw new ListDEException("No se puede agregar el niño en la posición indicada: " + e.getMessage());
+        }
+    }
+    public void deleteKidByIdentification(String identification) throws ListDEException {
+        try {
+            NodeDE temp = headDE;
+            NodeDE Nodeanterior = null;
+            while ((temp != null) && (!temp.getData().getId().equals(identification))) {
+                Nodeanterior = temp;
+                temp = temp.getNext();
+            }
+            if (temp != null) {
+                if (Nodeanterior == null) {
+                    headDE = temp.getNext();
+                } else {
+                    Nodeanterior.setNext(temp.getNext());
+                }
+            } else {
+                throw new ListDEException("No se encontró al niño con la identificación " + identification);
+            }
+        } catch (ListDEException e) {
+            throw new ListDEException("No se pudo eliminar al niño con la identificación " + identification + ": " + e.getMessage());
         }
     }
 
     //-----------------CODIGO 8 METODO QUE ME PERIMITA DECIRLE A UN NIÑO DETERMINADO QUE PIERDA UN NUMERO DE POSICIONES DADAS---------------
 
-    public void addPetAtPosForLose(Pet pet, int pos2) throws ListDEException {
+    public void addPetAtPosForLose(@Valid Pet pet, int pos2) throws ListDEException {
         try {
             NodeDE temp = headDE;
             NodeDE newNode = new NodeDE(pet);
@@ -361,7 +437,7 @@ public class ListDE {
 
     //-------------------CODIGO 9 OBTENER UN INFORME DE PERROS POR RANGO DE EDADES--------------------
 
-    public void getAgeByRangePet(byte minAgepet, byte maxAgepet) throws ListDEException {
+    public void getAgeByRangePet(@Valid byte minAgepet, @Valid byte maxAgepet) throws ListDEException {
         try {
             NodeDE current = headDE;
             boolean found = false;
@@ -386,11 +462,11 @@ public class ListDE {
 
     //------------CODIGO 10 IMPLEMENTAR UN METODO QUE ME PERMITA ENVIAR AL FINAL DE LA LISTA A LOS NIÑOS QUE SU NOMBRE INICIE  CON UNA LETRA DADA -----------
 
-    public void addToStartNameChar(char letter) throws ListSEException {
+    public void addToStartNameCharPet(@NotNull char letter) throws ListDEException {
         try {
             // Verificar si la lista está vacía
             if (headDE == null) {
-                throw new ListSEException("La lista está vacía");
+                throw new ListDEException("La lista está vacía");
             }
 
             // Inicializar variables de nodo
@@ -427,8 +503,14 @@ public class ListDE {
                 }
             }
         } catch (NullPointerException e) {
-            throw new ListSEException("La lista está vacía");
+            throw new ListDEException("La lista está vacía");
         }
+    }
+//------------METODOS QUE TENGO QUE AÑADIR PARA LOS DIFERENTES CODIGOS -----------------------
+    public void getinvertPet() {
+    }
+
+    public void getReportPetsByLocationGendersByAge(byte age, ReportPetsLocationGenderDTO reports)throws ListDEException {
     }
 }
 

@@ -20,4 +20,6 @@ public class Kid {
     public int getPosition() {
         return 0;
     }
+
+
 }

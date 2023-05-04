@@ -4,26 +4,20 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3d9acaf8-3970-42ce-9807-f484eb5c0667" name="Changes" comment="Este push ya tiene la lista SE completado teniendo en cuenta la fecha 26/04/24">
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_fasterxml_classmate_1_5_1.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__jakarta_validation_jakarta_validation_api_3_0_2.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__javax_el_javax_el_api_3_0_1_b06.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__javax_validation_validation_api_2_0_0_Final.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_glassfish_javax_el_3_0_1_b12.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_hibernate_validator_hibernate_validator_6_1_5_Final.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_jboss_logging_jboss_logging_3_5_0_Final.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+    <list default="true" id="3d9acaf8-3970-42ce-9807-f484eb5c0667" name="Changes" comment="Este push ya tiene la lista SE completada con las listDE con los 10 metodos de la forma correcta">
+      <change afterPath="$PROJECT_DIR$/ListaSE-main-master/ListaSE-main/tads-master/src/main/java/co/edu/umanizales/tads/controller/dto/LocationGenderQuantityPetDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ListaSE-main-master/ListaSE-main/tads-master/src/main/java/co/edu/umanizales/tads/controller/dto/PetDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ListaSE-main-master/ListaSE-main/tads-master/src/main/java/co/edu/umanizales/tads/controller/dto/PetsByLocationDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ListaSE-main-master/ListaSE-main/tads-master/src/main/java/co/edu/umanizales/tads/controller/dto/ReportPetsLocationGenderDTO.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ListaSE-main-master/ListaSE-main/tads-master/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/ListaSE-main-master/ListaSE-main/tads-master/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ListaSE-main-master/ListaSE-main/tads-master/src/main/java/co/edu/umanizales/tads/controller/ListDEController.java" beforeDir="false" afterPath="$PROJECT_DIR$/ListaSE-main-master/ListaSE-main/tads-master/src/main/java/co/edu/umanizales/tads/controller/ListDEController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ListaSE-main-master/ListaSE-main/tads-master/src/main/java/co/edu/umanizales/tads/controller/ListSEController.java" beforeDir="false" afterPath="$PROJECT_DIR$/ListaSE-main-master/ListaSE-main/tads-master/src/main/java/co/edu/umanizales/tads/controller/ListSEController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ListaSE-main-master/ListaSE-main/tads-master/src/main/java/co/edu/umanizales/tads/model/Kid.java" beforeDir="false" afterPath="$PROJECT_DIR$/ListaSE-main-master/ListaSE-main/tads-master/src/main/java/co/edu/umanizales/tads/model/Kid.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ListaSE-main-master/ListaSE-main/tads-master/src/main/java/co/edu/umanizales/tads/model/ListDE.java" beforeDir="false" afterPath="$PROJECT_DIR$/ListaSE-main-master/ListaSE-main/tads-master/src/main/java/co/edu/umanizales/tads/model/ListDE.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ListaSE-main-master/ListaSE-main/tads-master/src/main/java/co/edu/umanizales/tads/model/ListSE.java" beforeDir="false" afterPath="$PROJECT_DIR$/ListaSE-main-master/ListaSE-main/tads-master/src/main/java/co/edu/umanizales/tads/model/ListSE.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ListaSE-main-master/ListaSE-main/tads-master/src/main/java/co/edu/umanizales/tads/model/NodeDE.java" beforeDir="false" afterPath="$PROJECT_DIR$/ListaSE-main-master/ListaSE-main/tads-master/src/main/java/co/edu/umanizales/tads/model/NodeDE.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ListaSE-main-master/ListaSE-main/tads-master/src/main/java/co/edu/umanizales/tads/model/Pet.java" beforeDir="false" afterPath="$PROJECT_DIR$/ListaSE-main-master/ListaSE-main/tads-master/src/main/java/co/edu/umanizales/tads/model/Pet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ListaSE-main-master/ListaSE-main/tads-master/src/main/java/co/edu/umanizales/tads/service/ListDEService.java" beforeDir="false" afterPath="$PROJECT_DIR$/ListaSE-main-master/ListaSE-main/tads-master/src/main/java/co/edu/umanizales/tads/service/ListDEService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ListaSE-main-master/ListaSE-main/tads-master/src/main/java/co/edu/umanizales/tads/service/ListSEService.java" beforeDir="false" afterPath="$PROJECT_DIR$/ListaSE-main-master/ListaSE-main/tads-master/src/main/java/co/edu/umanizales/tads/service/ListSEService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ListaSE-main-master/ListaSE-main/tads-master/tads.iml" beforeDir="false" afterPath="$PROJECT_DIR$/ListaSE-main-master/ListaSE-main/tads-master/tads.iml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -59,25 +53,25 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RequestMappingsPanelOrder0": "0",
-    "RequestMappingsPanelOrder1": "1",
-    "RequestMappingsPanelWidth0": "75",
-    "RequestMappingsPanelWidth1": "75",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "last_opened_file_path": "C:/Users/Jheferson/Documents/YEFF/ListaSE-main-master",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "spring.configuration.checksum": "1006b614b4dfaa493690ab38b1cbd70a",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
+    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
+    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
+    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/Jheferson/Documents/YEFF/ListaSE-main-master&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;spring.configuration.checksum&quot;: &quot;1006b614b4dfaa493690ab38b1cbd70a&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager">
     <configuration name="TadsApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
       <module name="tads" />
@@ -138,7 +132,12 @@
       <workItem from="1682986562515" duration="4012000" />
       <workItem from="1683057176532" duration="3808000" />
       <workItem from="1683061297737" duration="250000" />
-      <workItem from="1683066133311" duration="18147000" />
+      <workItem from="1683066133311" duration="18416000" />
+      <workItem from="1683125587789" duration="3076000" />
+      <workItem from="1683133189505" duration="430000" />
+      <workItem from="1683139143358" duration="5614000" />
+      <workItem from="1683156687734" duration="13354000" />
+      <workItem from="1683226721507" duration="6455000" />
     </task>
     <task id="LOCAL-00001" summary="Este push ya tiene la lista SE completado teniendo en cuenta la fecha 26/04/24">
       <created>1682562758427</created>
@@ -147,7 +146,14 @@
       <option name="project" value="LOCAL" />
       <updated>1682562758427</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Este push ya tiene la lista SE completada con las listDE con los 10 metodos de la forma correcta">
+      <created>1683087413294</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1683087413295</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -166,6 +172,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Este push ya tiene la lista SE completado teniendo en cuenta la fecha 26/04/24" />
-    <option name="LAST_COMMIT_MESSAGE" value="Este push ya tiene la lista SE completado teniendo en cuenta la fecha 26/04/24" />
+    <MESSAGE value="Este push ya tiene la lista SE completada con las listDE con los 10 metodos de la forma correcta" />
+    <option name="LAST_COMMIT_MESSAGE" value="Este push ya tiene la lista SE completada con las listDE con los 10 metodos de la forma correcta" />
   </component>
 </project>

@@ -1,5 +1,5 @@
 package co.edu.umanizales.tads.model;
-
+import javax.validation.constraints.*;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -8,6 +8,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class NodeDE {
+    @NotNull
     public String name;
     private Pet data;
     private NodeDE next;

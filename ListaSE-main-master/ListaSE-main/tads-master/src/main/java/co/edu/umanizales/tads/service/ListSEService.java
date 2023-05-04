@@ -27,8 +27,8 @@ public class ListSEService {
 
     }
     //---------------------------------------ESTE ES EL PRIMER METODO DE PROGRAMACION------------------------
-    public void invert() throws ListSEException {
-        kids.invert();
+    public void getinvert() throws ListSEException {
+        kids.getinvert();
     }
 
     public  void removeKidByAge(byte age) {
