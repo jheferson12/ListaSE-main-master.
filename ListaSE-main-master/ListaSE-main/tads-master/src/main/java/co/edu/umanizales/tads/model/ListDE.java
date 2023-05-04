@@ -507,10 +507,7 @@ public class ListDE {
         }
     }
 //------------METODOS QUE TENGO QUE AÑADIR PARA LOS DIFERENTES CODIGOS -----------------------
-    public void getinvertPet() {
-    }
-
-    public void getReportPetsByLocationGendersByAge(byte age, ReportPetsLocationGenderDTO reports)throws ListDEException {
+        public void getReportPetsByLocationGendersByAge(byte age, ReportPetsLocationGenderDTO reports)throws ListDEException {
     }
 }
 

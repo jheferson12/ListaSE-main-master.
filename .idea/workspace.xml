@@ -4,21 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3d9acaf8-3970-42ce-9807-f484eb5c0667" name="Changes" comment="Este push ya tiene la lista SE completada con las listDE con los 10 metodos de la forma correcta">
-      <change afterPath="$PROJECT_DIR$/ListaSE-main-master/ListaSE-main/tads-master/src/main/java/co/edu/umanizales/tads/controller/dto/LocationGenderQuantityPetDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ListaSE-main-master/ListaSE-main/tads-master/src/main/java/co/edu/umanizales/tads/controller/dto/PetDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ListaSE-main-master/ListaSE-main/tads-master/src/main/java/co/edu/umanizales/tads/controller/dto/PetsByLocationDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ListaSE-main-master/ListaSE-main/tads-master/src/main/java/co/edu/umanizales/tads/controller/dto/ReportPetsLocationGenderDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ListaSE-main-master/ListaSE-main/tads-master/src/main/java/co/edu/umanizales/tads/controller/ListDEController.java" beforeDir="false" afterPath="$PROJECT_DIR$/ListaSE-main-master/ListaSE-main/tads-master/src/main/java/co/edu/umanizales/tads/controller/ListDEController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ListaSE-main-master/ListaSE-main/tads-master/src/main/java/co/edu/umanizales/tads/controller/ListSEController.java" beforeDir="false" afterPath="$PROJECT_DIR$/ListaSE-main-master/ListaSE-main/tads-master/src/main/java/co/edu/umanizales/tads/controller/ListSEController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ListaSE-main-master/ListaSE-main/tads-master/src/main/java/co/edu/umanizales/tads/model/Kid.java" beforeDir="false" afterPath="$PROJECT_DIR$/ListaSE-main-master/ListaSE-main/tads-master/src/main/java/co/edu/umanizales/tads/model/Kid.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ListaSE-main-master/ListaSE-main/tads-master/src/main/java/co/edu/umanizales/tads/model/ListDE.java" beforeDir="false" afterPath="$PROJECT_DIR$/ListaSE-main-master/ListaSE-main/tads-master/src/main/java/co/edu/umanizales/tads/model/ListDE.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ListaSE-main-master/ListaSE-main/tads-master/src/main/java/co/edu/umanizales/tads/model/ListSE.java" beforeDir="false" afterPath="$PROJECT_DIR$/ListaSE-main-master/ListaSE-main/tads-master/src/main/java/co/edu/umanizales/tads/model/ListSE.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ListaSE-main-master/ListaSE-main/tads-master/src/main/java/co/edu/umanizales/tads/model/NodeDE.java" beforeDir="false" afterPath="$PROJECT_DIR$/ListaSE-main-master/ListaSE-main/tads-master/src/main/java/co/edu/umanizales/tads/model/NodeDE.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ListaSE-main-master/ListaSE-main/tads-master/src/main/java/co/edu/umanizales/tads/service/ListDEService.java" beforeDir="false" afterPath="$PROJECT_DIR$/ListaSE-main-master/ListaSE-main/tads-master/src/main/java/co/edu/umanizales/tads/service/ListDEService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ListaSE-main-master/ListaSE-main/tads-master/src/main/java/co/edu/umanizales/tads/service/ListSEService.java" beforeDir="false" afterPath="$PROJECT_DIR$/ListaSE-main-master/ListaSE-main/tads-master/src/main/java/co/edu/umanizales/tads/service/ListSEService.java" afterDir="false" />
-    </list>
+    <list default="true" id="3d9acaf8-3970-42ce-9807-f484eb5c0667" name="Changes" comment="Este push ya tiene la lista SE completada con las listDE con los 10 metodos de la forma correcta correccion de nuevo teniendo en cuenta unos codigos que estan en proceso" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -137,7 +123,7 @@
       <workItem from="1683133189505" duration="430000" />
       <workItem from="1683139143358" duration="5614000" />
       <workItem from="1683156687734" duration="13354000" />
-      <workItem from="1683226721507" duration="6455000" />
+      <workItem from="1683226721507" duration="6645000" />
     </task>
     <task id="LOCAL-00001" summary="Este push ya tiene la lista SE completado teniendo en cuenta la fecha 26/04/24">
       <created>1682562758427</created>
@@ -153,7 +139,14 @@
       <option name="project" value="LOCAL" />
       <updated>1683087413295</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Este push ya tiene la lista SE completada con las listDE con los 10 metodos de la forma correcta correccion de nuevo teniendo en cuenta unos codigos que estan en proceso">
+      <created>1683233821420</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1683233821420</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -173,6 +166,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Este push ya tiene la lista SE completado teniendo en cuenta la fecha 26/04/24" />
     <MESSAGE value="Este push ya tiene la lista SE completada con las listDE con los 10 metodos de la forma correcta" />
-    <option name="LAST_COMMIT_MESSAGE" value="Este push ya tiene la lista SE completada con las listDE con los 10 metodos de la forma correcta" />
+    <MESSAGE value="Este push ya tiene la lista SE completada con las listDE con los 10 metodos de la forma correcta correccion de nuevo teniendo en cuenta unos codigos que estan en proceso" />
+    <option name="LAST_COMMIT_MESSAGE" value="Este push ya tiene la lista SE completada con las listDE con los 10 metodos de la forma correcta correccion de nuevo teniendo en cuenta unos codigos que estan en proceso" />
   </component>
 </project>
