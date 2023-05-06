@@ -6,7 +6,6 @@ import co.edu.umanizales.tads.controller.dto.ResponseDTO;
 import co.edu.umanizales.tads.model.Kid;
 import co.edu.umanizales.tads.model.ListSE;
 import co.edu.umanizales.tads.model.Location;
-import co.edu.umanizales.tads.model.Node;
 import co.edu.umanizales.tads.service.ListSEService;
 import co.edu.umanizales.tads.service.LocationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +14,6 @@ import co.edu.umanizales.tads.exception.ListSEException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
-
 import java.util.List;
 
 
@@ -29,8 +27,6 @@ public class ListSEController {
 
 
     //En este codigo vamos a ver
-
-
 //En esta parte del codigo vemos que el getMaping sirve para enviar el HTTP o la url hacer por
 
 
@@ -119,26 +115,26 @@ public class ListSEController {
     }
 
     //------------------CODIGO PARA AÑADIR AL NIÑO-------------------------------------------
-    @PostMapping(path = "addkid")
-    public ResponseEntity<ResponseDTO> addKid(@RequestBody KidDTO kidDTO) throws ListSEException {
-        Location location = locationService.getLocationByCode(kidDTO.getCodeLocation());
-        if (location == null) {
+    @PostMapping
+    public ResponseEntity<ResponseDTO> addKid(@RequestBody KidDTO kidDTO){
+        Location location = locationService.getLocationsByCode(kidDTO.getCodeLocation());
+        if(location == null){
             return new ResponseEntity<>(new ResponseDTO(
-                    404, "La ubicación no existe",
+                    404,"La ubicación no existe",
                     null), HttpStatus.OK);
         }
         try {
             listSEService.getKids().add(
                     new Kid(kidDTO.getIdentification(),
-                            kidDTO.getAge(), kidDTO.getGender(),
-                            location, kidDTO.getCodeLocation()));
+                            kidDTO.getName(), kidDTO.getAge(),
+                            kidDTO.getGender(), location));
         } catch (ListSEException e) {
             return new ResponseEntity<>(new ResponseDTO(
-                    409, e.getMessage(),
+                    409,e.getMessage(),
                     null), HttpStatus.OK);
         }
         return new ResponseEntity<>(new ResponseDTO(
-                200, "Se ha adicionado el petacón",
+                200,"Se ha adicionado el petacón",
                 null), HttpStatus.OK);
 
     }
@@ -148,11 +144,15 @@ public class ListSEController {
     //-----------ESTE ES EL CONTROLER DE INVETIR LISTA(1)---------------------------
     @GetMapping("/invert")
     public ResponseEntity<ResponseDTO> getInvert() {
-        listSEService.changeExtremes();
-        return new ResponseEntity<>(new ResponseDTO(
-                200, "SE ha invertido la lista",
-                null), HttpStatus.OK);
-
+        try {
+            listSEService.changeExtremes();
+            return new ResponseEntity<>(new ResponseDTO(200,
+                    "Se ha invertido la lista",null),
+                    HttpStatus.OK);
+        } catch (Exception e) {return new ResponseEntity<>(new ResponseDTO(500,
+                "Error al intentar invertir la lista"+e.getMessage(),
+                    null), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     //--------------ESTE ES EL CONTROLER DE NIÑOS AL PRINCIPIO Y NIÑAS AL FINAL(2)----------------
@@ -248,6 +248,7 @@ public class ListSEController {
                     HttpStatus.BAD_REQUEST);
         }
     }
+
     /*@GetMapping(path = "/count_kid_by_city")
     public Map<String, Integer> countKidByCity() {
         Map<String, Integer> KidByCity = new HashMap<>();
@@ -281,7 +282,7 @@ public class ListSEController {
     //-----------------ESTE ES EL CONTROLLER DE:METODO QUE ME PERMITA DECIRLE A UN NIÑO DETERMINADO QUE PIERDA UN NUMERO DE POSICIONES DADAS (8) -------------
 
     @PostMapping(path = "/kids/addkidatposforlose/{pos}")
-    public ResponseEntity<ResponseDTO> addKidAtPosForLose(@RequestBody Kid kid, @PathVariable int pos)throws ListSEException {
+    public ResponseEntity<ResponseDTO> addKidAtPosForLose(@RequestBody Kid kid, @PathVariable int pos) {
         try {
             listSEService.addKidAtPosForLose(kid, pos);
             return new ResponseEntity<>(new ResponseDTO(

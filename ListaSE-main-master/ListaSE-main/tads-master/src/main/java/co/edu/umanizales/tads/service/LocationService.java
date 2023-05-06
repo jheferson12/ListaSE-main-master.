@@ -41,14 +41,14 @@ public class LocationService {
         }
 
 
-    public Location getLocationByCode(String codeLocation) throws ListSEException {
+    /*public Location getLocationByCode(String codeLocation) throws ListSEException {
         if (codeLocation == null || codeLocation.isEmpty()) {
             throw new IllegalArgumentException("El código de ubicación no puede ser nulo o vacío");
         }
         Node head=null;
         Node current = head;
         while (current != null) {
-            Location currentLocation = current.getData().getLocation();
+            Location currentLocation = current.getData().getCodeLocation();
             if (currentLocation != null && currentLocation.getCode().equals(codeLocation)) {
                 return currentLocation;
             }
@@ -56,6 +56,8 @@ public class LocationService {
         }
         throw new ListSEException("No se encontró ninguna ubicación con el código proporcionado");
     }
+
+     */
 
     public List<Location> getLocationsByCodeSize(int size){
         List<Location> listLocations = new ArrayList<>();

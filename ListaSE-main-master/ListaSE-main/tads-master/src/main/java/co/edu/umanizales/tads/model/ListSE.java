@@ -16,29 +16,27 @@ public class ListSE {
     List<Kid> kids = new ArrayList<>();
 
     public void add(Kid kid) throws ListSEException {
-        try {
-            if (head != null) {
-                Node temp = head;
-                while (temp.getNext() != null) {
-                    if (temp.getData().getId().equals(kid.getId())) {
-                        throw new ListSEException("Ya existe un niño");
-                    }
-                    temp = temp.getNext();
-                }
-                if (temp.getData().getId().equals(kid.getId())) {
+        if(head != null){
+            Node temp = head;
+            while(temp.getNext() !=null)
+            {
+                if(temp.getData().getIdentification().equals(kid.getIdentification())){
                     throw new ListSEException("Ya existe un niño");
                 }
-                /// Parado en el último
-                Node newNode = new Node(kid);
-                temp.setNext(newNode);
-            } else {
-                head = new Node(kid);
+                temp = temp.getNext();
+
             }
-            size++;
-        } catch (ListSEException ex) {
-            // Manejar la excepción aquí
-            throw new ListSEException("Se ha producido un error al agregar un niño" + ex.getMessage());
+            if(temp.getData().getIdentification().equals(kid.getIdentification())){
+                throw new ListSEException("Ya existe un niño");
+            }
+            /// Parado en el último
+            Node newNode = new Node(kid);
+            temp.setNext(newNode);
         }
+        else {
+            head = new Node(kid);
+        }
+        size ++;
     }
 
     //------------
@@ -65,6 +63,23 @@ public class ListSE {
     }
 
      */
+    public void deleteByidentification (String identification){
+        Node currentNode = head;
+        Node prevNode = null;
+
+        while (currentNode != null && currentNode.getData().getIdentification() != identification) {
+            prevNode = currentNode;
+            currentNode = currentNode.getNext();
+        }
+
+        if(currentNode != null){
+            if (prevNode == null){
+                head = currentNode.getNext();
+            }else {
+                prevNode.setNext(currentNode.getNext());
+            }
+        }
+    }
 
 
 
@@ -290,26 +305,22 @@ public class ListSE {
         }
     }
 
-    public int getCountKidsByLocationCode(String code) throws ListSEException {
-        int count = 0;
-        try {
-            if (this.head != null) {
-                Node temp = this.head;
-                while (temp != null) {
-                    if (temp.getData().getLocation().getCode().equals(code)) {
-                        count++;
-                    }
-                    temp = temp.getNext();
+    public int getCountKidsByLocationCode(String code) throws ListSEException{
+        int count =0;
+        if (this.head == null){
+            throw new ListSEException("No hay niños para realizar esta operacion");
+        }
+        if( this.head!=null){
+            Node temp = this.head;
+            while(temp != null){
+                if(temp.getData().getLocation().getCode().equals(code)){
+                    count++;
                 }
-            } else {
-                throw new ListSEException("No existen niños para poder realizar la operación");
+                temp = temp.getNext();
             }
-        } catch (ListSEException e) {
-            throw new ListSEException("No puedo hacer esta operacion intentalo de nuevo " + e.getMessage());
         }
         return count;
     }
-
     public int getCountKidsByDeptCode(String code) throws ListSEException {
         try {
             // Llamada al método que realiza el conteo de niños en un departamento específico
@@ -340,7 +351,7 @@ public class ListSE {
 
     public void winPositionKid(String id, int position, ListSE listSE) throws ListSEException {
         try {
-            if (!this.head.getData().getId().equals(id)) {
+            if (!this.head.getData().getIdentification().equals(id)) {
                 throw new ListSEException("No existe el niño que busca");
             }
 
@@ -348,7 +359,7 @@ public class ListSE {
                 Node temp = this.head;
                 int count = 0;
 
-                while (temp != null && !temp.getData().getId().equals(id)) {
+                while (temp != null && !temp.getData().getIdentification().equals(id)) {
                     temp = temp.getNext();
                     count++;
                 }
@@ -359,7 +370,7 @@ public class ListSE {
 
                 int newPosition = count - position;
                 Kid listCopy = temp.getData();
-                listSE.deleteKidByIdentification(temp.getData().getId());
+                listSE.deleteKidByIdentification(temp.getData().getIdentification());
                 listSE.addKidsByPosition(listCopy, newPosition);
 
             } else {
@@ -393,7 +404,7 @@ public class ListSE {
         try {
             Node temp = head;
             Node Nodeanterior = null;
-            while ((temp != null) && (!temp.getData().getId().equals(identification))) {
+            while ((temp != null) && (!temp.getData().getIdentification().equals(identification))) {
                 Nodeanterior = temp;
                 temp = temp.getNext();
             }
@@ -422,13 +433,13 @@ public class ListSE {
             int count = 1;
 
             if (head != null) {
-                while (temp != null && !temp.getData().getId().equals(id)) {
+                while (temp != null && !temp.getData().getIdentification().equals(id)) {
                     temp = temp.getNext();
                     count++;
                 }
                 int newPosition = position + count;
                 Kid listCopy = temp.getData();
-                listSE.deleteKidByIdentification(temp.getData().getId());
+                listSE.deleteKidByIdentification(temp.getData().getIdentification());
                 listSE.addKidsByPosition(listCopy, newPosition);
 
             } else {
@@ -639,7 +650,7 @@ public class ListSE {
         int count = 0;
         Node temp = head;
         while (temp != null) {
-            if (temp.getData().getId().equals(id)) {
+            if (temp.getData().getIdentification().equals(id)) {
                 return count;
             }
             temp = temp.getNext();
@@ -671,7 +682,7 @@ public class ListSE {
     //Este codigo pertenece al codigo numero 8
     public Kid getKidById(String id) throws ListSEException {
         Node temp = head;
-        while (temp != null && !temp.getData().getId().equals(id)) {
+        while (temp != null && !temp.getData().getIdentification().equals(id)) {
             temp = temp.getNext();
         }
         if (temp != null && temp.getData() != null) {

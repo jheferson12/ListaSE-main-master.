@@ -7,19 +7,22 @@ import lombok.*;
 @Setter
 public class Kid {
 
+    private String identification;
     private String name;
     private byte age;
     private char gender;
     private Location location;
-    private  String id;
 
-    public Kid(String id, String name, int sum) {
+
+
+    public Kid(String name, byte age, char gender, String codeLocation, String identification) {
     }
 
 
     public int getPosition() {
         return 0;
     }
+
 
 
 }

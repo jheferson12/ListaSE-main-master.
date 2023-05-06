@@ -1,5 +1,6 @@
 package co.edu.umanizales.tads.controller.dto;
 
+import co.edu.umanizales.tads.model.Location;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -13,6 +14,7 @@ public class KidDTO {
     private byte age;
     private char gender;
     private String codeLocation;
+
 
 
 
