@@ -299,7 +299,7 @@ public class ListDE {
 
     //-----------CODIGO 6 GENERAR UN REPORTE QUE ME DIGA CUANTAS MASCOTAS HAY DE CADA CIUDAD-----------------
 
-    public void getReportKidsByLocationGendersByAge(@Min(value = 0, message = "La edad debe ser mayor o igual a cero") byte age, @NotNull ReportKidsLocationGenderDTO report) throws ListDEException {
+    public void getReportPetsByLocationGendersByAge(@Min(value = 0, message = "La edad debe ser mayor o igual a cero") byte age, @NotNull ReportKidsLocationGenderDTO report) throws ListDEException {
         try {
             if (headDE != null) {
                 NodeDE temp = this.headDE;
@@ -471,7 +471,7 @@ public class ListDE {
             NodeDE temp = headDE;
             NodeDE newNode = new NodeDE(pet);
             int listLength = getLength();
-            if (pos2 < 0 || pos2 >= listLength)//to do a validation and add the kid in the last position
+            if (pos2 < 0 || pos2 >= listLength)//to do a validation and add the Pet in the last position
                 add(pet);
             if (pos2 == 0) {
                 newNode.setNext(headDE);//to actualize the head
