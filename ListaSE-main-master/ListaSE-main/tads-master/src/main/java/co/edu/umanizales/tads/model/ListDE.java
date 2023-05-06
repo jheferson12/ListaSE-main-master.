@@ -131,7 +131,7 @@ public class ListDE {
         size++;
     }
 
-    //-----------------------------CODIGO 2 NIÑOS AL INCIO Y NIÑAS AL FINAL-------------------------------
+    //-----------------------------CODIGO 2 MASCOTA AL INCIO Y MASCOTAS AL FINAL-------------------------------
 
     /*
     En este codigo (2) vemos que lo que cambio es el head por headDE y el tem para diferenciar le añadi una "o"
@@ -184,7 +184,7 @@ public class ListDE {
 
 
 
-    //----------------------CODIGO 3 INTERCALAR NIÑO-NIÑA-NIÑO-NIÑA-------------------------------
+    //----------------------CODIGO 3 INTERCALAR MASCOTA (MASCULINO)-MASCOTAS( FEMENINO)-MASCOTA(MASCULINO)-MASCOTAS(FEMENINO)-------------------------------
     public void getAlternatePets() throws @NotEmpty ListDEException {
         try {
             ListDE alternateList = new ListDE();
@@ -233,7 +233,7 @@ public class ListDE {
         return null;
     }
 
-    //-------------------------CODIGO 4 DADA UNA EDAD ELIMINAR A LOS NIÑOS DE LA EDAD DADA -----------------
+    //-------------------------CODIGO 4 DADA UNA EDAD ELIMINAR A LA MASCOTA DE LA EDAD DADA -----------------
 
     public void removePetByAge(@Min(value = 1, message = "La edad debe ser mayor que cero") Byte age) throws ListDEException {
         NodeDE temp = headDE;
@@ -265,7 +265,7 @@ public class ListDE {
     }
 
 
-    //---------CODIGO 5 OBTENER EL PROMEDIO DE EDAD DE LOS NIÑOS DE LA LISTA -------------------
+    //---------CODIGO 5 OBTENER EL PROMEDIO DE EDAD DE LAS MASCOTAS DE LA LISTA -------------------
 
     public int getLength() {
         int count = 0;
@@ -297,7 +297,7 @@ public class ListDE {
         }
     }
 
-    //-----------CODIGO 6 GENERAR UN REPORTE QUE ME DIGA CUANTOS NIÑOS HAY DE CADA CIUDAD-----------------
+    //-----------CODIGO 6 GENERAR UN REPORTE QUE ME DIGA CUANTAS MASCOTAS HAY DE CADA CIUDAD-----------------
 
     public void getReportKidsByLocationGendersByAge(@Min(value = 0, message = "La edad debe ser mayor o igual a cero") byte age, @NotNull ReportKidsLocationGenderDTO report) throws ListDEException {
         try {
@@ -362,7 +362,7 @@ public class ListDE {
         return count;
     }
 
-    //------------CODIGO 7 METODO QUE ME PERMITA DECIRLE A UN NIÑO DETERMINADO QUE ADELANTE  UN NUMERO DE POSICIONES DADAS---------
+    //------------CODIGO 7 METODO QUE ME PERMITA DECIRLE A UNA MASCOTA DETERMINADO QUE ADELANTE  UN NUMERO DE POSICIONES DADAS---------
 
     public void winPositionPet(@NotEmpty String id, @Positive int position,@NotNull ListDE listDE) throws ListDEException {
 
@@ -464,7 +464,7 @@ public class ListDE {
         }
     }
 
-    //-----------------CODIGO 8 METODO QUE ME PERIMITA DECIRLE A UN NIÑO DETERMINADO QUE PIERDA UN NUMERO DE POSICIONES DADAS---------------
+    //-----------------CODIGO 8 METODO QUE ME PERIMITA DECIRLE A UNA MASCOTA DETERMINADO QUE PIERDA UN NUMERO DE POSICIONES DADAS---------------
 
     public void addPetAtPosForLose(@Valid Pet pet, int pos2) throws ListDEException {
         try {
@@ -524,7 +524,7 @@ public class ListDE {
         }
     }
 
-    //------------CODIGO 10 IMPLEMENTAR UN METODO QUE ME PERMITA ENVIAR AL FINAL DE LA LISTA A LOS NIÑOS QUE SU NOMBRE INICIE  CON UNA LETRA DADA -----------
+    //------------CODIGO 10 IMPLEMENTAR UN METODO QUE ME PERMITA ENVIAR AL FINAL DE LA LISTA A LAS MASCOTAS QUE SU NOMBRE INICIE  CON UNA LETRA DADA -----------
 
     public void addToStartNameCharPet(@NotNull char letter) throws ListDEException {
         try {

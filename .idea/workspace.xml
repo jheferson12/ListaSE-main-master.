@@ -4,17 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3d9acaf8-3970-42ce-9807-f484eb5c0667" name="Changes" comment="Este push ya tiene la lista SE completada con las listDE con los 10 metodos de la forma correcta correccion de nuevo teniendo en cuenta unos codigos que estan en proceso">
+    <list default="true" id="3d9acaf8-3970-42ce-9807-f484eb5c0667" name="Changes" comment="En este codigo esta organizado correctamente el codigo este es el que ya esta listo el dia 5/05/2023">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ListaSE-main-master/ListaSE-main/tads-master/src/main/java/co/edu/umanizales/tads/controller/ListDEController.java" beforeDir="false" afterPath="$PROJECT_DIR$/ListaSE-main-master/ListaSE-main/tads-master/src/main/java/co/edu/umanizales/tads/controller/ListDEController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ListaSE-main-master/ListaSE-main/tads-master/src/main/java/co/edu/umanizales/tads/controller/ListSEController.java" beforeDir="false" afterPath="$PROJECT_DIR$/ListaSE-main-master/ListaSE-main/tads-master/src/main/java/co/edu/umanizales/tads/controller/ListSEController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ListaSE-main-master/ListaSE-main/tads-master/src/main/java/co/edu/umanizales/tads/controller/dto/KidDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/ListaSE-main-master/ListaSE-main/tads-master/src/main/java/co/edu/umanizales/tads/controller/dto/KidDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ListaSE-main-master/ListaSE-main/tads-master/src/main/java/co/edu/umanizales/tads/controller/dto/PetDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/ListaSE-main-master/ListaSE-main/tads-master/src/main/java/co/edu/umanizales/tads/controller/dto/PetDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ListaSE-main-master/ListaSE-main/tads-master/src/main/java/co/edu/umanizales/tads/model/Kid.java" beforeDir="false" afterPath="$PROJECT_DIR$/ListaSE-main-master/ListaSE-main/tads-master/src/main/java/co/edu/umanizales/tads/model/Kid.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ListaSE-main-master/ListaSE-main/tads-master/src/main/java/co/edu/umanizales/tads/model/ListDE.java" beforeDir="false" afterPath="$PROJECT_DIR$/ListaSE-main-master/ListaSE-main/tads-master/src/main/java/co/edu/umanizales/tads/model/ListDE.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ListaSE-main-master/ListaSE-main/tads-master/src/main/java/co/edu/umanizales/tads/model/ListSE.java" beforeDir="false" afterPath="$PROJECT_DIR$/ListaSE-main-master/ListaSE-main/tads-master/src/main/java/co/edu/umanizales/tads/model/ListSE.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ListaSE-main-master/ListaSE-main/tads-master/src/main/java/co/edu/umanizales/tads/model/Pet.java" beforeDir="false" afterPath="$PROJECT_DIR$/ListaSE-main-master/ListaSE-main/tads-master/src/main/java/co/edu/umanizales/tads/model/Pet.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ListaSE-main-master/ListaSE-main/tads-master/src/main/java/co/edu/umanizales/tads/service/LocationService.java" beforeDir="false" afterPath="$PROJECT_DIR$/ListaSE-main-master/ListaSE-main/tads-master/src/main/java/co/edu/umanizales/tads/service/LocationService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -137,7 +129,7 @@
       <workItem from="1683226721507" duration="6645000" />
       <workItem from="1683241916007" duration="13187000" />
       <workItem from="1683309638060" duration="2081000" />
-      <workItem from="1683332457235" duration="11538000" />
+      <workItem from="1683332457235" duration="12699000" />
     </task>
     <task id="LOCAL-00001" summary="Este push ya tiene la lista SE completado teniendo en cuenta la fecha 26/04/24">
       <created>1682562758427</created>
@@ -174,7 +166,14 @@
       <option name="project" value="LOCAL" />
       <updated>1683242337302</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="En este codigo esta organizado correctamente el codigo este es el que ya esta listo el dia 5/05/2023">
+      <created>1683344693821</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1683344693821</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -195,6 +194,7 @@
     <MESSAGE value="Este push ya tiene la lista SE completado teniendo en cuenta la fecha 26/04/24" />
     <MESSAGE value="Este push ya tiene la lista SE completada con las listDE con los 10 metodos de la forma correcta" />
     <MESSAGE value="Este push ya tiene la lista SE completada con las listDE con los 10 metodos de la forma correcta correccion de nuevo teniendo en cuenta unos codigos que estan en proceso" />
-    <option name="LAST_COMMIT_MESSAGE" value="Este push ya tiene la lista SE completada con las listDE con los 10 metodos de la forma correcta correccion de nuevo teniendo en cuenta unos codigos que estan en proceso" />
+    <MESSAGE value="En este codigo esta organizado correctamente el codigo este es el que ya esta listo el dia 5/05/2023" />
+    <option name="LAST_COMMIT_MESSAGE" value="En este codigo esta organizado correctamente el codigo este es el que ya esta listo el dia 5/05/2023" />
   </component>
 </project>
