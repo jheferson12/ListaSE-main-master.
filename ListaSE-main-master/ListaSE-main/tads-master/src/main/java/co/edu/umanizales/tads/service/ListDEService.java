@@ -17,6 +17,9 @@ public class ListDEService {
 
 
     }
+
+    public void removeNodeBtIdentificationPet(String identification) {
+    }
 }
 
 

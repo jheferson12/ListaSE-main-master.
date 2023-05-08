@@ -662,6 +662,7 @@ public class ListSE {
 
 
 
+
     /*
      * algoritmo para eliminar por id
      * se crea una mensajero que sea igual a la cabeza
@@ -715,9 +716,14 @@ public class ListSE {
         return getReport((byte) 12);
     }
 
+
+
+
+
     public void deleteByIdentifications(String id) {
 
     }
+
 
 
     public ListDE toDoublyLinkedList() {

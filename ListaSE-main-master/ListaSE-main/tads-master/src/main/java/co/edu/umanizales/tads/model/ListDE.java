@@ -572,7 +572,55 @@ public class ListDE {
             throw new ListDEException("La lista está vacía");
         }
     }
-//------------METODOS QUE TENGO QUE AÑADIR PARA LOS DIFERENTES CODIGOS -----------------------
+       /*
+    Eliminar por Identificacion
+Cundo queremos eliminar a un niño tenienndo en cuenta la edad  lo primero que ago es lo sigiente
+1Comienzo a crear un metodo  que me pida como tal la identificacion  por ejemplo deleteByage(byte age).
+2 depues en esta parte le pido en el caso que Recorra la listaDE que
+la creo con este nombre para ver el tema del nodo que en ese caso le pongo el valor llamado temp
+que corresponde a esa identificacion  teniendo en cuenta esa parte.Una  vez que encuentre el nodo creado en este caso NodeDE, que me establezca tanto el getNext y el getPrevious  y siguiente para apuntar el uno al otro, omitiendo el nodo que se va a eliminar.
+Y me comienzo a preguntar lo siguiente,Si el nodo que se va a eliminar es el primer nodo en la lista, establezca la cabeza de la lista en el siguiente nodo.
+Si el nodo que se va a eliminar es el último nodo en la lista  es decir en este caso el getprevious , establezca la cola de la lista en el nodo anterior.
+Devuelve el nodo que se eliminó de la lista.
+     */
+    //---------------------EJERCICIO 8/05/23----------------------------------------
+       public NodeDE removeNodeByIdentificationPet(String identification) {
+           NodeDE temp = headDE;
+           NodeDE previousNode = null;
+
+           while (temp != null) {
+               if (temp.getName().equals(identification)) {
+                   if (previousNode != null) {
+                       previousNode.setNext(temp.getNext());
+                   } else {
+                       headDE = temp.getNext();
+                   }
+
+                   if (temp.getNext() != null) {
+                       temp.getNext().setPrevious(previousNode);
+                   }
+
+                   temp.setPrevious(null);
+                   temp.setNext(null);
+
+                   return temp;
+               }
+
+               previousNode = temp;
+               temp = temp.getNext();
+           }
+
+           return null;
+       }
+
+
+
+
+
+
+
+
+    //------------METODOS QUE TENGO QUE AÑADIR PARA LOS DIFERENTES CODIGOS -----------------------
         public void getReportPetsByLocationGendersByAge(byte age, ReportPetsLocationGenderDTO reports)throws ListDEException {
     }
 }

@@ -375,6 +375,15 @@ public class ListDEController {
                 return new ResponseEntity<>(new ResponseDTO(500, errorMessage, null), HttpStatus.INTERNAL_SERVER_ERROR);
             }
         }
+        //--------------------EJERCICIO DIA 8/05/23--------------------------------
+    @GetMapping(path = "/removeNodeByIdentificationPet(identification)")
+    public ResponseEntity<ResponseDTO>removeNodeByIdentificationPet(String identification){
+        listDEService.removeNodeBtIdentificationPet(identification);
+        return new ResponseEntity<>(new ResponseDTO(200,
+                "se removio al niño por identificacion",null),HttpStatus.OK);
+    }
+
+
 
 
     }
