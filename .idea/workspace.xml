@@ -4,12 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3d9acaf8-3970-42ce-9807-f484eb5c0667" name="Changes" comment="En este codigo esta organizado correctamente el codigo este es el que ya esta listo el dia 5/05/2023.">
+    <list default="true" id="3d9acaf8-3970-42ce-9807-f484eb5c0667" name="Changes" comment="En este codigo esta organizado correctamente el codigo este es el que ya esta listo el dia 5/05/2023.&#10;En ete codigo esta el ejercicio del dia 8/05/2023">
+      <change afterPath="$PROJECT_DIR$/ListaSE-main-master/ListaSE-main/tads-master/src/main/java/co/edu/umanizales/tads/controller/dto/RangePetDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ListaSE-main-master/ListaSE-main/tads-master/src/main/java/co/edu/umanizales/tads/controller/dto/Ranges.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ListaSE-main-master/ListaSE-main/tads-master/src/main/java/co/edu/umanizales/tads/service/RangePetService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ListaSE-main-master/ListaSE-main/tads-master/src/main/java/co/edu/umanizales/tads/controller/ListDEController.java" beforeDir="false" afterPath="$PROJECT_DIR$/ListaSE-main-master/ListaSE-main/tads-master/src/main/java/co/edu/umanizales/tads/controller/ListDEController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ListaSE-main-master/ListaSE-main/tads-master/src/main/java/co/edu/umanizales/tads/model/ListDE.java" beforeDir="false" afterPath="$PROJECT_DIR$/ListaSE-main-master/ListaSE-main/tads-master/src/main/java/co/edu/umanizales/tads/model/ListDE.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ListaSE-main-master/ListaSE-main/tads-master/src/main/java/co/edu/umanizales/tads/model/ListSE.java" beforeDir="false" afterPath="$PROJECT_DIR$/ListaSE-main-master/ListaSE-main/tads-master/src/main/java/co/edu/umanizales/tads/model/ListSE.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ListaSE-main-master/ListaSE-main/tads-master/src/main/java/co/edu/umanizales/tads/service/ListDEService.java" beforeDir="false" afterPath="$PROJECT_DIR$/ListaSE-main-master/ListaSE-main/tads-master/src/main/java/co/edu/umanizales/tads/service/ListDEService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -64,6 +65,11 @@
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
+  <component name="RecentsManager">
+    <key name="CreateClassDialog.RecentsKey">
+      <recent name="co.edu.umanizales.tads.controller.dto" />
+    </key>
+  </component>
   <component name="RunManager">
     <configuration name="TadsApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
       <module name="tads" />
@@ -135,7 +141,17 @@
       <workItem from="1683332457235" duration="15837000" />
       <workItem from="1683397125356" duration="32000" />
       <workItem from="1683580263690" duration="720000" />
-      <workItem from="1683581967781" duration="4406000" />
+      <workItem from="1683581967781" duration="4603000" />
+      <workItem from="1683767248590" duration="585000" />
+      <workItem from="1683772483992" duration="46000" />
+      <workItem from="1683773218742" duration="71000" />
+      <workItem from="1683773398862" duration="15000" />
+      <workItem from="1683777396402" duration="44000" />
+      <workItem from="1683777865094" duration="132000" />
+      <workItem from="1683778009125" duration="150000" />
+      <workItem from="1683822776195" duration="172000" />
+      <workItem from="1683834472658" duration="1867000" />
+      <workItem from="1683850979070" duration="11685000" />
     </task>
     <task id="LOCAL-00001" summary="Este push ya tiene la lista SE completado teniendo en cuenta la fecha 26/04/24">
       <created>1682562758427</created>
@@ -193,7 +209,14 @@
       <option name="project" value="LOCAL" />
       <updated>1683351801635</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="En este codigo esta organizado correctamente el codigo este es el que ya esta listo el dia 5/05/2023.&#10;En ete codigo esta el ejercicio del dia 8/05/2023">
+      <created>1683586500925</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1683586500925</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -216,6 +239,17 @@
     <MESSAGE value="Este push ya tiene la lista SE completada con las listDE con los 10 metodos de la forma correcta correccion de nuevo teniendo en cuenta unos codigos que estan en proceso" />
     <MESSAGE value="En este codigo esta organizado correctamente el codigo este es el que ya esta listo el dia 5/05/2023" />
     <MESSAGE value="En este codigo esta organizado correctamente el codigo este es el que ya esta listo el dia 5/05/2023." />
-    <option name="LAST_COMMIT_MESSAGE" value="En este codigo esta organizado correctamente el codigo este es el que ya esta listo el dia 5/05/2023." />
+    <MESSAGE value="En este codigo esta organizado correctamente el codigo este es el que ya esta listo el dia 5/05/2023.&#10;En ete codigo esta el ejercicio del dia 8/05/2023" />
+    <option name="LAST_COMMIT_MESSAGE" value="En este codigo esta organizado correctamente el codigo este es el que ya esta listo el dia 5/05/2023.&#10;En ete codigo esta el ejercicio del dia 8/05/2023" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <breakpoint enabled="true" type="java-exception">
+          <properties class="java.lang.IllegalStateException" package="java.lang" />
+          <option name="timeStamp" value="1" />
+        </breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

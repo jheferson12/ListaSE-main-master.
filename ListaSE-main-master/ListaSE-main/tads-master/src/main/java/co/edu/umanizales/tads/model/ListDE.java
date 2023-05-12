@@ -1,6 +1,5 @@
 package co.edu.umanizales.tads.model;
 import co.edu.umanizales.tads.controller.dto.ReportKidsLocationGenderDTO;
-import co.edu.umanizales.tads.controller.dto.ReportPetsLocationGenderDTO;
 import co.edu.umanizales.tads.exception.ListDEException;
 import lombok.*;
 import javax.validation.Valid;
@@ -28,19 +27,26 @@ public class ListDE {
             if (headDE != null) {
                 NodeDE temp = headDE;
                 while (temp.getNext() != null) {
-                    temp.getNext();
+                    if (temp.getData().getId().equals(pet.getId())) {
+                        throw new ListDEException("Ya se añadio la mascota no puesdes escribirlo de nuevo");
+                    }
+                    temp = temp.getNext();
                 }
-                NodeDE newNodeDE = new NodeDE(pet);
-                temp.setNext(newNodeDE);
-                newNodeDE.setNext(newNodeDE);
+                if (temp.getData().getId().equals(pet.getId())) {
+                    throw new ListDEException("No puede volver a escribir lo mismo ");
+                }
+                NodeDE newNode = new NodeDE(pet);
+                temp.setNext(newNode);
+                newNode.setPrevious(temp);
             } else {
                 headDE = new NodeDE(pet);
+
             }
         } catch (Exception e) {
-            throw new ListDEException("An error occurred while adding a pet: " + e.getMessage());
+            throw new ListDEException("Problema para añadir el perro tenga cuidado: " + e.getMessage());
         }
-    }
 
+    }
 
 
     public void removeDE(@NotNull @Valid Pet pet) throws ListDEException {
@@ -78,7 +84,7 @@ public class ListDE {
 
             throw new ListDEException("El elemento a eliminar no se encuentra en la lista");
         } catch (ListDEException ex) {
-            throw new ListDEException("No puedo remover al perro intenta de nuevo"+ex.getMessage());
+            throw new ListDEException("No puedo remover al perro intenta de nuevo" + ex.getMessage());
         }
     }
 
@@ -88,21 +94,20 @@ public class ListDE {
             if (this.headDE == null) {
                 throw new ListDEException("No hay elementos en la lista para invertir.");
             }
-            NodeDE temp = null;
+            ListDE listDE = new ListDE();
             NodeDE current = this.headDE;
             while (current != null) {
-                temp = current.getPrevious();
-                current.setPrevious(current.getNext());
-                current.setNext(temp);
-                current = current.getPrevious();
+                listDE.addToStart(current.getData());
+                current = current.getNext();
             }
-            if (temp != null) {
-                this.headDE = temp.getPrevious();
+            if (current != null) {
+                this.headDE = current.getPrevious();
             }
         } catch (ListDEException e) {
             throw new ListDEException("Se ha producido un error al invertir la lista: " + e.getMessage());
         }
     }
+
     public List<Pet> print() {
         List<Pet> pets = new ArrayList<>();
         if (headDE != null) {
@@ -114,9 +119,6 @@ public class ListDE {
         }
         return pets;
     }
-
-
-
 
 
     public void insertFront(Pet data) {
@@ -140,7 +142,7 @@ public class ListDE {
 
     public void getOrderPetsToStart() throws @NotEmpty ListDEException {
         try {
-            if (this.headDE != null) {
+            if (headDE != null) {
                 ListDE listDE = new ListDE();
                 NodeDE temp = this.headDE;
 
@@ -152,7 +154,7 @@ public class ListDE {
                     }
                     temp = temp.getNext();
                 }
-                this.headDE = listDE.getHead();
+                headDE = listDE.getHead();
             } else {
                 throw new @NotEmpty ListDEException("No hay niños para completar esta operacion");
             }
@@ -162,6 +164,7 @@ public class ListDE {
             throw new @NotEmpty ListDEException("Se ha producido un error al ordenar la lista de niños: " + e.getMessage());
         }
     }
+
     /*
     En esta parte vemos que cambiamos el Kid por el pet ya que el kid pues lo usamos para la lista simplemente
     Enlazada,Tambien convertimos ese head por headDE ya que como tenemos una clase creada como el el NodeDE tenemos cread
@@ -183,17 +186,19 @@ public class ListDE {
     }
 
 
-
     //----------------------CODIGO 3 INTERCALAR MASCOTA (MASCULINO)-MASCOTAS( FEMENINO)-MASCOTA(MASCULINO)-MASCOTAS(FEMENINO)-------------------------------
     public void getAlternatePets() throws @NotEmpty ListDEException {
         try {
-            ListDE alternateList = new ListDE();
             ListDE listBoys = new ListDE();
             ListDE listGirls = new ListDE();
+            ListDE listDE = new ListDE();
+            NodeDE boysNode = listBoys.getHead();
+            NodeDE girlsNode = listGirls.getHead();
+
 
             NodeDE temp = headDE;
 
-            if (this.headDE == null && this.headDE.getNext() == null) {
+            if (headDE == null) {
                 throw new @NotEmpty ListDEException("No existen niños o no hay suficientes para alternar");
             } else {
                 while (temp != null) {
@@ -206,56 +211,49 @@ public class ListDE {
                     }
                     temp = temp.getNext();
                 }
-
-                NodeDE boysNode = listBoys.getHead();
-                NodeDE girlsNode = listGirls.getHead();
-
-                while (boysNode != null) {
+                while (boysNode != null || girlsNode != null) {
                     if (boysNode != null) {
-                        alternateList.add(boysNode.getData());
-                        boysNode.setPrevious(alternateList.getTail());
+                        listDE.add(boysNode.getData());
                         boysNode = boysNode.getNext();
+
                     }
                     if (girlsNode != null) {
-                        alternateList.add(girlsNode.getData());
-                        girlsNode.setPrevious(alternateList.getTail());
+                        listDE.add(girlsNode.getData());
                         girlsNode = girlsNode.getNext();
                     }
                 }
-                this.headDE = alternateList.getHead();
+                this.headDE = listDE.getHead();
             }
         } catch (NullPointerException e) {
             throw new @NotEmpty ListDEException("Error de puntero nulo al tratar de alternar niños");
         }
     }
 
-    private NodeDE getTail() {
-        return null;
-    }
-
     //-------------------------CODIGO 4 DADA UNA EDAD ELIMINAR A LA MASCOTA DE LA EDAD DADA -----------------
 
     public void removePetByAge(@Min(value = 1, message = "La edad debe ser mayor que cero") Byte age) throws ListDEException {
         NodeDE temp = headDE;
-        NodeDE current = this.headDE;
-        NodeDE previous = null;
-        ListDE listcopy = new ListDE();
+        NodeDE previous = temp.getPrevious();
+        NodeDE next = temp.getNext();
+
         try {
-            if (this.headDE == null) {
+            if (temp.getData().getAge() == age) {
                 throw new ListDEException("No existen niños para realizar la operación");
             } else {
 
                 while (temp != null) {
                     if (temp.getData().getAge() != age) {
-                        listcopy.addToStart(temp.getData());
+                        if (previous == null) {
+                            headDE = next;
+                        } else {
+                            previous.setNext(next);
+                        }
+                        if (next == null) {
+                            next.setPrevious(previous);
+
+                        }
                     }
                     temp = temp.getNext();
-                }
-                this.headDE = listcopy.getHead();
-                while (current!=null){
-                    current.setPrevious(previous);
-                    previous=current;
-                    current=current.getNext();
                 }
 
             }
@@ -267,16 +265,6 @@ public class ListDE {
 
     //---------CODIGO 5 OBTENER EL PROMEDIO DE EDAD DE LAS MASCOTAS DE LA LISTA -------------------
 
-    public int getLength() {
-        int count = 0;
-        NodeDE current = headDE;
-        while (current != null) {
-            count++;
-            current = current.getNext();
-        }
-        return count;
-    }
-
     public float getAveragePetAge() throws @NotEmpty ListDEException {
         try {
             if (headDE != null) {
@@ -285,7 +273,7 @@ public class ListDE {
                 int age = 0;
                 while (temp.getNext() != null) {
                     count++;
-                    age = age + temp.getData().getAge();
+                    age += temp.getData().getAge();
                     temp = temp.getNext();
                 }
                 return (float) age / count;
@@ -317,25 +305,29 @@ public class ListDE {
         }
     }
 
-    public int getCountPetsByLocationCode(@NotNull String code) throws ListDEException {
-        int count = 0;
+    public int getCountPetsByLocationCode(String code)throws ListDEException {
         try {
+            if (code == null || code.isEmpty()) {
+                throw new ListDEException("El codigo que escribio no puede estar vacio tenga cuidado ");
+            }
+            int count = 0;
             if (this.headDE != null) {
-                NodeDE temp = this.headDE;
-                while (temp != null) {
-                    if (temp.getData().getLocation().getCode().equals(code)) {
+                NodeDE current = this.headDE;
+                while (current != null) {
+                    if (current.getData().getLocation().getCode().equals(code)) {
                         count++;
                     }
-                    temp = temp.getNext();
+                    current = current.getNext();
                 }
-            } else {
-                throw new ListDEException("No existen niños para poder realizar la operación");
             }
+            return count;
         } catch (ListDEException e) {
-            throw new ListDEException("No puedo hacer esta operacion intentalo de nuevo " + e.getMessage());
+            throw new ListDEException("Error: " + e.getMessage());
+
         }
-        return count;
     }
+
+
 
     public int getCountPetsByDeptCode(@NotNull String code) throws ListDEException {
         try {
@@ -364,62 +356,59 @@ public class ListDE {
 
     //------------CODIGO 7 METODO QUE ME PERMITA DECIRLE A UNA MASCOTA DETERMINADO QUE ADELANTE  UN NUMERO DE POSICIONES DADAS---------
 
-    public void winPositionPet(@NotEmpty String id, @Positive int position,@NotNull ListDE listDE) throws ListDEException {
-
+    public void winPositionPet(@NotNull @NotEmpty String id, @PositiveOrZero int position) throws ListDEException {
         try {
-            if (!this.headDE.getData().getId().equals(id)) {
-                throw new ListDEException("No existe el niño que busca");
+            if (position < 0) {
+                throw new ListDEException("La posición debe ser un número positivo");
             }
-
             if (headDE != null) {
-                NodeDE temp = this.headDE;
-                int count = 0;
-
+                NodeDE temp = headDE;
+                int counter = 1;
                 while (temp != null && !temp.getData().getId().equals(id)) {
                     temp = temp.getNext();
-                    count++;
+                    counter++;
                 }
-
-                if (count > size || count < size) {
-                    throw new ListDEException("No se puede realizar la accion por falta de niños");
+                if (temp != null) {
+                    int newPosition = counter - position;
+                    if (newPosition < 0) {
+                        throw new ListDEException("La posición especificada está fuera de los límites de la lista");
+                    }
+                    Pet listCopy = temp.getData();
+                    deleteById(temp.getData().getId());
+                    if (newPosition > 0) {
+                        addByPosition(listCopy, newPosition);
+                    } else {
+                        addToStartPet(listCopy);
+                    }
                 }
-
-                int newPosition = count - position;
-                Pet listCopy = temp.getData();
-                listDE.deleteKidByIdentification(temp.getData().getId());
-                listDE.addKidsByPosition(listCopy, newPosition);
-                NodeDE prev = temp.getPrevious();
-                NodeDE curr = temp.getNext();
-                if (prev != null) {
-                    prev.setNext(curr);
-                } else {
-                    listDE.setHeadDE(curr);
-                }
-                temp.setPrevious(listDE.getTail());
-                temp.setNext(null);
-                listDE.getTail().setNext(temp);
-                listDE.setTail(temp);
-
-                if (curr != null) {
-                    curr.setPrevious(prev);
-                } else {
-                    listDE.setTail(prev);
-                }
-            } else {
-                throw new ListDEException("No existen niños para poder realizar la función");
             }
         } catch (ListDEException e) {
-            throw new ListDEException("Error en el método winPositionKid(): " + e.getMessage());
+            throw new ListDEException("Error: " + e.getMessage());
         }
     }
 
-    private void setTail(NodeDE prev) {
+
+    public void addToStartPet(@NotNull(message = "El objeto pet no puede ser nulo")Pet pet) throws ListDEException {
+        if (pet == null) {
+            throw new ListDEException("El objeto pet no puede ser nulo");
+        }
+
+        NodeDE nodeDE = new NodeDE(pet);
+        if (headDE != null) {
+            headDE.setPrevious(nodeDE);
+            nodeDE.setNext(headDE);
+        }
+        headDE = nodeDE;
+        size++;
     }
 
-    public void addKidsByPosition(@NotNull Pet pet, int pos) throws ListDEException {
-        NodeDE newNode = new NodeDE(pet);
+    public void addByPosition(@NotNull Pet pet,@Min(0) int position) throws ListDEException {
         try {
-            if (pos == 0) {
+            if (position < 0 || position > size) {
+                throw new ListDEException("Posicion invalida:" + position);
+            }
+            NodeDE newNode = new NodeDE(pet);
+            if (position == 0) {
                 newNode.setNext(headDE);
                 if (headDE != null) {
                     headDE.setPrevious(newNode);
@@ -427,202 +416,165 @@ public class ListDE {
                 headDE = newNode;
             } else {
                 NodeDE current = headDE;
-                for (int i = 1; i < pos - 1; i++) {
+                for (int i = 1; i < position - 1; i++) {
                     current = current.getNext();
                 }
                 newNode.setNext(current.getNext());
-                newNode.setPrevious(current);
                 if (current.getNext() != null) {
                     current.getNext().setPrevious(newNode);
                 }
                 current.setNext(newNode);
+                newNode.setPrevious(current);
             }
-
         } catch (Exception e) {
-            throw new ListDEException("No se puede agregar el niño en la posición indicada: " + e.getMessage());
+            throw new ListDEException("Error occurred while adding node: " + e.getMessage());
         }
     }
-    public void deleteKidByIdentification(@NotEmpty String  identification) throws ListDEException {
-        try {
-            NodeDE temp = headDE;
-            NodeDE prevoious  = null;
-            while ((temp != null) && (!temp.getData().getId().equals(identification))) {
-                prevoious = temp;
-                temp = temp.getNext();
-            }
-            if (temp != null) {
-                if (prevoious == null) {
-                    headDE = temp.getNext();
+
+
+
+    public void deleteById(@NotNull String id) throws ListDEException {
+        if (id == null) {
+            throw new ListDEException("El identificador del dueño no puede ser nulo");
+        }
+
+        NodeDE temp = headDE;
+        while (temp != null) {
+            if (temp.getData().getId().equals(id)) {
+                NodeDE prev = temp.getPrevious();
+                NodeDE next = temp.getNext();
+                if (prev == null) {
+                    headDE = next;
                 } else {
-                    prevoious.setNext(temp.getNext());
+                    prev.setNext(next);
                 }
-            } else {
-                throw new ListDEException("No se encontró al niño con la identificación " + identification);
+                if (next != null) {
+                    next.setPrevious(prev);
+                }
             }
-        } catch (ListDEException e) {
-            throw new ListDEException("No se pudo eliminar al niño con la identificación " + identification + ": " + e.getMessage());
+            temp = temp.getNext();
         }
     }
+
 
     //-----------------CODIGO 8 METODO QUE ME PERIMITA DECIRLE A UNA MASCOTA DETERMINADO QUE PIERDA UN NUMERO DE POSICIONES DADAS---------------
 
-    public void addPetAtPosForLose(@Valid Pet pet, int pos2) throws ListDEException {
+    public void losePositionPet(@NotNull String id,@Positive int positionpet) throws ListDEException {
         try {
-            NodeDE temp = headDE;
-            NodeDE newNode = new NodeDE(pet);
-            int listLength = getLength();
-            if (pos2 < 0 || pos2 >= listLength)//to do a validation and add the Pet in the last position
-                add(pet);
-            if (pos2 == 0) {
-                newNode.setNext(headDE);//to actualize the head
-                headDE = newNode;
-                headDE.getNext().setPrevious(newNode);
-                newNode.setPrevious(temp);
-                newNode.getNext().setPrevious(newNode);
-            } else {
-                for (int i = 0; temp.getNext() != null && i < pos2 - 1; i++) {
-                    temp = temp.getNext();
-                }
-                newNode.setNext(temp.getNext());
-                temp.setNext(newNode);
+            if (positionpet < 0) {
+                throw new ListDEException("La posicion debe ser positiva");
             }
-            //NullPointerException: si la lista está vacía.
-            //IndexOutOfBoundsException: si la posición ingresada está fuera del rango válido.
-            //Exception (cualquier otra excepción): si se produce algún otro error
-            // al intentar agregar la mascota.
-        } catch (NullPointerException e) {
-            throw new ListDEException("La lista está vacía");
-        } catch (IndexOutOfBoundsException e) {
-            throw new ListDEException("La posición ingresada está fuera del rango válido");
-        } catch (Exception e) {
-            throw new ListDEException("Se produjo un error al intentar agregar la mascota");
+            NodeDE temp = headDE;
+            int count = 1;
+            while (temp != null && !temp.getData().getId().equals(id)) {
+                temp = temp.getNext();
+                count++;
+            }
+
+            int sum = positionpet + count;
+            Pet pet = temp.getData();
+            deleteById(temp.getData().getId());
+            addByPosition(pet, sum);
+        } catch (ListDEException e) {
+            throw new ListDEException("Error: " + e.getMessage());
         }
     }
 
     //-------------------CODIGO 9 OBTENER UN INFORME DE PERROS POR RANGO DE EDADES--------------------
 
-    public void getAgeByRangePet(@Valid byte minAgepet, @Valid byte maxAgepet) throws ListDEException {
+    public int getRangePetByAge(@PositiveOrZero int Startpet,@PositiveOrZero  int finishpet) throws ListDEException {
         try {
-            NodeDE current = headDE;
-            boolean found = false;
-            while (current != null) {
-                byte edad = current.getData().getAge();
-                if (edad >= minAgepet && edad <= maxAgepet) {
-                    String name = current.getData().getName();
-                    // Aquí puedes hacer lo que quieras con los datos del niño encontrado
-                    found = true;
+            if (Startpet < 0 || finishpet < 0) {
+                throw new ListDEException("El informe de rangos no puede ser negativo");
+            }
+            NodeDE temp = headDE;
+            int counter = 0;
+            while (temp != null) {
+                if (temp.getData().getAge() >= Startpet && temp.getData().getAge() <= finishpet) {
+                    counter++;
                 }
-                current = current.getNext();
+                temp = temp.getNext();
             }
-            if (!found) {
-                throw new ListDEException("No se encontraron los perros dentro del rango de edad especificado.");
-            }
-        } catch (NullPointerException e) {
-            throw new ListDEException("La lista está vacía");
-        } catch (IllegalArgumentException e) {
-            throw new ListDEException("La edad mínima no puede ser mayor que la edad máxima");
+            return counter;
+        } catch (ListDEException e) {
+            throw new ListDEException("Error: " + e.getMessage());
         }
     }
 
     //------------CODIGO 10 IMPLEMENTAR UN METODO QUE ME PERMITA ENVIAR AL FINAL DE LA LISTA A LAS MASCOTAS QUE SU NOMBRE INICIE  CON UNA LETRA DADA -----------
 
-    public void addToStartNameCharPet(@NotNull char letter) throws ListDEException {
+    public void sendPetToTheEndByLetter(@NotNull Character letter) throws ListDEException {
         try {
-            // Verificar si la lista está vacía
-            if (headDE == null) {
-                throw new ListDEException("La lista está vacía");
-            }
+            if (this.headDE != null) {
+                ListDE listCopy = new ListDE();
+                NodeDE temp = this.headDE;
+                char firstChar = Character.toUpperCase(letter);
 
-            // Inicializar variables de nodo
-            NodeDE prev = null;
-            NodeDE current = headDE;
-            NodeDE last = null;
-
-            // Recorrer la lista de nodos
-            while (current != null) {
-                // Verificar si el nombre del nodo empieza con el caracter dado
-                if (current.name.startsWith(String.valueOf(letter))) {
-                    // Eliminar el nodo actual de la lista
-                    if (prev == null) {
-                        headDE = current.getNext();
+                while (temp != null) {
+                    char firstLetter = temp.getData().getName().charAt(0);
+                    if (Character.toUpperCase(firstLetter) != firstChar) {
+                        listCopy.addToStartPet(temp.getData());
                     } else {
-                        prev.setNext(current.getNext());
-                        current.setPrevious(prev);
+                        listCopy.add(temp.getData());
                     }
-
-                    // Agregar el nodo actual a la lista nueva
-                    if (last == null) {
-                        last = current;
-                    } else {
-                        last.setNext(current);
-                        current.setPrevious(last);
-                        last = current;
-                    }
-
-                    // Avanzar al siguiente nodo
-                    current = current.getNext();
-                    last.setNext(null);
-                } else {
-                    // Avanzar al siguiente nodo
-                    prev = current;
-                    current = current.getNext();
+                    temp = temp.getNext();
                 }
+                this.headDE = listCopy.getHeadDE();
+            } else {
+                throw new ListDEException("La lista no puede estar vacia");
             }
-        } catch (NullPointerException e) {
-            throw new ListDEException("La lista está vacía");
+        } catch (NullPointerException ex) {
+            throw new ListDEException("El argumento letter no puede ser nulo");
         }
     }
-       /*
+
+    /*
     Eliminar por Identificacion
-Cundo queremos eliminar a un niño tenienndo en cuenta la edad  lo primero que ago es lo sigiente
-1Comienzo a crear un metodo  que me pida como tal la identificacion  por ejemplo deleteByage(byte age).
-2 depues en esta parte le pido en el caso que Recorra la listaDE que
-la creo con este nombre para ver el tema del nodo que en ese caso le pongo el valor llamado temp
-que corresponde a esa identificacion  teniendo en cuenta esa parte.Una  vez que encuentre el nodo creado en este caso NodeDE, que me establezca tanto el getNext y el getPrevious  y siguiente para apuntar el uno al otro, omitiendo el nodo que se va a eliminar.
-Y me comienzo a preguntar lo siguiente,Si el nodo que se va a eliminar es el primer nodo en la lista, establezca la cabeza de la lista en el siguiente nodo.
-Si el nodo que se va a eliminar es el último nodo en la lista  es decir en este caso el getprevious , establezca la cola de la lista en el nodo anterior.
-Devuelve el nodo que se eliminó de la lista.
+    Cuando queremos eliminar a un niño tenienndo en cuenta la identificacion lo primero que ago es lo sigiente
+    1Comienzo a crear un metodo  que me pida como tal la identificacion  por ejemplo deleteByidentification(String identification).
+    2 depues en esta parte le pido en el caso que Recorra la listaDE que
+    la creo con este nombre para ver el tema del nodo que en ese caso le pongo el valor llamado temp
+    que corresponde a esa identificacion  teniendo en cuenta esa parte.Una  vez que encuentre el nodo
+    creado en este caso NodeDE, que me establezca tanto el getNext y el getPrevious  y siguiente para apuntar el uno al otro, omitiendo el nodo que se va a eliminar.
+    Y me comienzo a preguntar lo siguiente,Si el nodo que se va a eliminar es el primer nodo en la lista, establezca la cabeza de la lista en el siguiente nodo.
+    Si el nodo que se va a eliminar es el último nodo en la lista  es decir en este caso el getprevious ,
+    establezca la cola de la lista en el nodo anterior.
+    Devuelve el nodo que se eliminó de la lista.
      */
     //---------------------EJERCICIO 8/05/23----------------------------------------
-       public NodeDE removeNodeByIdentificationPet(String identification) {
-           NodeDE temp = headDE;
-           NodeDE previousNode = null;
+    public NodeDE removeNodeByIdentificationPet(@NotNull String identification)throws ListDEException {
+           try {
+               NodeDE temp = headDE;
+               NodeDE previousNode = null;
 
-           while (temp != null) {
-               if (temp.getName().equals(identification)) {
-                   if (previousNode != null) {
-                       previousNode.setNext(temp.getNext());
-                   } else {
-                       headDE = temp.getNext();
+               while (temp != null) {
+                   if (temp.getName().equals(identification)) {
+                       if (previousNode != null) {
+                           previousNode.setNext(temp.getNext());
+                       } else {
+                           headDE = temp.getNext();
+                       }
+
+                       if (temp.getNext() != null) {
+                           temp.getNext().setPrevious(previousNode);
+                       }
+
+                       temp.setPrevious(null);
+                       temp.setNext(null);
+
+                       return temp;
                    }
 
-                   if (temp.getNext() != null) {
-                       temp.getNext().setPrevious(previousNode);
-                   }
-
-                   temp.setPrevious(null);
-                   temp.setNext(null);
-
-                   return temp;
+                   previousNode = temp;
+                   temp = temp.getNext();
                }
-
-               previousNode = temp;
-               temp = temp.getNext();
+           } catch (Exception e) {
+               throw new ListDEException("Error occurred while removing node: " + e.getMessage());
            }
 
            return null;
-       }
-
-
-
-
-
-
-
-
-    //------------METODOS QUE TENGO QUE AÑADIR PARA LOS DIFERENTES CODIGOS -----------------------
-        public void getReportPetsByLocationGendersByAge(byte age, ReportPetsLocationGenderDTO reports)throws ListDEException {
     }
+
 }
 
 

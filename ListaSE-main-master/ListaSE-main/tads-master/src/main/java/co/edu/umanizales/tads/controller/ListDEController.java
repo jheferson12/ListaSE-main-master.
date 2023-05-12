@@ -1,21 +1,19 @@
 package co.edu.umanizales.tads.controller;
-import co.edu.umanizales.tads.controller.dto.PetDTO;
-import co.edu.umanizales.tads.controller.dto.ReportPetsLocationGenderDTO;
-import co.edu.umanizales.tads.controller.dto.ResponseDTO;
+import co.edu.umanizales.tads.controller.dto.*;
 import co.edu.umanizales.tads.exception.ListDEException;
-import co.edu.umanizales.tads.exception.ListSEException;
 import co.edu.umanizales.tads.model.*;
 import co.edu.umanizales.tads.service.ListDEService;
 import co.edu.umanizales.tads.service.LocationService;
+import co.edu.umanizales.tads.service.RangePetService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.context.request.WebRequest;
-import javax.validation.Valid;
 import javax.validation.constraints.*;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 @RestController
@@ -25,6 +23,8 @@ public class ListDEController {
     private ListDEService listDEService;
     @Autowired
     private LocationService locationService;
+    @Autowired
+    private RangePetService rangePetService;
 
     @ControllerAdvice
     public class ListDEExceptionHandler {
@@ -33,7 +33,7 @@ public class ListDEController {
         public ResponseEntity<ResponseDTO> getPets() {
             try {
                 return new ResponseEntity<>(new ResponseDTO(
-                        200, listDEService.getPets().getHead(), null), HttpStatus.OK);
+                        200, listDEService.getPets().print(), null), HttpStatus.OK);
             } catch (Exception e) {
                 return new ResponseEntity<>(new ResponseDTO(
                         500, "Error al obtener la lista de mascotas" + e.getMessage(),
@@ -44,7 +44,7 @@ public class ListDEController {
 
         //----------------AÑADIR MASCOTA------------------
         @PostMapping(path = "/addpet")
-        public ResponseEntity<ResponseDTO> addPet(@RequestBody PetDTO petDTO) throws ListSEException {
+        public ResponseEntity<ResponseDTO> addPet(@RequestBody PetDTO petDTO)  {
             Location location = locationService.getLocationsByCode(petDTO.getCodeLocation());
             if (location == null) {
                 return new ResponseEntity<>(new ResponseDTO(
@@ -61,15 +61,39 @@ public class ListDEController {
                         null), HttpStatus.OK);
             }
             return new ResponseEntity<>(new ResponseDTO(
-                    200, "Se ha adicionado el petacón",
+                    200, "Se ha adicionado la mascota que ingreso",
                     null), HttpStatus.OK);
 
+        }
+        //---------------------------BORRAR POR ID DE LA MASCOTA-----------
+        @GetMapping(path = "/deletebyid/{id}")
+        public ResponseEntity<ResponseDTO> deleteById(@PathVariable String id)  {
+            try {
+                listDEService.getPets().deleteById(id);
+                return new ResponseEntity<>(new ResponseDTO(
+                        200, "La/s mascota/s fue/ron borrada/os felicitaciones", null), HttpStatus.OK);
+            } catch (Exception e) {
+                return new ResponseEntity<>(new ResponseDTO(
+                        500, "Tiene un error al eliminar la/s mascota/s", null), HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        }
+        //-------------------------------AÑADIR EN POSICION A LA MASCOTA-------------------------
+        @GetMapping(path = "/addbyposition/{position}")
+        public ResponseEntity<ResponseDTO> addByPosition(@RequestBody Pet pet, @PathVariable int position)  {
+            try {
+                listDEService.getPets().addByPosition(pet, position);
+                return new ResponseEntity<>(new ResponseDTO(
+                        200, "La mascota fue añadida en la posición solicitada", null), HttpStatus.OK);
+            } catch (Exception e) {
+                return new ResponseEntity<>(new ResponseDTO(
+                        500, "Se produjo un error al agregar la mascota en la posición solicitada", null), HttpStatus.INTERNAL_SERVER_ERROR);
+            }
         }
 
         //-------Voy ha hacer una combinacion etre el controller advice y el controller con el get y post ------
         //--------CON CONTROLLER ADVICE----------------
         @ExceptionHandler(value = {ListDEException.class})
-        public ResponseEntity<Object> handleListDEException(ListDEException ex, WebRequest request) {
+        public ResponseEntity<Object> handleListDEExecptionPet(ListDEException ex) {
             try {
                 String errorMessage = "Error al invertir la lista: " + ex.getMessage();
                 return new ResponseEntity<>(errorMessage, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
@@ -80,18 +104,22 @@ public class ListDEController {
         }
 
 
-
         //----------------CON CONTROLLER GETMAPPING-----------
         @GetMapping("/invertpet")
-        public ResponseEntity<ResponseDTO> getInvertPet(@RequestParam @NotNull(message = "El parámetro pet no puede ser nulo") Pet pet) {
+        public ResponseEntity<ResponseDTO> getInvertPet()  {
             try {
-                listDEService.getPets().getInvertPet();
-                return new ResponseEntity<>(new ResponseDTO(
-                        200, "Se ha invertido la lista",
-                        null), HttpStatus.OK);
-            } catch (ListDEException ex) {
-                String errorMessage = "Error al invertir la lista: " + ex.getMessage();
-                return new ResponseEntity<>(new ResponseDTO(200, errorMessage, null), HttpStatus.INTERNAL_SERVER_ERROR);
+                if (listDEService.getPets() != null) {
+                    listDEService.getPets().getInvertPet();
+                    return new ResponseEntity<>(new ResponseDTO(200,
+                            "La lista de mascotas se invertio correctamente", null), HttpStatus.OK);
+
+                } else {
+                    return new ResponseEntity<>(new ResponseDTO(409,
+                            "No se puede invertir a la mascota tenga cuidado", null), HttpStatus.BAD_REQUEST);
+                }
+            } catch (Exception e) {
+                return new ResponseEntity<>(new ResponseDTO(500,
+                        "Error por el servidor", null), HttpStatus.INTERNAL_SERVER_ERROR);
             }
         }
 
@@ -99,14 +127,15 @@ public class ListDEController {
         //-----------------------------CONTROLLER 2 MASCOTA (MASCULINO)AL INCIO Y MASCOTAS (FEMENINO) AL FINAL-------------------------------
         @ExceptionHandler(value = {ListDEException.class})
         public ResponseEntity<Object> handleListDEException(ListDEException ex) {
-           try {
-               String errorMessage="Error al tener perro a al inicio"+ex.getMessage();
-               return new ResponseEntity<>(errorMessage,new HttpHeaders(),HttpStatus.INTERNAL_SERVER_ERROR);
-           }catch (Exception exception){
-               String errorMessage="Error al tener perr@s al final porque no se encuentra agregado "+exception.getMessage();
-               return new ResponseEntity<>(errorMessage,new HttpHeaders(),HttpStatus.INTERNAL_SERVER_ERROR);
-           }
+            try {
+                String errorMessage = "Error al tener perro a al inicio" + ex.getMessage();
+                return new ResponseEntity<>(errorMessage, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
+            } catch (Exception exception) {
+                String errorMessage = "Error al tener perr@s al final porque no se encuentra agregado " + exception.getMessage();
+                return new ResponseEntity<>(errorMessage, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
+            }
         }
+
         private ResponseEntity<Object> handleListDEException(String errorMessage, Exception ex) {
             return new ResponseEntity<>(errorMessage + ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -114,14 +143,21 @@ public class ListDEController {
 
         //-----------------CONTROLLER CON GETMAPPING-----------------------------
         @GetMapping(path = "/orderpetstostart")
-        public ResponseEntity<ResponseDTO> getOrderPetsToStart(@NotNull ListDE listDE) throws ListDEException {
+        public ResponseEntity<ResponseDTO> getOrderPetsToStart()  {
             try {
-                listDEService.getPets().getOrderPetsToStart();
-                return new ResponseEntity<>(new ResponseDTO(200, "Se ha intercambiado" +
-                        " la mascota al inicio y las mascotas al final ", null), HttpStatus.OK);
-            } catch (Exception ex) {
-                String errorMessage = "Error en ordenar la mascota/s al comienzo: " + ex.getMessage();
-                return new ResponseEntity<>(new ResponseDTO(200, errorMessage, null), HttpStatus.INTERNAL_SERVER_ERROR);
+                if (listDEService.getPets() != null) {
+                    listDEService.getPets().getOrderPetsToStart();
+                    return new ResponseEntity<>(new ResponseDTO(200,
+                            "Se ha organizado la lista con las mascotas masculinas  al comienzo con exito ",
+                            null), HttpStatus.OK);
+
+                } else {
+                    return new ResponseEntity<>(new ResponseDTO(409,
+                            "No se puede realizar la acción tenga cuidado", null), HttpStatus.BAD_REQUEST);
+                }
+            } catch (Exception e) {
+                return new ResponseEntity<>(new ResponseDTO(500,
+                        "Error interno del servidor ", null), HttpStatus.INTERNAL_SERVER_ERROR);
             }
         }
 
@@ -137,22 +173,20 @@ public class ListDEController {
         }
 
 
-
         //------------------CONTROLLER CON GETMAPPING--------------------------
-        @GetMapping(path = "/alternatepets")
-        public ResponseEntity<ResponseDTO> getAlternatePets(@NotNull NodeDE headDE) {
+        @GetMapping(path = "/getalternatepets")
+        public ResponseEntity<ResponseDTO> getAlternatePets() {
             try {
                 listDEService.getPets().getAlternatePets();
-                return new ResponseEntity<>(new ResponseDTO(200, "Se ha alternado la lista",
-                        null), HttpStatus.OK);
-            } catch (ListDEException ex) {
-                String errorMessage = "Error al alternar la lista: " + ex.getMessage();
-                return new ResponseEntity<>(new ResponseDTO(500, errorMessage, null), HttpStatus.INTERNAL_SERVER_ERROR);
-            } catch (IllegalStateException ex) {
-                String errorMessage = "Ocurrió un estado ilegal: " + ex.getMessage();
-                return new ResponseEntity<>(new ResponseDTO(500, errorMessage, null), HttpStatus.INTERNAL_SERVER_ERROR);
+            } catch (Exception e) {
+                return new ResponseEntity<>(new ResponseDTO(
+                        500, "Error al alternar las mascotas tenga cuidado ", null),
+                        HttpStatus.INTERNAL_SERVER_ERROR);
             }
+            return new ResponseEntity<>(new ResponseDTO(
+                    200, "La lista se alternó exitosamente", null), HttpStatus.OK);
         }
+
         //-------------------------CODIGO 4 DADA UNA EDAD ELIMINAR A LOS PERROS DE LA EDAD DADA -----------------
         @ExceptionHandler(value = {IllegalStateException.class})
         public ResponseEntity<String> handleIllegalStateException(IllegalStateException ex) {
@@ -163,20 +197,18 @@ public class ListDEController {
             }
         }
 
-
-
         //------------------CODIGO CON GETMAPPING---------------------------
-        @GetMapping(path = "/removepetbyagepet{age}")
-        public ResponseEntity<ResponseDTO> removePetByAge(@Min(value = 1, message = "La edad  de la masocta/s debe ser mayor que cero") Byte age) {
+        @GetMapping(path = "/deletepetbyage/{age}")
+        public ResponseEntity<ResponseDTO> removePetByAge(@Min(value = 1, message = "La edad debe ser mayor que cero") Byte age)  {
             try {
                 listDEService.getPets().removePetByAge(age);
-                return new ResponseEntity<>(new ResponseDTO(200, "Se ha eliminado el perro de " + age + " años de edad", null), HttpStatus.OK);
-            } catch (ListDEException ex) {
-                String errorMessage = "Error al eliminar el perro de " + age + " años de edad: " + ex.getMessage();
-                return new ResponseEntity<>(new ResponseDTO(500, errorMessage, null), HttpStatus.INTERNAL_SERVER_ERROR);
+                return new ResponseEntity<>(new ResponseDTO(
+                        200, "La mascota fue eliminada con exito", null), HttpStatus.OK);
+            } catch (Exception e) {
+                return new ResponseEntity<>(new ResponseDTO(
+                        500, "Hay un error al eliminar la mascota estar atento ", null), HttpStatus.INTERNAL_SERVER_ERROR);
             }
         }
-
 
         //---------CODIGO 5 OBTENER EL PROMEDIO DE EDAD DE LOS PERROS DE LA LISTA -------------------
         @ExceptionHandler(value = {FileNotFoundException.class})
@@ -191,202 +223,219 @@ public class ListDEController {
         }
 
     }
-
-
-        @GetMapping(path = "/averageagepet")
-        public ResponseEntity<ResponseDTO> getAveragePetAge(@Valid byte age) {
-            try {
-                double averageAge = listDEService.getPets().getAveragePetAge();
-                return ResponseEntity.ok(new ResponseDTO(200, "Promedio de edad de la mascota/s: " + averageAge, null));
-            } catch (Exception ex) {
-                String errorMessage = "Error al calcular el promedio de edad de las mascota/s: " + ex.getMessage();
-                return new ResponseEntity<>(new ResponseDTO(500, errorMessage, null), HttpStatus.INTERNAL_SERVER_ERROR);
-            }
+    @GetMapping(path = "/averageagepet")
+    public ResponseEntity<ResponseDTO> getAveragePetAge()  {
+        try {
+            float averageAge = listDEService.getPets().getAveragePetAge();
+            return new ResponseEntity<>(new ResponseDTO(
+                    200, "La edad promedio de las mascotas que ingresaste son : " + averageAge, null),
+                    HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new ResponseDTO(
+                    500, "Se produjo un error al calcular la edad promedio de las mascotas", null), HttpStatus.INTERNAL_SERVER_ERROR);
         }
-
-
-        //-----------CODIGO 6 GENERAR UN REPORTE QUE ME DIGA CUANTOS PERROS HAY DE CADA CIUDAD CODIGO A-----------------
-        @ExceptionHandler(value = ListDEException.class)
-        public ResponseEntity<Object> handleListSEException(ListDEException ex) {
-            try {
-                String errorMessage = "Error al generar un reporte de mascota/s por ciudad " + ex.getMessage();
-                return new ResponseEntity<>(errorMessage, HttpStatus.INTERNAL_SERVER_ERROR);
-            } catch (Exception e) {
-                return new ResponseEntity<>("Error inesperado al manejar la excepción: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-            }
-        }
-
-        //-------------REPORT GETMAPPING------------------------
-        @GetMapping(path = "/get_count_pets_by_location_code")
-        @ExceptionHandler(value = {ListSEException.class})
-        public ResponseEntity<ResponseDTO> getCountPetsByLocationCode(@NotNull String code) throws ListDEException {
-            try {
-                listDEService.getPets().getCountPetsByLocationCode(code);
-                return new ResponseEntity<>(new ResponseDTO(200, "ya esta identificado por ciudad la mascota/s", null), HttpStatus.OK);
-            } catch (Exception ex) {
-                String errorMessage = "Error al obtener el conteo de niños por código de ubicación: " + ex.getMessage();
-                return new ResponseEntity<>(new ResponseDTO(500, errorMessage, null), HttpStatus.INTERNAL_SERVER_ERROR);
-            }
-        }
-
-
-
-        //-----------CODIGO 6 GENERAR UN REPORTE QUE ME DIGA CUANTOS PERROS HAY DE CADA CIUDAD CODIGO B-----------------
-        @ExceptionHandler(ListDEException.class)
-            public ResponseEntity<String> handle(ListDEException ex) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No se puede identificar la cantidad de mascota/s " + ex.getMessage());
     }
 
 
-        //--------------------CON GETMAPING------------------------------------------
-        @GetMapping(path = "/petsbylocationgenders/{age}")
-        public ResponseEntity<ResponseDTO> getReportPetsByLocationGendersByAge(@PathVariable byte age) {
-            try {
-                ReportPetsLocationGenderDTO reports =
-                        new ReportPetsLocationGenderDTO(locationService.getLocationsByCodeSize(age));
-                listDEService.getPets().getReportPetsByLocationGendersByAge(age, reports);
-                return new ResponseEntity<>(new ResponseDTO(
-                        200, reports,
-                        null), HttpStatus.OK);
-            } catch (ListDEException exception) {
-                String errorMessage = "Error al generar el reporte de mascota/s por género y ciudad: " + exception.getMessage();
-                return new ResponseEntity<>(new ResponseDTO(500, errorMessage, null), HttpStatus.INTERNAL_SERVER_ERROR);
-            }
+    //-----------CODIGO 6 GENERAR UN REPORTE QUE ME DIGA CUANTOS PERROS HAY DE CADA CIUDAD CODIGO A-----------------
+    @ExceptionHandler(value = ListDEException.class)
+    public ResponseEntity<Object> handleListSEException(ListDEException ex) {
+        try {
+            String errorMessage = "Error al generar un reporte de mascota/s por ciudad " + ex.getMessage();
+            return new ResponseEntity<>(errorMessage, HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Error inesperado al manejar la excepción: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
 
-        //-----------CODIGO 6 GENERAR UN REPORTE QUE ME DIGA CUANTOS PERROS HAY DE CADA CIUDAD CODIGO C----------------
+    //-------------REPORT GETMAPPING------------------------
+    @GetMapping(path = "/petsbylocation")
+    public ResponseEntity<ResponseDTO> getCountPetsByLocationCode() {
+        List<PetsByLocationDTO> petsByLocationDTOList = new ArrayList<>();
+        try {
+            for (Location location : locationService.getLocations()) {
+                int count = listDEService.getPets().getCountPetsByLocationCode(location.getCode());
+                if (count > 0) {
+                    petsByLocationDTOList.add(new PetsByLocationDTO(location, count));
+                }
+            }
+            return new ResponseEntity<>(new ResponseDTO(
+                    200, petsByLocationDTOList,
+                    null), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+
+    //-----------CODIGO 6 GENERAR UN REPORTE QUE ME DIGA CUANTOS PERROS HAY DE CADA CIUDAD CODIGO B-----------------
+    @ExceptionHandler(ListDEException.class)
+    public ResponseEntity<String> handle(ListDEException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No se puede identificar la cantidad de mascota/s " + ex.getMessage());
+    }
+
+
+    //--------------------CON GETMAPING------------------------------------------
+    @GetMapping(path = "/petsbylocationgenders/{age}")
+    public ResponseEntity<ResponseDTO> getReportPetsByLocationGendersByAge(@Min(value = 0, message = "La edad debe ser mayor o igual a cero") byte age, @NotNull ReportKidsLocationGenderDTO report) {
+        try {
+            ReportPetsLocationGenderDTO reports =
+                    new ReportPetsLocationGenderDTO(locationService.getLocationsByCodeSize(age));
+            listDEService.getPets().getReportPetsByLocationGendersByAge(age,report);
+            return new ResponseEntity<>(new ResponseDTO(
+                    200, reports,
+                    null), HttpStatus.OK);
+        } catch (ListDEException exception) {
+            String errorMessage = "Error al generar el reporte de mascota/s por género y ciudad: " + exception.getMessage();
+            return new ResponseEntity<>(new ResponseDTO(500, errorMessage, null), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    //-----------CODIGO 6 GENERAR UN REPORTE QUE ME DIGA CUANTOS PERROS HAY DE CADA CIUDAD CODIGO C----------------
     @ExceptionHandler(ListDEException.class)
     public ResponseEntity<String> handleListDEException(ListDEException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No se puede identificar la cantidad de mascota/s " + ex.getMessage());
     }
 
 
-        //------------------CON GET MAPPING--------------------------------------
-        @GetMapping("/countpetsByDept")
-        public ResponseEntity<ResponseDTO> getCountPetsByDeptCode(@NotNull String code) {
-            try {
-                int count = listDEService.getPets().getCountPetsByDeptCode(code);
-                return new ResponseEntity<>(new ResponseDTO(200, "Cantidad de mascota/s en el departamento: " + count, null), HttpStatus.OK);
-            } catch (ListDEException e) {
-                String errorMessage = "Error al obtener la cantidad de mascota/s: " + e.getMessage();
-                return new ResponseEntity<>(new ResponseDTO(500, errorMessage, null), HttpStatus.INTERNAL_SERVER_ERROR);
-            }
+    //------------------CON GET MAPPING--------------------------------------
+    @GetMapping("/countpetsByDept")
+    public ResponseEntity<ResponseDTO> getCountPetsByDeptCode(@NotNull String code) {
+        try {
+            int count = listDEService.getPets().getCountPetsByDeptCode(code);
+            return new ResponseEntity<>(new ResponseDTO(200, "Cantidad de mascota/s en el departamento: " + count, null), HttpStatus.OK);
+        } catch (ListDEException e) {
+            String errorMessage = "Error al obtener la cantidad de mascota/s: " + e.getMessage();
+            return new ResponseEntity<>(new ResponseDTO(500, errorMessage, null), HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
 
-        //------------CODIGO 7 METODO QUE ME PERMITA DECIRLE A UN PERRO DETERMINADO QUE ADELANTE  UN NUMERO DE POSICIONES DADAS---------
+    //------------CODIGO 7 METODO QUE ME PERMITA DECIRLE A UN PERRO DETERMINADO QUE ADELANTE  UN NUMERO DE POSICIONES DADAS---------
 
-        @ExceptionHandler(value = {IndexOutOfBoundsException.class})
-        public ResponseEntity<String> handleIndexOutOfBoundsException(IndexOutOfBoundsException exception) {
+    @ExceptionHandler(value = {IndexOutOfBoundsException.class})
+    public ResponseEntity<String> handleIndexOutOfBoundsException(IndexOutOfBoundsException exception) {
         try {
             return new ResponseEntity<>("Se ha producido una excepción de índice fuera de rango", HttpStatus.INTERNAL_SERVER_ERROR);
-        } catch (IndexOutOfBoundsException exception1) {
-            return new ResponseEntity<>("Se ha producido un error al manejar la excepción de índice fuera de rango", HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (IndexOutOfBoundsException exception2) {
+            return new ResponseEntity<>("Se ha producido un error al manejar la excepción de índice fuera de rango"+exception, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
 
-
-        //----------------------------CONTROLLER CON GETMAPPING-----------------------
-        @GetMapping(path = "/winPositionpet/{id}/{win}")
-        public ResponseEntity<ResponseDTO> winPositionPet(@NotEmpty String id, @Positive int position, @NotNull ListDE listDE) {
-            try {
-                listDEService.getPets().winPositionPet(id, position, listDE);
-                return new ResponseEntity<>(new ResponseDTO(200,
-                        "la mascota/s gano la posicion propuesta  ", null), HttpStatus.OK);
-            } catch (ListDEException ex) {
-                return new ResponseEntity<>(new ResponseDTO(500,
-                        "Error al tratar de ganar la posición: " + ex.getMessage(), null), HttpStatus.INTERNAL_SERVER_ERROR);
-            }
-        }
-
-
-        //-----------------CODIGO 8 METODO QUE ME PERIMITA DECIRLE A UN PERRO DETERMINADO QUE PIERDA UN NUMERO DE POSICIONES DADAS-----------
-        @ExceptionHandler(value = {NullPointerException.class})
-        public ResponseEntity<Object> handleNullPointerException(NullPointerException ex) {
+    //----------------------------CONTROLLER CON GETMAPPING-----------------------
+    @GetMapping(path = "/winpositionpet/{id}/{position}")
+    public ResponseEntity<ResponseDTO> winPositionPet(String id, int position){
         try {
-            return new ResponseEntity<>("No se ha añadido el perro ",HttpStatus.INTERNAL_SERVER_ERROR);
-        }catch (NullPointerException pointerException){
-            return new ResponseEntity<>("Tiene un error al pedir a la mascota/s perder el numero de posciciones",HttpStatus.INTERNAL_SERVER_ERROR);
+            listDEService.getPets().winPositionPet(id,position);
+            return new ResponseEntity<>(new ResponseDTO(
+                    200, "La mascota gano las posiciones en la lista especificadas", null)
+                    , HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new ResponseDTO(
+                    500, "Se produjo un error en ganar posiciones de la mascota en la lista",
+                    null), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    //-----------------CODIGO 8 METODO QUE ME PERIMITA DECIRLE A UN PERRO DETERMINADO QUE PIERDA UN NUMERO DE POSICIONES DADAS-----------
+    @ExceptionHandler(value = {NullPointerException.class})
+    public ResponseEntity<Object> handleNullPointerException(NullPointerException nullPointerException) {
+        try {
+            return new ResponseEntity<>("No se ha añadido el perro ", HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (NullPointerException pointerException) {
+            return new ResponseEntity<>("Tiene un error al pedir a la mascota/s perder el numero de posciciones", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
 
+    //-------------------CODIGO CON POSTMAPPING----------------------------
+    @GetMapping(path = "/losepositionpet/{id}/{positionpet}")
+    public ResponseEntity<ResponseDTO>losePositionPet(String id, int positionpet){
+        try {
+            listDEService.getPets().losePositionPet(id,positionpet);
+            return new ResponseEntity<>(new ResponseDTO(
+                    200, "La mascota perdio posiciones en la lista", null),
+                    HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new ResponseDTO(
+                    500, "Se obtuvo un error al perder la mascota en la lista", null)
+                    , HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
-        //-------------------CODIGO CON POSTMAPPING----------------------------
-        @PostMapping(path = "/pets/addpetsatposforlose/{pos}")
-        public ResponseEntity<ResponseDTO> addPetAtPosForLose(@Valid Pet pet, int pos2) {
-            try {
-                listDEService.getPets().addPetAtPosForLose(pet, pos2);
-                return new ResponseEntity<>(new ResponseDTO(200,
-                        "mascota/s agregado exitosamente en la posición " + pos2, null), HttpStatus.OK);
-            } catch (ListDEException ex) {
-                String errorMessage = "Error al agregar el niño en la posición " + pos2 + ": " + ex.getMessage();
-                return new ResponseEntity<>(new ResponseDTO(500, errorMessage, null), HttpStatus.INTERNAL_SERVER_ERROR);
+
+    //-------------------CODIGO 9 OBTENER UN INFORME DE PERROS POR RANGO DE EDADES--------------------
+    @ExceptionHandler(value = {ListDEException.class, IllegalArgumentException.class})
+    public ResponseEntity<Object> handleException(Exception exception) {
+        try {
+            return new ResponseEntity<>("No se a tenido en cuenta el rango de edad de las mascota/s", HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (IllegalStateException stateException) {
+            return new ResponseEntity<>("No se a visto la mascota/s añadido ", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+
+    //----------CONTROLLER CON GETMAPPING------------------------------
+
+    @GetMapping(path = "/rangeage")
+    public ResponseEntity<ResponseDTO> getPetRangeByAge()  {
+        try {
+            List<RangePetDTO> listPetRange = new ArrayList<>();
+            for (Ranges i : rangePetService.getRanges()) {
+                int quantity = listDEService.getPets().getRangePetByAge(i.getFrom(), i.getTo());
+                listPetRange.add(new RangePetDTO(i, quantity));
             }
+            return new ResponseEntity<>(new ResponseDTO(
+                    200, "el rango de los niños es: " + listPetRange,
+                    null), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new ResponseDTO(
+                    500, "Error al obtener el rango de edades",
+                    null), HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
 
 
-        //-------------------CODIGO 9 OBTENER UN INFORME DE PERROS POR RANGO DE EDADES--------------------
-        @ExceptionHandler(value = {ListDEException.class, IllegalArgumentException.class})
-        public ResponseEntity<Object> handleException(Exception ex) {
-            try {
-                return new ResponseEntity<>("No se a tenido en cuenta el rango de edad de las mascota/s",HttpStatus.INTERNAL_SERVER_ERROR);
-            }catch (IllegalStateException stateException){
-                return new ResponseEntity<>("No se a visto la mascota/s añadido ",HttpStatus.INTERNAL_SERVER_ERROR);
-            }
+    //------------CODIGO 10 IMPLEMENTAR UN METODO QUE ME PERMITA ENVIAR AL
+    // FINAL DE LA LISTA A LOS PERROS QUE SU NOMBRE INICIE  CON UNA LETRA DADA -----
+    @ExceptionHandler(value = IllegalArgumentException.class)
+    public ResponseEntity<Object> handleIllegalArgumentException(IllegalArgumentException ex) {
+        try {
+            return new ResponseEntity<>("No se encuentra la mascota/s añadido ", HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (IllegalStateException illegalStateException) {
+            return new ResponseEntity<>("No puedo enviar a ningun/a mascota/s de la lista,No se encuentra ", HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
 
 
-        //----------CONTROLLER CON GETMAPPING------------------------------
-        @GetMapping(path = "/getagebyrange/{age}")
-        public ResponseEntity<ResponseDTO> getAgeByRangePet(@Valid byte minAgepet, @Valid byte maxAgepet) {
-            try {
-                listDEService.getPets().getAgeByRangePet(minAgepet, maxAgepet);
-                return new ResponseEntity<>(new ResponseDTO(200, "Este es rango por edades de las mascota/s", null), HttpStatus.OK);
-            } catch (ListDEException ex) {
-                return new ResponseEntity<>(new ResponseDTO(500, ex.getMessage(), null), HttpStatus.INTERNAL_SERVER_ERROR);
-            }
+    //----------------------CODIGO GETMAPPING------------------------------
+    @GetMapping(path = "/sendpetfinish/{letter}")
+    public ResponseEntity<ResponseDTO> petToFinishByLetter(@PathVariable char letter) {
+        try {
+            listDEService.getPets().sendPetToTheEndByLetter(Character.toUpperCase(letter));
+            return new ResponseEntity<>(new ResponseDTO(
+                    200, "los niños con la letra dada se han enviado al final",
+                    null), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
 
-        //------------CODIGO 10 IMPLEMENTAR UN METODO QUE ME PERMITA ENVIAR AL
-        // FINAL DE LA LISTA A LOS PERROS QUE SU NOMBRE INICIE  CON UNA LETRA DADA -----
-        @ExceptionHandler(value = IllegalArgumentException.class)
-        public ResponseEntity<Object> handleIllegalArgumentException(IllegalArgumentException ex) {
-           try {
-               return new ResponseEntity<>("No se encuentra la mascota/s añadido ",HttpStatus.INTERNAL_SERVER_ERROR);
-           }catch (IllegalStateException illegalStateException){
-               return new ResponseEntity<>("No puedo enviar a ningun/a mascota/s de la lista,No se encuentra ",HttpStatus.INTERNAL_SERVER_ERROR);
-           }
-        }
-
-
-        //----------------------CODIGO GETMAPPING------------------------------
-        @GetMapping(path = "/addtostartnamechar/{letter}")
-        public ResponseEntity<ResponseDTO> addToStartNameCharPet(@NotNull char letter) {
-            try {
-                listDEService.getPets().addToStartNameCharPet(letter);
-                return new ResponseEntity<>(new ResponseDTO(200,
-                        "el nombre  de la mascota/s fue agregado al principio de la lista", null), HttpStatus.OK);
-            } catch (ListDEException ex) {
-                String errorMessage = "Error al agregar el nombre  de la mascota/s al principio de la lista: " + ex.getMessage();
-                return new ResponseEntity<>(new ResponseDTO(500, errorMessage, null), HttpStatus.INTERNAL_SERVER_ERROR);
-            } catch (Exception ex) {
-                String errorMessage = "Se ha producido un error inesperado: " + ex.getMessage();
-                return new ResponseEntity<>(new ResponseDTO(500, errorMessage, null), HttpStatus.INTERNAL_SERVER_ERROR);
-            }
-        }
-        //--------------------EJERCICIO DIA 8/05/23--------------------------------
+    //--------------------EJERCICIO DIA 8/05/23--------------------------------
     @GetMapping(path = "/removeNodeByIdentificationPet(identification)")
-    public ResponseEntity<ResponseDTO>removeNodeByIdentificationPet(String identification){
-        listDEService.removeNodeBtIdentificationPet(identification);
-        return new ResponseEntity<>(new ResponseDTO(200,
-                "se removio al niño por identificacion",null),HttpStatus.OK);
+    public ResponseEntity<ResponseDTO> removeNodeByIdentificationPet(@NotNull String identification) {
+        try {
+            listDEService.getPets().removeNodeByIdentificationPet(identification);
+            return new ResponseEntity<>(new ResponseDTO(200,
+                    "Se removió al niño por identificación", null), HttpStatus.OK);
+        } catch (ListDEException e) {
+            return new ResponseEntity<>(new ResponseDTO(400, e.getMessage(), null), HttpStatus.BAD_REQUEST);
+        }
     }
 
 
+}
 
-
-    }
 
 
 
