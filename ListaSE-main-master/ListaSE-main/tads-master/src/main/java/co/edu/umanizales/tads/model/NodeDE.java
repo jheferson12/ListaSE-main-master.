@@ -27,9 +27,7 @@ public class NodeDE {
     public void setNext(NodeDE next) {
         this.next = next;
     }
-    public Pet getData() {
-        return data;
-    }
+    public Pet getData() {return data;}
 
     public void setData(Pet data) {
         this.data = data;

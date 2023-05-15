@@ -1,31 +1,32 @@
 package co.edu.umanizales.tads.controller.dto;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotEmpty;
+
+import co.edu.umanizales.tads.model.Location;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 
 @Data
 @AllArgsConstructor
 public class PetDTO {
-    @NotEmpty(message = "No se permite  que este vacio la identificacion")
-    private String identificationPet;
 
-    @NotEmpty(message = "No se permite que este vacio el nombre")
+    @NotBlank(message = "No se va ha anular el nombre de la mascota")
     private String name;
 
-    @Min(value = 0,message = "No hay minimo")
-    @Max(value = 15,message = "lo maximo de letras es 15 ")
+    @Min(value = 0,message = "la edad de la mascota tiene como minimo 1 ")
+    @Max(value = 15,message = "la edad de la mascota tiene hasta maximo 15 ")
     private byte age;
 
-    @Pattern(regexp = "[A-Za-z]+$\"",message = "El nombre solo puede contener numeros")
+    @NotBlank(message = "No se va ha anular la raza de la mascota ")
+    private String breed;
+
+    @NotNull(message = "No se va ha anular el genero de la mascota ")
     private char gender;
 
-    @Size(min = 0, max = 19,message = "el minimo es 0 y el maximo  cantidad de numeros en string es 19 ")
-    private String codeLocation;
+    @NotNull(message = "No es permitido anular la ubicacion del perro ")
+    private String codeLocationPet;
+    @NotBlank(message = "No es permitido anular el id de la mascota ")
+    private String id;
 
     // constructores, getters y setters
 }

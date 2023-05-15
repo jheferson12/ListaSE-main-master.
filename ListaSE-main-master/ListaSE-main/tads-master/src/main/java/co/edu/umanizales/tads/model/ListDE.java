@@ -28,7 +28,7 @@ public class ListDE {
                 NodeDE temp = headDE;
                 while (temp.getNext() != null) {
                     if (temp.getData().getId().equals(pet.getId())) {
-                        throw new ListDEException("Ya se añadio la mascota no puesdes escribirlo de nuevo");
+                        throw new ListDEException("Ya se añadio la mascota no puedes escribirlo de nuevo");
                     }
                     temp = temp.getNext();
                 }
@@ -180,10 +180,12 @@ public class ListDE {
             } else {
                 headDE = new NodeDE(pet);
             }
-        } catch (IllegalArgumentException e) {
+        } catch (NullPointerException e) {
+            // Aquí puedes manejar la excepción de alguna otra manera si lo deseas
             throw new ListDEException("Error: " + e.getMessage());
         }
     }
+
 
 
     //----------------------CODIGO 3 INTERCALAR MASCOTA (MASCULINO)-MASCOTAS( FEMENINO)-MASCOTA(MASCULINO)-MASCOTAS(FEMENINO)-------------------------------

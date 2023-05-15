@@ -4,13 +4,30 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3d9acaf8-3970-42ce-9807-f484eb5c0667" name="Changes" comment="En este codigo esta organizado correctamente el codigo este es el que ya esta listo el dia 5/05/2023.&#10;En ete codigo esta el ejercicio del dia 8/05/2023">
-      <change afterPath="$PROJECT_DIR$/ListaSE-main-master/ListaSE-main/tads-master/src/main/java/co/edu/umanizales/tads/controller/dto/RangePetDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ListaSE-main-master/ListaSE-main/tads-master/src/main/java/co/edu/umanizales/tads/controller/dto/Ranges.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ListaSE-main-master/ListaSE-main/tads-master/src/main/java/co/edu/umanizales/tads/service/RangePetService.java" afterDir="false" />
+    <list default="true" id="3d9acaf8-3970-42ce-9807-f484eb5c0667" name="Changes" comment="El codigo ya se encuentra con todo tanto en la simplemente enlazada como en la doblemente enlazada">
+      <change afterPath="$PROJECT_DIR$/ListaSE-main-master/ListaSE-main/tads-master/src/main/java/co/edu/umanizales/tads/controller/ListDECircularController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ListaSE-main-master/ListaSE-main/tads-master/src/main/java/co/edu/umanizales/tads/exception/ListDEEExceptionCircular.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ListaSE-main-master/ListaSE-main/tads-master/src/main/java/co/edu/umanizales/tads/model/ListDECircular.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ListaSE-main-master/ListaSE-main/tads-master/src/main/java/co/edu/umanizales/tads/service/ListCircularService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__com_fasterxml_classmate_1_5_1.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__jakarta_validation_jakarta_validation_api_3_0_2.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__javax_el_javax_el_api_3_0_1_b06.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_glassfish_javax_el_3_0_1_b12.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_hibernate_validator_hibernate_validator_6_1_5_Final.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_jboss_logging_jboss_logging_3_5_0_Final.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ListaSE-main-master/ListaSE-main/tads-master/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/ListaSE-main-master/ListaSE-main/tads-master/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ListaSE-main-master/ListaSE-main/tads-master/src/main/java/co/edu/umanizales/tads/controller/ListDEController.java" beforeDir="false" afterPath="$PROJECT_DIR$/ListaSE-main-master/ListaSE-main/tads-master/src/main/java/co/edu/umanizales/tads/controller/ListDEController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ListaSE-main-master/ListaSE-main/tads-master/src/main/java/co/edu/umanizales/tads/controller/ListSEController.java" beforeDir="false" afterPath="$PROJECT_DIR$/ListaSE-main-master/ListaSE-main/tads-master/src/main/java/co/edu/umanizales/tads/controller/ListSEController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ListaSE-main-master/ListaSE-main/tads-master/src/main/java/co/edu/umanizales/tads/controller/dto/PetDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/ListaSE-main-master/ListaSE-main/tads-master/src/main/java/co/edu/umanizales/tads/controller/dto/PetDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ListaSE-main-master/ListaSE-main/tads-master/src/main/java/co/edu/umanizales/tads/model/Kid.java" beforeDir="false" afterPath="$PROJECT_DIR$/ListaSE-main-master/ListaSE-main/tads-master/src/main/java/co/edu/umanizales/tads/model/Kid.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ListaSE-main-master/ListaSE-main/tads-master/src/main/java/co/edu/umanizales/tads/model/ListDE.java" beforeDir="false" afterPath="$PROJECT_DIR$/ListaSE-main-master/ListaSE-main/tads-master/src/main/java/co/edu/umanizales/tads/model/ListDE.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ListaSE-main-master/ListaSE-main/tads-master/src/main/java/co/edu/umanizales/tads/model/ListSE.java" beforeDir="false" afterPath="$PROJECT_DIR$/ListaSE-main-master/ListaSE-main/tads-master/src/main/java/co/edu/umanizales/tads/model/ListSE.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ListaSE-main-master/ListaSE-main/tads-master/src/main/java/co/edu/umanizales/tads/model/NodeDE.java" beforeDir="false" afterPath="$PROJECT_DIR$/ListaSE-main-master/ListaSE-main/tads-master/src/main/java/co/edu/umanizales/tads/model/NodeDE.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ListaSE-main-master/ListaSE-main/tads-master/src/main/java/co/edu/umanizales/tads/model/Pet.java" beforeDir="false" afterPath="$PROJECT_DIR$/ListaSE-main-master/ListaSE-main/tads-master/src/main/java/co/edu/umanizales/tads/model/Pet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ListaSE-main-master/ListaSE-main/tads-master/src/main/java/co/edu/umanizales/tads/service/ListDEService.java" beforeDir="false" afterPath="$PROJECT_DIR$/ListaSE-main-master/ListaSE-main/tads-master/src/main/java/co/edu/umanizales/tads/service/ListDEService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ListaSE-main-master/ListaSE-main/tads-master/src/main/java/co/edu/umanizales/tads/service/ListSEService.java" beforeDir="false" afterPath="$PROJECT_DIR$/ListaSE-main-master/ListaSE-main/tads-master/src/main/java/co/edu/umanizales/tads/service/ListSEService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ListaSE-main-master/ListaSE-main/tads-master/tads.iml" beforeDir="false" afterPath="$PROJECT_DIR$/ListaSE-main-master/ListaSE-main/tads-master/tads.iml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -72,6 +89,8 @@
   </component>
   <component name="RunManager">
     <configuration name="TadsApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <option name="ALTERNATIVE_JRE_PATH" value="corretto-17" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
       <module name="tads" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="co.edu.umanizales.tads.TadsApplication" />
       <method v="2">
@@ -151,7 +170,14 @@
       <workItem from="1683778009125" duration="150000" />
       <workItem from="1683822776195" duration="172000" />
       <workItem from="1683834472658" duration="1867000" />
-      <workItem from="1683850979070" duration="11685000" />
+      <workItem from="1683850979070" duration="14478000" />
+      <workItem from="1683938732850" duration="178000" />
+      <workItem from="1683998972095" duration="1392000" />
+      <workItem from="1684035126807" duration="9454000" />
+      <workItem from="1684086719264" duration="7579000" />
+      <workItem from="1684117948871" duration="638000" />
+      <workItem from="1684160385636" duration="1841000" />
+      <workItem from="1684168233793" duration="10175000" />
     </task>
     <task id="LOCAL-00001" summary="Este push ya tiene la lista SE completado teniendo en cuenta la fecha 26/04/24">
       <created>1682562758427</created>
@@ -216,7 +242,14 @@
       <option name="project" value="LOCAL" />
       <updated>1683586500925</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="El codigo ya se encuentra con todo tanto en la simplemente enlazada como en la doblemente enlazada">
+      <created>1683863087728</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1683863087728</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -240,7 +273,8 @@
     <MESSAGE value="En este codigo esta organizado correctamente el codigo este es el que ya esta listo el dia 5/05/2023" />
     <MESSAGE value="En este codigo esta organizado correctamente el codigo este es el que ya esta listo el dia 5/05/2023." />
     <MESSAGE value="En este codigo esta organizado correctamente el codigo este es el que ya esta listo el dia 5/05/2023.&#10;En ete codigo esta el ejercicio del dia 8/05/2023" />
-    <option name="LAST_COMMIT_MESSAGE" value="En este codigo esta organizado correctamente el codigo este es el que ya esta listo el dia 5/05/2023.&#10;En ete codigo esta el ejercicio del dia 8/05/2023" />
+    <MESSAGE value="El codigo ya se encuentra con todo tanto en la simplemente enlazada como en la doblemente enlazada" />
+    <option name="LAST_COMMIT_MESSAGE" value="El codigo ya se encuentra con todo tanto en la simplemente enlazada como en la doblemente enlazada" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -249,6 +283,10 @@
           <properties class="java.lang.IllegalStateException" package="java.lang" />
           <option name="timeStamp" value="1" />
         </breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>jar://$PROJECT_DIR$/../../../../../Program Files/Java/lib/src.zip!/java.base/java/lang/IllegalArgumentException.java</url>
+          <option name="timeStamp" value="2" />
+        </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
   </component>

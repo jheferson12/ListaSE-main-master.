@@ -18,8 +18,7 @@ public class ListSEService {
 
 
     public ListSEService() {
-
-
+        this.kids = new ListSE();
     }
 
 

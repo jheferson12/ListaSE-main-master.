@@ -15,14 +15,4 @@ public class Kid {
 
 
 
-    public Kid(String name, byte age, char gender, String codeLocation, String identification) {
-    }
-
-
-    public int getPosition() {
-        return 0;
-    }
-
-
-
 }

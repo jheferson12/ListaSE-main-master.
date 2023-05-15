@@ -4,8 +4,6 @@ import javax.validation.constraints.*;
 
 @AllArgsConstructor
 @Data
-@Getter
-@Setter
 public class Pet {
     @NotBlank(message = "No se va ha anular el nombre de la mascota")
     private String name;
@@ -26,14 +24,6 @@ public class Pet {
     @NotBlank(message = "No es permitido anular el id de la mascota ")
     private String id;
 
-    public Pet(String id, String name, int sum) {
-    }
 
-    public Pet(String identificationPet, String name, byte age, char gender, String codeLocation) {
-    }
-
-    public int getPosition() {
-        return 0;
-    }
 }
 

@@ -36,8 +36,14 @@ public class ListSEController {
     //----------------OBTENER NIÑOS--------------------------------
     @GetMapping(path = "getkids")
     public ResponseEntity<ResponseDTO> getKids() {
-        return new ResponseEntity<>(new ResponseDTO(
-                200, listSEService.getKids().getHead(), null), HttpStatus.OK);
+        try {
+            return new ResponseEntity<>(new ResponseDTO(
+                    200, listSEService.getKids(), null), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new ResponseDTO(
+                    500, "Error al obtener la lista de mascotas revise" + e.getMessage(),
+                    null), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     //Esta parte es la cantidad de niños en la ciudad
@@ -73,11 +79,15 @@ public class ListSEController {
 //Esta parte cambia extremos
 
     @GetMapping(path = "/change_extremes")
-    public ResponseEntity<ResponseDTO> changeExtremes() {
-        listSEService.changeExtremes();
-        return new ResponseEntity<>(new ResponseDTO(
-                200, "SE han intercambiado los extremos",
-                null), HttpStatus.OK);
+    public ResponseEntity<ResponseDTO>changeExtremes(){
+        try {
+            listSEService.getKids().changeExtremes();
+        }catch (ListSEException listSEException){
+            return new ResponseEntity<>(new ResponseDTO(200,
+                    "ya se cambio los extremos correctamente ",null),HttpStatus.OK);
+        }
+        return new ResponseEntity<>(new ResponseDTO(404,
+                "no se cambio los extremos",null),HttpStatus.NOT_FOUND);
     }
 
 
@@ -115,7 +125,7 @@ public class ListSEController {
     }
 
     //------------------CODIGO PARA AÑADIR AL NIÑO-------------------------------------------
-    @PostMapping
+    @PostMapping(path = "/addkid")
     public ResponseEntity<ResponseDTO> addKid(@RequestBody KidDTO kidDTO){
         Location location = locationService.getLocationsByCode(kidDTO.getCodeLocation());
         if(location == null){
@@ -142,7 +152,7 @@ public class ListSEController {
 
     //---------------------------------DESDE AQUI COMIENZA LOS CODIGOS DEL 1 AL 10------------------------
     //-----------ESTE ES EL CONTROLER DE INVETIR LISTA(1)---------------------------
-    @GetMapping("/invert")
+    @GetMapping("/invertpet")
     public ResponseEntity<ResponseDTO> getInvert() {
         try {
             listSEService.changeExtremes();
@@ -325,8 +335,6 @@ public class ListSEController {
                     null), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
-
 }
 
 
