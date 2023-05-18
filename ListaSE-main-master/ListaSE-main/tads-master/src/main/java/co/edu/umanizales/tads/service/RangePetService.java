@@ -1,9 +1,7 @@
 package co.edu.umanizales.tads.service;
-
 import co.edu.umanizales.tads.controller.dto.Ranges;
 import lombok.Data;
 import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.List;
 

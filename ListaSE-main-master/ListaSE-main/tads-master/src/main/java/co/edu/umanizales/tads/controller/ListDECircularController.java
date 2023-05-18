@@ -1,8 +1,11 @@
 package co.edu.umanizales.tads.controller;
+import co.edu.umanizales.tads.controller.dto.PetDTO;
 import co.edu.umanizales.tads.controller.dto.ResponseDTO;
 import co.edu.umanizales.tads.exception.ListDEEExceptionCircular;
+import co.edu.umanizales.tads.model.Location;
 import co.edu.umanizales.tads.model.Pet;
 import co.edu.umanizales.tads.service.ListCircularService;
+import co.edu.umanizales.tads.service.LocationService;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,93 +17,132 @@ import org.springframework.web.bind.annotation.*;
 public class ListDECircularController {
     @Autowired
     private ListCircularService listCircularService;
+    @Autowired
+    private LocationService locationService;
 
-    @GetMapping(path = "/getinto/{x}")
-    public ResponseEntity<ResponseDTO> getinto(Pet pet,int x) {
-        try {
-            listCircularService.getPetsde().getinto(pet,x);
-        }catch (Exception exception){
-            return new ResponseEntity<>(new ResponseDTO(200,
-                    "Se añadio al perro",null), HttpStatus.OK);
+    @PostMapping(path = "/addpet")
+    public ResponseEntity<ResponseDTO> addPet(@RequestBody PetDTO petDTO) {
+        Location location = locationService.getLocationsByCode(petDTO.getCodeLocationPet());
+        if (location == null) {
+            return new ResponseEntity<>(new ResponseDTO(
+                    404, "La ubicación no existe",
+                    null), HttpStatus.OK);
         }
-        return new ResponseEntity<>(new ResponseDTO(400,
-                "no se añadio el perro tiene problemas ",null),HttpStatus.NOT_FOUND);
-    }
-    @GetMapping(path = "/showlist")
-    public ResponseEntity<ResponseDTO>showList(){
+
         try {
-            listCircularService.getPetsde().showList();
-        }catch (ListDEEExceptionCircular listDEEExceptionCircular){
-            return new ResponseEntity<>(new ResponseDTO(200,
-                    "ya se ve al perro añadido",null),HttpStatus.OK);
+            listCircularService.getPetsde().add(new Pet(petDTO.getName(), petDTO.getAge(), petDTO.getBreed(),
+                    petDTO.getGender(), location, petDTO.getId(), false));
+        } catch (ListDEEExceptionCircular e) {
+            return new ResponseEntity<>(new ResponseDTO(
+                    409, e.getMessage(),
+                    null), HttpStatus.OK);
         }
-        return new ResponseEntity<>(new ResponseDTO(404,
-                "no se añadio el perro añadido revise ",null),HttpStatus.INTERNAL_SERVER_ERROR);
+
+        return new ResponseEntity<>(new ResponseDTO(
+                200, "Se ha adicionado la mascota que ingresó",
+                null), HttpStatus.OK);
     }
-    @GetMapping(path = "insertaatposition")
-    public ResponseEntity<ResponseDTO>insertAtPosition(int position, int data, Pet pet){
+//--------------------VER LOS PERROS O LISTAR---------------------------
+    @GetMapping(path = "getpets")
+    public ResponseEntity<ResponseDTO> getPets() {
         try {
-            listCircularService.getPetsde().insertAtPosition(position,data,pet);
-        }catch (ListDEEExceptionCircular listDEEExceptionCircular){
-            return new ResponseEntity<>(new ResponseDTO(200,
-                    "se incerto de posicion buena suerte",null),HttpStatus.OK);
+            return new ResponseEntity<>(new ResponseDTO(
+                    200, listCircularService.getPetsde().print(), null), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new ResponseDTO(
+                    500, "Error al obtener la lista de mascotas revise" + e.getMessage(),
+                    null), HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return new ResponseEntity<>(new ResponseDTO(404,
-                "el perro no se incerto de poscion ",null),HttpStatus.BAD_REQUEST);
     }
-    @GetMapping(path = "/addfirst")
-    public ResponseEntity<ResponseDTO>addFirst(int data, Pet pet){
+//----------------------------INSERTAR EN PSOCICION------------------
+
+    @PostMapping(path = "/addbyposition/{position}")
+    public ResponseEntity<ResponseDTO> addByPosition(@RequestBody PetDTO petDTO, @PathVariable int position)throws ListDEEExceptionCircular {
+        Location location = locationService.getLocationsByCode(petDTO.getCodeLocationPet());
+        listCircularService.getPetsde().addByPosition(
+                new Pet(petDTO.getName(), petDTO.getAge(),
+                        petDTO.getBreed(), petDTO.getGender(),location,
+                        petDTO.getId(),false),position);
+
+        return new ResponseEntity<>(new ResponseDTO(200, "Mascota adicionada en la posicion: "
+                + position, null),
+                HttpStatus.OK);
+    }
+
+    //-----------------------AÑADIR DE PRIMERAS--------------------------.
+    @PostMapping(path = "/addtostart")
+    public ResponseEntity<ResponseDTO> addFirst(@RequestBody PetDTO petDTO)throws ListDEEExceptionCircular {
+        Location location = locationService.getLocationsByCode(petDTO.getCodeLocationPet());
+        listCircularService.getPetsde().addFirst(
+                new Pet(petDTO.getName(), petDTO.getAge(),
+                        petDTO.getBreed(), petDTO.getGender(),
+                        location, petDTO.getId(),false));
+
+        return new ResponseEntity<>(new ResponseDTO(200, "Mascota adicionada al inicio", null),
+                HttpStatus.OK);
+    }
+    //-----------------------AÑADIR AL FINAL---------------------
+    @PostMapping(path = "/addfinal")
+    public ResponseEntity<ResponseDTO> addFinal(@RequestBody PetDTO petDTO) {
+        Location location = locationService.getLocationsByCode(petDTO.getCodeLocationPet());
+        if (location == null) {
+            return new ResponseEntity<>(new ResponseDTO(
+                    404, "La ubicación no existe",
+                    null), HttpStatus.OK);
+        }
+
         try {
-            listCircularService.getPetsde().addFirst(data, pet);
-        }catch (Exception exception){
-            return new ResponseEntity<>(new ResponseDTO(200,
-                    "se añadio al principio el perro",null),HttpStatus.OK);
+            listCircularService.getPetsde().addFinal(new Pet(petDTO.getName(), petDTO.getAge(), petDTO.getBreed(),
+                    petDTO.getGender(), location, petDTO.getId(), false));
+        } catch (ListDEEExceptionCircular e) {
+            return new ResponseEntity<>(new ResponseDTO(
+                    409, e.getMessage(),
+                    null), HttpStatus.OK);
         }
-        return new ResponseEntity<>(new ResponseDTO(404,
-                "no se añadio al inicio el perro ",null),HttpStatus.NOT_FOUND);
+
+        return new ResponseEntity<>(new ResponseDTO(
+                200, "Se ha adicionado la mascota que ingresó al final",
+                null), HttpStatus.OK);
     }
-    @GetMapping(path = "/addlast")
-    public ResponseEntity<ResponseDTO>addFinal(int data,Pet pet){
-        try {
-            listCircularService.getPetsde().addFinal(data, pet);
-        }catch (Exception exception){
-            return new ResponseEntity<>(new ResponseDTO(200,
-                    "se añadio a lo ultimo ",null),HttpStatus.OK);
+
+    @GetMapping(path = "/takeshower/{letter}")
+    public ResponseEntity<ResponseDTO> takeShower(@PathVariable char letter) {
+        char letterLower = Character.toLowerCase(letter);
+        Pet pet = listCircularService.getPetsde().takeShower(letter);
+
+        if (pet == null) {
+            return new ResponseEntity<>(
+                    new ResponseDTO(409, "No hay perros para bañar", null),
+                    HttpStatus.BAD_REQUEST);
+        } else {
+            String message;
+            if (pet == listCircularService.getPetsde().getFirst()) {
+                message = "Se bañó la primera mascota ingresada";
+            } else {
+                String direction = (letterLower == 'd') ? "derecha" : "izquierda";
+                int number = listCircularService.getPetsde().getPetNumber(pet);
+                message = "Se bañó la mascota número " + number + " dirigiéndose a la " + direction;
+            }
+            return new ResponseEntity<>(
+                    new ResponseDTO(200, message, null),
+                    HttpStatus.OK);
         }
-        return new ResponseEntity<>(new ResponseDTO(404,
-                "no se añade a lo ultimo",null),HttpStatus.NOT_FOUND);
     }
-    @GetMapping(path = "/addleftdog")
-    public ResponseEntity<ResponseDTO>addLeftDog(int data, Pet pet){
-        try {
-            listCircularService.getPetsde().addLeftDog(data, pet);
-        }catch (ListDEEExceptionCircular listDEEExceptionCircular){
-            return new ResponseEntity<>(new ResponseDTO(200,
-                    "se baño el perro en el lado izquierdo",null),HttpStatus.OK);
-        }
-        return new ResponseEntity<>(new ResponseDTO(404,
-                "no se baño en el lado izquierdo",null),HttpStatus.NOT_FOUND);
+    //----------------------ME MUESTRA EL TAMAÑO-------------------------------
+    @GetMapping(path = "/tamaño")
+    public ResponseEntity<ResponseDTO>tamaño(){
+
+        int j=listCircularService.getPetsde().tamaño();
+        return new ResponseEntity<>(new ResponseDTO(200
+                ,j,null),HttpStatus.OK);
     }
-    @GetMapping(path = "/addrightdog")
-    public ResponseEntity<ResponseDTO>addRightDog(int data, Pet pet){
-        try {
-            listCircularService.getPetsde().addRightDog(data, pet);
-        }catch (ListDEEExceptionCircular listDEEExceptionCircular){
-            return new ResponseEntity<>(new ResponseDTO(200,
-                    "se baño el perro en el lado derecho ",null),HttpStatus.OK);
-        }
-        return new ResponseEntity<>(new ResponseDTO(404,
-                "no se baño en el lado izquierdo el perro",null),HttpStatus.NOT_FOUND);
-    }
-    @GetMapping(path = "/addrightleftdog")
-    public ResponseEntity<ResponseDTO>addRightLeftdog(int data, boolean atBeginning, Pet pet){
-        try {
-            listCircularService.getPetsde().addRightLeftdog(data,atBeginning,pet);
-        }catch (ListDEEExceptionCircular listDEEExceptionCircular){
-            return new ResponseEntity<>(new ResponseDTO(200,
-                    "se baño el perro tanto en la izquierda como en la derecha",null),HttpStatus.OK);
-        }
-        return new ResponseEntity<>(new ResponseDTO(404,
-                "no se baño el perro en la parte izquierda como en la derecha",null),HttpStatus.NOT_FOUND);
-    }
+
+
+
+
+
+
+
+
+
 }

@@ -1,5 +1,4 @@
 package co.edu.umanizales.tads.model;
-import co.edu.umanizales.tads.controller.dto.ReportKidsLocationGenderDTO;
 import co.edu.umanizales.tads.exception.ListDEException;
 import lombok.*;
 import javax.validation.Valid;
@@ -44,7 +43,7 @@ public class ListDE {
             }
         } catch (Exception e) {
             throw new ListDEException("Problema para añadir el perro tenga cuidado: " + e.getMessage());
-        }
+        }size++;
 
     }
 
@@ -94,15 +93,16 @@ public class ListDE {
             if (this.headDE == null) {
                 throw new ListDEException("No hay elementos en la lista para invertir.");
             }
-            ListDE listDE = new ListDE();
+
+            ListDE invertedList = new ListDE();
             NodeDE current = this.headDE;
+
             while (current != null) {
-                listDE.addToStart(current.getData());
+                invertedList.addToStart(current.getData());
                 current = current.getNext();
             }
-            if (current != null) {
-                this.headDE = current.getPrevious();
-            }
+
+            this.headDE = invertedList.headDE;
         } catch (ListDEException e) {
             throw new ListDEException("Se ha producido un error al invertir la lista: " + e.getMessage());
         }
@@ -140,28 +140,22 @@ public class ListDE {
     Tambien vemos que lo que cambio en la lista doblemente enlazada son las excepciones que son ListSEExeption.
      */
 
-    public void getOrderPetsToStart() throws @NotEmpty ListDEException {
-        try {
-            if (headDE != null) {
-                ListDE listDE = new ListDE();
-                NodeDE temp = this.headDE;
+    public void getOrderPetsToStart() throws ListDEException {
+        if (headDE != null) {
+            ListDE listDE = new ListDE();
+            NodeDE temp = this.headDE;
 
-                while (temp != null) {
-                    if (temp.getData().getGender() == 'M') {
-                        listDE.addToStart(temp.getData());
-                    } else {
-                        listDE.add(temp.getData());
-                    }
-                    temp = temp.getNext();
+            while (temp != null) {
+                if (temp.getData().getGender() == 'M') {
+                    listDE.addToStart(temp.getData());
+                } else {
+                    listDE.add(temp.getData());
                 }
-                headDE = listDE.getHead();
-            } else {
-                throw new @NotEmpty ListDEException("No hay niños para completar esta operacion");
+                temp = temp.getNext();
             }
-        } catch (ListDEException e) {
-            // manejo de la excepción aquí
-            // por ejemplo, puedes imprimir el mensaje de error
-            throw new @NotEmpty ListDEException("Se ha producido un error al ordenar la lista de niños: " + e.getMessage());
+            headDE = listDE.getHead();
+        } else {
+            throw new ListDEException("No hay niños para completar esta operacion");
         }
     }
 
@@ -183,129 +177,112 @@ public class ListDE {
         } catch (NullPointerException e) {
             // Aquí puedes manejar la excepción de alguna otra manera si lo deseas
             throw new ListDEException("Error: " + e.getMessage());
-        }
+        }size++;
     }
 
 
 
     //----------------------CODIGO 3 INTERCALAR MASCOTA (MASCULINO)-MASCOTAS( FEMENINO)-MASCOTA(MASCULINO)-MASCOTAS(FEMENINO)-------------------------------
-    public void getAlternatePets() throws @NotEmpty ListDEException {
-        try {
-            ListDE listBoys = new ListDE();
-            ListDE listGirls = new ListDE();
-            ListDE listDE = new ListDE();
-            NodeDE boysNode = listBoys.getHead();
-            NodeDE girlsNode = listGirls.getHead();
-
-
-            NodeDE temp = headDE;
-
-            if (headDE == null) {
-                throw new @NotEmpty ListDEException("No existen niños o no hay suficientes para alternar");
-            } else {
-                while (temp != null) {
-                    if (temp.getData().getGender() == 'M') {
-                        listBoys.add(temp.getData());
-                    } else {
-                        if (temp.getData().getGender() == 'F') {
-                            listGirls.add(temp.getData());
-                        }
-                    }
-                    temp = temp.getNext();
-                }
-                while (boysNode != null || girlsNode != null) {
-                    if (boysNode != null) {
-                        listDE.add(boysNode.getData());
-                        boysNode = boysNode.getNext();
-
-                    }
-                    if (girlsNode != null) {
-                        listDE.add(girlsNode.getData());
-                        girlsNode = girlsNode.getNext();
-                    }
-                }
-                this.headDE = listDE.getHead();
-            }
-        } catch (NullPointerException e) {
-            throw new @NotEmpty ListDEException("Error de puntero nulo al tratar de alternar niños");
+    public void getAlternatePets() throws ListDEException {
+        if (headDE == null) {
+            throw new ListDEException("La lista no contiene datos");
         }
+
+        ListDE masculinoList = new ListDE();
+        ListDE femeninoList = new ListDE();
+
+        NodeDE temp = headDE;
+        while (temp != null) {
+            if (temp.getData().getGender() == 'M') {
+                masculinoList.add(temp.getData());
+            } else if (temp.getData().getGender() == 'F') {
+                femeninoList.add(temp.getData());
+            }
+            temp = temp.getNext();
+        }
+
+        if (femeninoList.getSize() == 0) {
+            throw new ListDEException("No hay suficientes mascotas de género femenino para realizar el sorteo");
+        }
+
+        NodeDE masculinoNode = masculinoList.getHeadDE();
+        NodeDE femeninoNode = femeninoList.getHeadDE();
+        NodeDE combinedListHead = null;
+        NodeDE combinedListTail = null;
+
+        while (masculinoNode != null && femeninoNode != null) {
+            if (combinedListHead == null) {
+                combinedListHead = masculinoNode;
+                combinedListTail = masculinoNode;
+            } else {
+                combinedListTail.setNext(masculinoNode);
+                combinedListTail = combinedListTail.getNext();
+            }
+
+            combinedListTail.setNext(femeninoNode);
+            combinedListTail = combinedListTail.getNext();
+
+            masculinoNode = masculinoNode.getNext();
+            femeninoNode = femeninoNode.getNext();
+        }
+
+        if (femeninoNode != null) {
+            combinedListTail.setNext(femeninoNode);
+        }
+
+        headDE = combinedListHead;
     }
+
+
 
     //-------------------------CODIGO 4 DADA UNA EDAD ELIMINAR A LA MASCOTA DE LA EDAD DADA -----------------
 
     public void removePetByAge(@Min(value = 1, message = "La edad debe ser mayor que cero") Byte age) throws ListDEException {
         NodeDE temp = headDE;
-        NodeDE previous = temp.getPrevious();
-        NodeDE next = temp.getNext();
-
-        try {
-            if (temp.getData().getAge() == age) {
-                throw new ListDEException("No existen niños para realizar la operación");
+        ListDE listcopy = new ListDE();
+            if (age <= 0) {
+                throw new ListDEException("La edad debe ser mayor que cero");
             } else {
+                if (this.headDE == null) {
+                    throw new ListDEException("No existen niños para realizar la operación");
+                } else {
 
-                while (temp != null) {
-                    if (temp.getData().getAge() != age) {
-                        if (previous == null) {
-                            headDE = next;
-                        } else {
-                            previous.setNext(next);
+                    while (temp != null) {
+                        if (temp.getData().getAge() != age) {
+                            listcopy.add(temp.getData());
                         }
-                        if (next == null) {
-                            next.setPrevious(previous);
-
-                        }
+                        temp = temp.getNext();
                     }
-                    temp = temp.getNext();
-                }
+                    this.headDE = listcopy.getHead();
 
+                }
             }
-        } catch (ListDEException e) {
-            throw new ListDEException("Error al remover niños por edad: " + e.getMessage());
-        }
+
     }
 
 
     //---------CODIGO 5 OBTENER EL PROMEDIO DE EDAD DE LAS MASCOTAS DE LA LISTA -------------------
 
-    public float getAveragePetAge() throws @NotEmpty ListDEException {
-        try {
-            if (headDE != null) {
-                NodeDE temp = headDE;
-                int count = 0;
-                int age = 0;
-                while (temp.getNext() != null) {
-                    count++;
-                    age += temp.getData().getAge();
-                    temp = temp.getNext();
-                }
-                return (float) age / count;
-            } else {
-                throw new @NotEmpty ListDEException("No hay niños para poder hacer el promedio de edades");
-            }
-        } catch (ArithmeticException e) {
-            throw new @NotEmpty ListDEException("No se pudo calcular el promedio de edades debido a una excepción aritmética: " + e.getMessage());
+    public float getAveragePetAge() throws ListDEException {
+        if (headDE == null) {
+            throw new ListDEException("No hay mascotas para calcular el promedio de edades");
         }
+
+        NodeDE temp = headDE;
+        int count = 0;
+        int age = 0;
+
+        while (temp != null) {
+            count++;
+            age += temp.getData().getAge();
+            temp = temp.getNext();
+        }
+
+        return (float) age / count;
     }
+
 
     //-----------CODIGO 6 GENERAR UN REPORTE QUE ME DIGA CUANTAS MASCOTAS HAY DE CADA CIUDAD-----------------
-
-    public void getReportPetsByLocationGendersByAge(@Min(value = 0, message = "La edad debe ser mayor o igual a cero") byte age, @NotNull ReportKidsLocationGenderDTO report) throws ListDEException {
-        try {
-            if (headDE != null) {
-                NodeDE temp = this.headDE;
-                while (temp != null) {
-                    if (temp.getData().getAge() > age) {
-                        report.updateQuantity(temp.getData().getLocation().getName(), temp.getData().getGender());
-                    }
-                    temp = temp.getNext();
-                }
-            } else {
-                throw new ListDEException("No existen niños para poder realizar la función");
-            }
-        } catch (ListDEException e) {
-            throw new ListDEException("Error al generar el reporte de niños por ubicación y género: " + e.getMessage());
-        }
-    }
 
     public int getCountPetsByLocationCode(String code)throws ListDEException {
         try {
@@ -357,38 +334,40 @@ public class ListDE {
     }
 
     //------------CODIGO 7 METODO QUE ME PERMITA DECIRLE A UNA MASCOTA DETERMINADO QUE ADELANTE  UN NUMERO DE POSICIONES DADAS---------
+    public void winPetPosition(String id, int position) throws ListDEException {
+        if (position < 0) {
+            throw new ListDEException("La posición debe ser un número positivo");
+        }
 
-    public void winPositionPet(@NotNull @NotEmpty String id, @PositiveOrZero int position) throws ListDEException {
-        try {
-            if (position < 0) {
-                throw new ListDEException("La posición debe ser un número positivo");
+        if (headDE != null) {
+            NodeDE temp = headDE;
+            int counter = 0;
+
+            // Buscar el nodo con el ID especificado
+            while (temp != null && !temp.getData().getId().equals(id)) {
+                temp = temp.getNext();
+                counter++;
             }
-            if (headDE != null) {
-                NodeDE temp = headDE;
-                int counter = 1;
-                while (temp != null && !temp.getData().getId().equals(id)) {
-                    temp = temp.getNext();
-                    counter++;
+
+            if (temp != null) {
+                int newPosition = counter - position;  // Restar la posición en lugar de sumarla
+
+                if (newPosition < 0) {
+                    throw new ListDEException("La posición especificada está fuera de los límites de la lista");
                 }
-                if (temp != null) {
-                    int newPosition = counter - position;
-                    if (newPosition < 0) {
-                        throw new ListDEException("La posición especificada está fuera de los límites de la lista");
-                    }
-                    Pet listCopy = temp.getData();
-                    deleteById(temp.getData().getId());
-                    if (newPosition > 0) {
-                        addByPosition(listCopy, newPosition);
-                    } else {
-                        addToStartPet(listCopy);
-                    }
+
+                Pet listCopy = temp.getData();
+                deleteById(temp.getData().getId());
+
+                // Insertar el nodo en la nueva posición
+                if (newPosition > 0) {
+                    addByPosition(listCopy, newPosition);
+                } else {
+                    addToStartPet(listCopy);
                 }
             }
-        } catch (ListDEException e) {
-            throw new ListDEException("Error: " + e.getMessage());
         }
     }
-
 
     public void addToStartPet(@NotNull(message = "El objeto pet no puede ser nulo")Pet pet) throws ListDEException {
         if (pet == null) {
@@ -403,35 +382,41 @@ public class ListDE {
         headDE = nodeDE;
         size++;
     }
-
-    public void addByPosition(@NotNull Pet pet,@Min(0) int position) throws ListDEException {
-        try {
-            if (position < 0 || position > size) {
-                throw new ListDEException("Posicion invalida:" + position);
-            }
-            NodeDE newNode = new NodeDE(pet);
-            if (position == 0) {
-                newNode.setNext(headDE);
-                if (headDE != null) {
-                    headDE.setPrevious(newNode);
-                }
-                headDE = newNode;
-            } else {
-                NodeDE current = headDE;
-                for (int i = 1; i < position - 1; i++) {
-                    current = current.getNext();
-                }
-                newNode.setNext(current.getNext());
-                if (current.getNext() != null) {
-                    current.getNext().setPrevious(newNode);
-                }
-                current.setNext(newNode);
-                newNode.setPrevious(current);
-            }
-        } catch (Exception e) {
-            throw new ListDEException("Error occurred while adding node: " + e.getMessage());
+//------------------------AÑADIR EN POSICION---------------------
+    public void addByPosition(Pet pet, int position) throws ListDEException {
+        if (position < 0 || position > size) {
+            throw new ListDEException("Posicion invalida: " + position);
         }
+
+        NodeDE newNode = new NodeDE(pet);
+
+        if (position == 0) {
+            newNode.setNext(headDE);
+            if (headDE != null) {
+                headDE.setPrevious(newNode);
+            }
+            headDE = newNode;
+        } else {
+            NodeDE current = headDE;
+            int currentPosition = 0;
+
+            while (currentPosition < position - 1) {
+                current = current.getNext();
+                currentPosition++;
+            }
+
+            newNode.setNext(current.getNext());
+            if (current.getNext() != null) {
+                current.getNext().setPrevious(newNode);
+            }
+            current.setNext(newNode);
+            newNode.setPrevious(current);
+        }
+
+        size++; // Incrementar el tamaño solo si la inserción se realiza correctamente
     }
+
+
 
 
 
@@ -460,48 +445,63 @@ public class ListDE {
 
 
     //-----------------CODIGO 8 METODO QUE ME PERIMITA DECIRLE A UNA MASCOTA DETERMINADO QUE PIERDA UN NUMERO DE POSICIONES DADAS---------------
-
-    public void losePositionPet(@NotNull String id,@Positive int positionpet) throws ListDEException {
-        try {
-            if (positionpet < 0) {
-                throw new ListDEException("La posicion debe ser positiva");
-            }
-            NodeDE temp = headDE;
-            int count = 1;
-            while (temp != null && !temp.getData().getId().equals(id)) {
-                temp = temp.getNext();
-                count++;
-            }
-
-            int sum = positionpet + count;
-            Pet pet = temp.getData();
-            deleteById(temp.getData().getId());
-            addByPosition(pet, sum);
-        } catch (ListDEException e) {
-            throw new ListDEException("Error: " + e.getMessage());
+    public void losePetPosition(String id, int position) throws ListDEException {
+        if (position < 0) {
+            throw new ListDEException("La posición debe ser positiva");
         }
+
+        NodeDE temp = headDE;
+        int count = 0;
+
+        // Buscar la mascota con el ID especificado
+        while (temp != null && !temp.getData().getId().equals(id)) {
+            temp = temp.getNext();
+            count++;
+        }
+
+        if (temp == null) {
+            throw new ListDEException("No se encontró una mascota con el ID especificado");
+        }
+
+        int newPosition = count + position;
+        if (newPosition < 0) {
+            throw new ListDEException("La posición resultante es inválida");
+        }
+
+        // Eliminar la mascota de la posición actual
+        if (temp == headDE) {
+            headDE = temp.getNext();
+        } else {
+            temp.getPrevious().setNext(temp.getNext());
+            if (temp.getNext() != null) {
+                temp.getNext().setPrevious(temp.getPrevious());
+            }
+        }
+
+        // Obtener la mascota eliminada y agregarla en la nueva posición
+        addByPosition(temp.getData(), newPosition);
     }
 
     //-------------------CODIGO 9 OBTENER UN INFORME DE PERROS POR RANGO DE EDADES--------------------
 
-    public int getRangePetByAge(@PositiveOrZero int Startpet,@PositiveOrZero  int finishpet) throws ListDEException {
-        try {
-            if (Startpet < 0 || finishpet < 0) {
-                throw new ListDEException("El informe de rangos no puede ser negativo");
-            }
-            NodeDE temp = headDE;
-            int counter = 0;
-            while (temp != null) {
-                if (temp.getData().getAge() >= Startpet && temp.getData().getAge() <= finishpet) {
-                    counter++;
-                }
-                temp = temp.getNext();
-            }
-            return counter;
-        } catch (ListDEException e) {
-            throw new ListDEException("Error: " + e.getMessage());
+    public int getRangePetByAge(int startAge, int finishAge) throws ListDEException {
+        if (startAge < 0 || finishAge < 0) {
+            throw new ListDEException("El informe de rangos no puede ser negativo");
         }
+
+        NodeDE temp = headDE;
+        int counter = 0;
+
+        while (temp != null) {
+            if (temp.getData().getAge() >= startAge && temp.getData().getAge() <= finishAge) {
+                counter++;
+            }
+            temp = temp.getNext();
+        }
+
+        return counter;
     }
+
 
     //------------CODIGO 10 IMPLEMENTAR UN METODO QUE ME PERMITA ENVIAR AL FINAL DE LA LISTA A LAS MASCOTAS QUE SU NOMBRE INICIE  CON UNA LETRA DADA -----------
 
@@ -523,7 +523,7 @@ public class ListDE {
                 }
                 this.headDE = listCopy.getHeadDE();
             } else {
-                throw new ListDEException("La lista no puede estar vacia");
+                throw new ListDEException("La lista no puede estar vacía");
             }
         } catch (NullPointerException ex) {
             throw new ListDEException("El argumento letter no puede ser nulo");

@@ -1,6 +1,4 @@
 package co.edu.umanizales.tads.service;
-import co.edu.umanizales.tads.exception.ListSEException;
-import co.edu.umanizales.tads.model.Node;
 import lombok.Data;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;

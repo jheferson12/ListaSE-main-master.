@@ -4,8 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3d9acaf8-3970-42ce-9807-f484eb5c0667" name="Changes" comment="El codigo ya se encuentra con todo tanto en la simplemente enlazada como en la doblemente enlazada.">
+    <list default="true" id="3d9acaf8-3970-42ce-9807-f484eb5c0667" name="Changes" comment="El codigo ya se encuentra con todo tanto en la simplemente enlazada como en la doblemente enlazada.tambien esta los algoritmos">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ListaSE-main-master/ListaSE-main/tads-master/src/main/java/co/edu/umanizales/tads/TadsApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/ListaSE-main-master/ListaSE-main/tads-master/src/main/java/co/edu/umanizales/tads/TadsApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ListaSE-main-master/ListaSE-main/tads-master/src/main/java/co/edu/umanizales/tads/controller/ListDEController.java" beforeDir="false" afterPath="$PROJECT_DIR$/ListaSE-main-master/ListaSE-main/tads-master/src/main/java/co/edu/umanizales/tads/controller/ListDEController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ListaSE-main-master/ListaSE-main/tads-master/src/main/java/co/edu/umanizales/tads/model/ListDE.java" beforeDir="false" afterPath="$PROJECT_DIR$/ListaSE-main-master/ListaSE-main/tads-master/src/main/java/co/edu/umanizales/tads/model/ListDE.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ListaSE-main-master/ListaSE-main/tads-master/src/main/java/co/edu/umanizales/tads/model/ListSE.java" beforeDir="false" afterPath="$PROJECT_DIR$/ListaSE-main-master/ListaSE-main/tads-master/src/main/java/co/edu/umanizales/tads/model/ListSE.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ListaSE-main-master/ListaSE-main/tads-master/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/ListaSE-main-master/ListaSE-main/tads-master/src/main/resources/application.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -155,7 +160,8 @@
       <workItem from="1684086719264" duration="7579000" />
       <workItem from="1684117948871" duration="638000" />
       <workItem from="1684160385636" duration="1841000" />
-      <workItem from="1684168233793" duration="11043000" />
+      <workItem from="1684168233793" duration="21712000" />
+      <workItem from="1684196498740" duration="35000" />
     </task>
     <task id="LOCAL-00001" summary="Este push ya tiene la lista SE completado teniendo en cuenta la fecha 26/04/24">
       <created>1682562758427</created>
@@ -234,7 +240,14 @@
       <option name="project" value="LOCAL" />
       <updated>1684184362084</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="El codigo ya se encuentra con todo tanto en la simplemente enlazada como en la doblemente enlazada.tambien esta los algoritmos">
+      <created>1684185129756</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1684185129756</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -260,7 +273,8 @@
     <MESSAGE value="En este codigo esta organizado correctamente el codigo este es el que ya esta listo el dia 5/05/2023.&#10;En ete codigo esta el ejercicio del dia 8/05/2023" />
     <MESSAGE value="El codigo ya se encuentra con todo tanto en la simplemente enlazada como en la doblemente enlazada" />
     <MESSAGE value="El codigo ya se encuentra con todo tanto en la simplemente enlazada como en la doblemente enlazada." />
-    <option name="LAST_COMMIT_MESSAGE" value="El codigo ya se encuentra con todo tanto en la simplemente enlazada como en la doblemente enlazada." />
+    <MESSAGE value="El codigo ya se encuentra con todo tanto en la simplemente enlazada como en la doblemente enlazada.tambien esta los algoritmos" />
+    <option name="LAST_COMMIT_MESSAGE" value="El codigo ya se encuentra con todo tanto en la simplemente enlazada como en la doblemente enlazada.tambien esta los algoritmos" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

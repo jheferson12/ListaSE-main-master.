@@ -23,6 +23,7 @@ public class Pet {
 
     @NotBlank(message = "No es permitido anular el id de la mascota ")
     private String id;
+    private boolean bathdog;
 
 
 }
