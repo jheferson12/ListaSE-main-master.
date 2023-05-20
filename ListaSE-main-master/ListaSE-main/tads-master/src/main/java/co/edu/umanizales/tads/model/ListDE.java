@@ -23,21 +23,32 @@ public class ListDE {
 
     public void add(@NotNull @Valid Pet pet) throws ListDEException {
         try {
+            //PEGGUNTO CABEZA ES DIFERENTE DE NULO
             if (headDE != null) {
+                //NODO TEMPORAL SERIA LO MISMO QUE LA CABEZA
                 NodeDE temp = headDE;
+                //EL SIGUIENTE DEL NODO TEMPORAL ES DIFERENTE DE NULO
                 while (temp.getNext() != null) {
+                    //HACE UNA COMPARACION CON LOS DATOS DEL NODO A LA IDENTIFICACION
                     if (temp.getData().getId().equals(pet.getId())) {
+                        //EXCEPCION
                         throw new ListDEException("Ya se añadio la mascota no puedes escribirlo de nuevo");
                     }
+                    //NODO TEMPORAL SERIA IGUAL A EL SIGUIENTE
                     temp = temp.getNext();
                 }
+                //HACE UNA COMPARACION CON LOS DATOS DEL NODO A LA IDENTIFICACION
                 if (temp.getData().getId().equals(pet.getId())) {
                     throw new ListDEException("No puede volver a escribir lo mismo ");
                 }
+                //EL NUEVO NODO
                 NodeDE newNode = new NodeDE(pet);
+                //EL NODO TEMPORAL CAMBIARIA EL NUEVO NODO COMO SU SIGUIENTE
                 temp.setNext(newNode);
+                //EL NUEVO NODO TENDRA UN PREVIO CAMBIANDO CON SI NODO TEMPORAL
                 newNode.setPrevious(temp);
             } else {
+                //CABEZA ESL IGUAL AL NODO
                 headDE = new NodeDE(pet);
 
             }
@@ -59,15 +70,15 @@ public class ListDE {
 
             while (current != null) {
                 if (current.getData().equals(pet)) {
-                    // Found the node to remove
+                    //BUSCA EL NODO A REMOVER
                     if (prev == null) {
-                        // Removing the head node
+                        // REMOVIENDO LA CABEZA DEL NODO
                         headDE = current.getNext();
                         if (headDE != null) {
                             headDE.setPrevious(null);
                         }
                     } else {
-                        // Removing a node that is not the head
+                        // REMOVIENDO EL NODO SI NO ES LA CABEZA
                         prev.setNext(current.getNext());
                         if (current.getNext() != null) {
                             current.getNext().setPrevious(prev);
@@ -76,8 +87,9 @@ public class ListDE {
                     size--;
                     return;
                 }
-
+                //NODO PREVIO SRIA IGUAL AL NODO ACTUAL
                 prev = current;
+                //NODO ACTUAL SERIA LA PARTE SIGUINETE DEL NODO
                 current = current.getNext();
             }
 
@@ -90,18 +102,23 @@ public class ListDE {
     //---------------------------------CODIGO 1 INVERTIR LA LISTA-------------------------------------------------
     public void getInvertPet() throws ListDEException {
         try {
+            //INSTANCIA ES DIFERENTE DE NULO
             if (this.headDE == null) {
+                //EXCEPCION
                 throw new ListDEException("No hay elementos en la lista para invertir.");
             }
-
+            //LISTA AÑADIDA COMO LISTA INVERTIDA
             ListDE invertedList = new ListDE();
+            //NODO ACTUAL SERIA LA INSTACIA
             NodeDE current = this.headDE;
-
+            //NODO ACTUAL DIFERENTE DE NULO
             while (current != null) {
+                //LISTASE AÑADE AL COMIENZO LOS DATOS DEL NODO ACTUAL
                 invertedList.addToStart(current.getData());
+                //LISTA ACTUAL SERIA EL SIGUIENTE DEL NODO ACTUAL
                 current = current.getNext();
             }
-
+            //INSTANCIA TOMA EL VALOR DE LA CABEZA DE LA LISTA
             this.headDE = invertedList.headDE;
         } catch (ListDEException e) {
             throw new ListDEException("Se ha producido un error al invertir la lista: " + e.getMessage());
@@ -109,11 +126,17 @@ public class ListDE {
     }
 
     public List<Pet> print() {
+        //LISTA DE LA CLASE
         List<Pet> pets = new ArrayList<>();
+        //SE PREGUNTA SI LA CABEZA ES DIFERENTE DE NULO
         if (headDE != null) {
+            //NODO ACTAUL ES IGUAL A LA CABEZA
             NodeDE current = headDE;
+            //NODO ACTUAL ES DIFERENTE DE NULO
             while (current != null) {
+                //LA LISTA ME AÑADA LOS DATOS DEL NODO ACTUAL
                 pets.add(current.getData());
+                //EL NODO ACTUAL SERIA EL SIGUIENTE DEL NODO ACTUAL
                 current = current.getNext();
             }
         }
@@ -141,18 +164,26 @@ public class ListDE {
      */
 
     public void getOrderPetsToStart() throws ListDEException {
+        //LA CABEZA ES DIFERENTE DE NULO
         if (headDE != null) {
+            //SE AÑADE LA LISTA
             ListDE listDE = new ListDE();
+            //NODO TEMPORAL IGUAL A LA INSTANCIA
             NodeDE temp = this.headDE;
-
+            //TEMPORAL ES DIFERENTE DE NULO
             while (temp != null) {
+                //LOS DATOS DEL NODO EN EL GENERO QUE LE ASIGNE LA LTRA
                 if (temp.getData().getGender() == 'M') {
+                    //LOS DATOS DE LA LISTA QUE AÑADA AL INICIO LOS DATOS DE EL NODO ACTUAL
                     listDE.addToStart(temp.getData());
                 } else {
+                    //LOS DATOS DE LA LISTA QUE AÑADA LOS DATOS DEL NODO TEMPORAL
                     listDE.add(temp.getData());
                 }
+                //EL NODO TEMPORAL SERIA EL SIGUINETE DEL NODO
                 temp = temp.getNext();
             }
+            //LA CABEZA SEA IGUAL A LA CABEZA DE LA LISTA
             headDE = listDE.getHead();
         } else {
             throw new ListDEException("No hay niños para completar esta operacion");
@@ -166,16 +197,22 @@ public class ListDE {
      */
     public void addToStart(@NotNull @Valid Pet pet) throws ListDEException {
         try {
+            //CABEZA ES DIFERENTE DE NULO
             if (headDE != null) {
+                //NUEVO NODO
                 NodeDE newNode = new NodeDE(pet);
+                //EL NUEVO NODO CAMBIARIA CON LA CABEZA
                 newNode.setNext(headDE);
+                //LA CABEZA DEL PREVIOS CABIA A EL NUEVO NODO
                 headDE.setPrevious(newNode);
+                //CABEZA SEA EL NUEVO NODO
                 headDE = newNode;
             } else {
+                //CABEZA SEA IGUAL AL NUEVO NODO
                 headDE = new NodeDE(pet);
             }
         } catch (NullPointerException e) {
-            // Aquí puedes manejar la excepción de alguna otra manera si lo deseas
+            // Aquí puedes manejar la excepción de alguna otra manera
             throw new ListDEException("Error: " + e.getMessage());
         }size++;
     }
@@ -184,13 +221,16 @@ public class ListDE {
 
     //----------------------CODIGO 3 INTERCALAR MASCOTA (MASCULINO)-MASCOTAS( FEMENINO)-MASCOTA(MASCULINO)-MASCOTAS(FEMENINO)-------------------------------
     public void getAlternatePets() throws ListDEException {
+        // VER SI LA LISTA ESTA VACIA
         if (headDE == null) {
             throw new ListDEException("La lista no contiene datos");
         }
 
+        //SE CREA LAS LISTAS TANTO EL NIÑO COMO PARA LA NIÑA
         ListDE masculinoList = new ListDE();
         ListDE femeninoList = new ListDE();
 
+        // Recorre la lista original y separa las mascotas en las listas correspondientes
         NodeDE temp = headDE;
         while (temp != null) {
             if (temp.getData().getGender() == 'M') {
@@ -201,58 +241,78 @@ public class ListDE {
             temp = temp.getNext();
         }
 
+        // Verifica si hay suficientes mascotas femeninas para realizar el sorteo
         if (femeninoList.getSize() == 0) {
             throw new ListDEException("No hay suficientes mascotas de género femenino para realizar el sorteo");
         }
 
+        // Inicializa nodos para recorrer las listas masculina y femenina
         NodeDE masculinoNode = masculinoList.getHeadDE();
         NodeDE femeninoNode = femeninoList.getHeadDE();
+
+        // Inicializa los nodos de la lista combinada
         NodeDE combinedListHead = null;
         NodeDE combinedListTail = null;
 
+        // Combina los nodos de las listas masculina y femenina alternativamente
         while (masculinoNode != null && femeninoNode != null) {
+            // Si es el primer nodo, establece la cabeza y la cola de la lista combinada
             if (combinedListHead == null) {
                 combinedListHead = masculinoNode;
                 combinedListTail = masculinoNode;
             } else {
+                // Agrega el nodo masculino a la lista combinada
                 combinedListTail.setNext(masculinoNode);
                 combinedListTail = combinedListTail.getNext();
             }
 
+            // Agrega el nodo femenino a la lista combinada
             combinedListTail.setNext(femeninoNode);
             combinedListTail = combinedListTail.getNext();
 
+            // Avanza a los siguientes nodos de ambas listas
             masculinoNode = masculinoNode.getNext();
             femeninoNode = femeninoNode.getNext();
         }
 
+        // Si quedan nodos femeninos, añádelos al final de la lista combinada
         if (femeninoNode != null) {
             combinedListTail.setNext(femeninoNode);
         }
 
+        // Actualiza la cabeza de la lista original con la lista combinada
         headDE = combinedListHead;
     }
+
 
 
 
     //-------------------------CODIGO 4 DADA UNA EDAD ELIMINAR A LA MASCOTA DE LA EDAD DADA -----------------
 
     public void removePetByAge(@Min(value = 1, message = "La edad debe ser mayor que cero") Byte age) throws ListDEException {
+        //QUE LE NODO TEMPORAL SEA LA CABEZA
         NodeDE temp = headDE;
+        //LISTA COPIA
         ListDE listcopy = new ListDE();
+        //SE PREGUTA SI LA EDAD ES MENOR QUE 0
             if (age <= 0) {
                 throw new ListDEException("La edad debe ser mayor que cero");
             } else {
+                //INSTANCIA ES IGUAL A NULO
                 if (this.headDE == null) {
                     throw new ListDEException("No existen niños para realizar la operación");
                 } else {
-
+                        //NODO TEMPORAL DIFERENTE DE NULO
                     while (temp != null) {
+                        //LOS DATOS QUE TIENE EL NODO TEMPORAL ES DIFERENTE A LA EDAD
                         if (temp.getData().getAge() != age) {
+                            //LISTA COPIA AÑADE A LOS DATOS
                             listcopy.add(temp.getData());
                         }
+                        //NODO TEMPORAL SERIA EL SIGUIENTE DEL NODO
                         temp = temp.getNext();
                     }
+                    //INSTANCIA ES IGUAL A LA CABEZA DE LA LISTA COPIA
                     this.headDE = listcopy.getHead();
 
                 }
@@ -264,20 +324,22 @@ public class ListDE {
     //---------CODIGO 5 OBTENER EL PROMEDIO DE EDAD DE LAS MASCOTAS DE LA LISTA -------------------
 
     public float getAveragePetAge() throws ListDEException {
+        //SI LA CABEZA ES NULA
         if (headDE == null) {
             throw new ListDEException("No hay mascotas para calcular el promedio de edades");
         }
-
+        //NODO TEMPORAL ES IGUAL A LA CABEZA
         NodeDE temp = headDE;
         int count = 0;
         int age = 0;
-
+        //NODO TEMPORAL ES DIFERENTE DE NULO
         while (temp != null) {
+            //SUME EL CONTADOR DESPDE QUE SEA CIERTO
             count++;
             age += temp.getData().getAge();
             temp = temp.getNext();
         }
-
+        //QUE ME RETORNE EN FLOAT EL NUMERO
         return (float) age / count;
     }
 
@@ -286,19 +348,27 @@ public class ListDE {
 
     public int getCountPetsByLocationCode(String code)throws ListDEException {
         try {
+            //SI EL COIGO ES IGUAL A NULO O EL CODIGO YA ESTA VACIO
             if (code == null || code.isEmpty()) {
                 throw new ListDEException("El codigo que escribio no puede estar vacio tenga cuidado ");
             }
+            //VARIABLE INICIALIZADA EN 0
             int count = 0;
+            //INSTANCIA ES DIFERENTE DE NULO
             if (this.headDE != null) {
+                //EL NODO ACTUAL ES LA INSTANCIA
                 NodeDE current = this.headDE;
+                //EL NODO ACTUAL ES DIFERENTE DE NULO
                 while (current != null) {
+                    //SE COMPARA LA IDENTIFICACION
                     if (current.getData().getLocation().getCode().equals(code)) {
                         count++;
                     }
+                    //NODO ACTUAL SERIA EL SIGUINETE DEL NODO ACTUAL
                     current = current.getNext();
                 }
             }
+            //RETORNE EL CONTADOR
             return count;
         } catch (ListDEException e) {
             throw new ListDEException("Error: " + e.getMessage());
@@ -318,13 +388,20 @@ public class ListDE {
     }
 
     private int count(String code) throws ListDEException {
+        //VARIABLES INCIALIZADAS EN 0
         int count = 0;
+        //INSTACIA ES DIFERENTE DE NULO
         if (this.headDE != null) {
+            //NODO TEMPORAL ES IGUAL A LA INSTANCIA
             NodeDE temp = this.headDE;
+            //NODO TEMPORAL ES DIFERENTE DE NULO
             while (temp != null) {
+                //LISTAR LA CANTIDAD DE DATOS TENIENDO EN CUENTA LA VARIABLE CON LA LOCALIZACION DADA
                 if (temp.getData().getLocation().getCode().substring(0, 5).equals(code)) {
+                    //SUMAR EL CONTADOR SI ESS VERDADERO
                     count++;
                 }
+                //NODO TEMPORAL SERIA EL SIGUINETE DEL NODO TEMPORAL
                 temp = temp.getNext();
             }
         } else {
@@ -335,10 +412,12 @@ public class ListDE {
 
     //------------CODIGO 7 METODO QUE ME PERMITA DECIRLE A UNA MASCOTA DETERMINADO QUE ADELANTE  UN NUMERO DE POSICIONES DADAS---------
     public void winPetPosition(String id, int position) throws ListDEException {
+        // Verificar si la posición es negativa
         if (position < 0) {
             throw new ListDEException("La posición debe ser un número positivo");
         }
 
+        // Verificar si la lista no está vacía
         if (headDE != null) {
             NodeDE temp = headDE;
             int counter = 0;
@@ -349,71 +428,83 @@ public class ListDE {
                 counter++;
             }
 
+            // Verificar si se encontró el nodo con el ID especificado
             if (temp != null) {
-                int newPosition = counter - position;  // Restar la posición en lugar de sumarla
-
-                if (newPosition < 0) {
-                    throw new ListDEException("La posición especificada está fuera de los límites de la lista");
-                }
-
                 Pet listCopy = temp.getData();
                 deleteById(temp.getData().getId());
 
-                // Insertar el nodo en la nueva posición
-                if (newPosition > 0) {
-                    addByPosition(listCopy, newPosition);
-                } else {
-                    addToStartPet(listCopy);
-                }
+                // Insertar el nodo al comienzo de la lista
+                addByPosition(listCopy, 1);
             }
         }
     }
 
     public void addToStartPet(@NotNull(message = "El objeto pet no puede ser nulo")Pet pet) throws ListDEException {
+        //CLASE PET ES IGUAL A NULO
         if (pet == null) {
             throw new ListDEException("El objeto pet no puede ser nulo");
         }
-
+        //AÑADIENDO EL NODO
         NodeDE nodeDE = new NodeDE(pet);
+        //CABEZA ES DIFERENTE DE NULO
         if (headDE != null) {
+            //LA CABEZA DEL ANTERIOR SERIA EL NODO
             headDE.setPrevious(nodeDE);
+            //EL NODO EL SIGUINETE SERIA LA CABEZA
             nodeDE.setNext(headDE);
         }
+        //CABEZA ES IGUAL AL NODO
         headDE = nodeDE;
         size++;
     }
 //------------------------AÑADIR EN POSICION---------------------
+
     public void addByPosition(Pet pet, int position) throws ListDEException {
-        if (position < 0 || position > size) {
-            throw new ListDEException("Posicion invalida: " + position);
+        if (position < 1 || position > size + 1) {
+            // Si la posición es inválida, lanzar una excepción
+            throw new ListDEException("La posición no es válida");
         }
 
+        if (position == 1) {
+            // Si la posición es 1, agregar al inicio de la lista
+            addToStart(pet);
+        } else if (position == size + 1) {
+            // Si la posición es la siguiente al final de la lista, agregar al final
+            addToEnd(pet);
+        } else {
+            NodeDE temp = headDE;
+            int count = 1;
+
+            // Recorrer la lista hasta la posición deseada o hasta el final de la lista
+            while (count < position && temp.getNext() != headDE) {
+                temp = temp.getNext();
+                count++;
+            }
+
+            // Si se llega a la posición deseada
+            NodeDE newNode = new NodeDE(pet);
+            newNode.setNext(temp.getNext());
+            newNode.setPrevious(temp);
+            temp.getNext().setPrevious(newNode);
+            temp.setNext(newNode);
+            size++;
+        }
+    }
+    public void addToEnd(Pet pet) {
         NodeDE newNode = new NodeDE(pet);
 
-        if (position == 0) {
-            newNode.setNext(headDE);
-            if (headDE != null) {
-                headDE.setPrevious(newNode);
-            }
+        if (headDE == null) {
             headDE = newNode;
         } else {
-            NodeDE current = headDE;
-            int currentPosition = 0;
-
-            while (currentPosition < position - 1) {
-                current = current.getNext();
-                currentPosition++;
+            NodeDE temp = headDE;
+            while (temp.getNext() != null) {
+                temp = temp.getNext();
             }
-
-            newNode.setNext(current.getNext());
-            if (current.getNext() != null) {
-                current.getNext().setPrevious(newNode);
-            }
-            current.setNext(newNode);
-            newNode.setPrevious(current);
+            temp.setNext(newNode);
+            newNode.setPrevious(temp);
         }
 
-        size++; // Incrementar el tamaño solo si la inserción se realiza correctamente
+        size++;
     }
 
 
@@ -421,24 +512,35 @@ public class ListDE {
 
 
     public void deleteById(@NotNull String id) throws ListDEException {
+        //SI EL ID ES NULO
         if (id == null) {
             throw new ListDEException("El identificador del dueño no puede ser nulo");
         }
-
+        //NODO TEMPORAL SERIA LA CABEZA
         NodeDE temp = headDE;
+        //EL NODO TEMPORAL ES DIFERENTE DE NULO
         while (temp != null) {
+            //COMPARAR LA IDENTIFICACION DE EL NODO TEMPORAL
             if (temp.getData().getId().equals(id)) {
+                //EL NODO PREVIO SERIA EL PREVIO DE EL NODO TEMPORAL
                 NodeDE prev = temp.getPrevious();
+                //EL NODO SIGUIENTE SERIA EL SIGUINETE DE EL NODO TEMPORAL
                 NodeDE next = temp.getNext();
+                //SI EL NODO PREV ES IGUAL A NULO
                 if (prev == null) {
+                    //CABEZA IGUAL AL NODO SIGUINETE
                     headDE = next;
                 } else {
+                    //NODO PREV SIGUINETE SERIA EL NODO SIGUINETE
                     prev.setNext(next);
                 }
+                //EL NODO SIGUINETE ES DIFERENTE DE NULO
                 if (next != null) {
+                    //EL NODO SIGUINETE QUE EL ANTERIOR O EL PREVIO SEA EL NODO ANTERIOR
                     next.setPrevious(prev);
                 }
             }
+            //EL NODO TEMPORAL SERIA EL SIGUINETE DEL NODO TEMPORAL
             temp = temp.getNext();
         }
     }
@@ -488,16 +590,20 @@ public class ListDE {
         if (startAge < 0 || finishAge < 0) {
             throw new ListDEException("El informe de rangos no puede ser negativo");
         }
-
+        //NODO TEMPORAL ES IGUAL AL NODO
         NodeDE temp = headDE;
         int counter = 0;
-
+        //EL NODO TEMPORAL ES DIFERENTE DE NULO
         while (temp != null) {
+            //LOS DATOS DE EL NODO TEMPORAL ES MAYOR QUE LA EDAD AL COMIENZO O LA OTRA PARTE CONTRARIA
             if (temp.getData().getAge() >= startAge && temp.getData().getAge() <= finishAge) {
+                //SI SE CUMPLE CONTADOR SE SUMA EN 1
                 counter++;
             }
+            //NODO TEMPORAL ES IGUAL A EL SIGUIENTE DEL NODO
             temp = temp.getNext();
         }
+        //RETORNE CONTADOR
 
         return counter;
     }
@@ -507,28 +613,45 @@ public class ListDE {
 
     public void sendPetToTheEndByLetter(@NotNull Character letter) throws ListDEException {
         try {
+            // Verificar si la lista no está vacía
             if (this.headDE != null) {
+                // Crear una lista copia para almacenar los elementos
                 ListDE listCopy = new ListDE();
+
+                // Nodo temporal para recorrer la lista original
                 NodeDE temp = this.headDE;
+
+                // Convertir la letra recibida a mayúscula
                 char firstChar = Character.toUpperCase(letter);
 
+                // Recorrer la lista original
                 while (temp != null) {
+                    // Obtener la primera letra del nombre del animal
                     char firstLetter = temp.getData().getName().charAt(0);
+
+                    // Comparar la primera letra con la letra recibida
                     if (Character.toUpperCase(firstLetter) != firstChar) {
+                        // Si no coincide, agregar el elemento al principio de la lista copia
                         listCopy.addToStartPet(temp.getData());
                     } else {
+                        // Si coincide, agregar el elemento al final de la lista copia
                         listCopy.add(temp.getData());
                     }
                     temp = temp.getNext();
                 }
+
+                // Actualizar la cabeza de la lista original con la cabeza de la lista copia
                 this.headDE = listCopy.getHeadDE();
             } else {
+                // Si la lista está vacía, lanzar una excepción
                 throw new ListDEException("La lista no puede estar vacía");
             }
         } catch (NullPointerException ex) {
+            // Si el argumento 'letter' es nulo, lanzar una excepción
             throw new ListDEException("El argumento letter no puede ser nulo");
         }
     }
+
 
     /*
     Eliminar por Identificacion
@@ -571,7 +694,7 @@ public class ListDE {
                    temp = temp.getNext();
                }
            } catch (Exception e) {
-               throw new ListDEException("Error occurred while removing node: " + e.getMessage());
+               throw new ListDEException("eror " + e.getMessage());
            }
 
            return null;

@@ -295,14 +295,14 @@ public class ListSEController {
     public ResponseEntity<ResponseDTO> addByPosition(@RequestBody KidDTO kidDTO, @PathVariable int position) {
         try {
             Location location = locationService.getLocationsByCode(kidDTO.getCodeLocation());
-            if (location == null){
+            if (location == null) {
                 return new ResponseEntity<>(new ResponseDTO(404, "La ubicación no existe", null), HttpStatus.OK);
             }
-            Kid kid = new Kid(kidDTO.getIdentification(),kidDTO.getName(), kidDTO.getAge(), kidDTO.getGender(),location);
-            listSEService.getKids().addKidsByPosition(kid,position);
-            return new ResponseEntity<>(new ResponseDTO(200, "El niño fue añadida en la posición solicitada", null), HttpStatus.OK);
+            Kid kid = new Kid(kidDTO.getIdentification(), kidDTO.getName(), kidDTO.getAge(), kidDTO.getGender(), location);
+            listSEService.getKids().addInPosition(position, kid);
+            return new ResponseEntity<>(new ResponseDTO(200, "El niño fue añadido en la posición solicitada", null), HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(new ResponseDTO(500, "Se produjo un error al realizar la operacion", null), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(new ResponseDTO(500, "Se produjo un error al realizar la operación", null), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -347,7 +347,7 @@ public class ListSEController {
                     int quantity = listSEService.getKids().getRangeByAge(i.getFrom(), i.getTo());
                     kidsRangeList.add(new RangeDTOKids(i, quantity));
                 }
-                return new ResponseEntity<>(new ResponseDTO(200, "el rango de los niños se obtubieron: " + kidsRangeList, null), HttpStatus.OK);
+                return new ResponseEntity<>(new ResponseDTO(200,  kidsRangeList, null), HttpStatus.OK);
 
             } else {
                 return new ResponseEntity<>(new ResponseDTO(404, "No se puede realizar la acción", null), HttpStatus.NOT_FOUND);
