@@ -159,44 +159,50 @@ public class ListDECircular {
     EN 1 SI EL NOTO TEMPORAL SIGUIENTE NO ES NULO SE CREA UN NODO NEW NODE CON EL OBJETO PET COMO DATO,DESPUES COMIENZO A
     MIRAR QUE EL SIGUIENTE SE CAMBIA AL NODO TEMPORAL PARA ESTABLECER EL NODO ANTERIOR DE NUEVO NODO,UNA VEZ QUE SE GA LO ANTERIOR
     ENTONCES QUE EL NODO TEMPORAL SIGUIENTE QUE AGARRE A NUEVO NODO DE LO CONTRARIO SE REALIZA LA EXCEPTION.
+
      */
+
     public void addByPosition(Pet pet, int position) throws ListDEEExceptionCircular {
-        if (position == 1) {
-            addFirst(pet);
-        } else if (position > 1 && position <= size + 1) {
-            if (position == 20) {
-                addFirst(pet);
-            } else {
-                NodeDE temp = headDEcircular;
-                int count = 1;
-
-                while (count < position && temp.getNext() != headDEcircular) {
-                    temp = temp.getNext();
-                    count++;
-                }
-
-                NodeDE newNode = new NodeDE(pet);
-                newNode.setNext(temp);
-                newNode.setPrevious(temp.getPrevious());
-                if (temp.getPrevious() != null) {
-                    temp.getPrevious().setNext(newNode);
-                }
-                temp.setPrevious(newNode);
-
-                if (count == position) {
-                    // Si se llega a la posición deseada
-                    if (newNode.getPrevious() == headDEcircular) {
-                        headDEcircular = newNode;
-                    }
-                }
-
-                size++;
-            }
-        } else {
-            // Aquí puedes manejar el caso donde la posición es mayor que el tamaño de la lista
-            // Puede ser un error, una excepción, o cualquier acción que consideres apropiada
+        if (position <= 0 || position > size + 1) {
+            position = size + 1;
         }
+
+        NodeDE newNode = new NodeDE(pet);
+
+        if (headDEcircular == null) {
+            // La lista está vacía
+            headDEcircular = newNode;
+            newNode.setNext(newNode);
+            newNode.setPrevious(newNode);
+        } else {
+            // La lista no está vacía
+            NodeDE temp = headDEcircular;
+            int count = 1;
+
+            while (count < position - 1 && temp.getNext() != headDEcircular) {
+                temp = temp.getNext();
+                count++;
+            }
+
+            newNode.setNext(temp.getNext());
+            newNode.setPrevious(temp);
+            temp.getNext().setPrevious(newNode);
+            temp.setNext(newNode);
+
+            if (position == 1) {
+                headDEcircular = newNode;
+            }
+        }
+
+        size++;
     }
+
+
+
+
+
+
+
 
 
 

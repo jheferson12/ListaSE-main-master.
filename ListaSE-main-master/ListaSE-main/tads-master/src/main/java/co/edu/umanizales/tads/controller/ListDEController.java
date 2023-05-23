@@ -81,7 +81,7 @@ public class ListDEController {
                 }
                 Pet pet = new Pet(petDTO.getName(), petDTO.getAge(), petDTO.getBreed(), petDTO.getGender(), location, petDTO.getId(), false);
                 listDEService.getPets().addByPosition(pet, position);
-                return new ResponseEntity<>(new ResponseDTO(200, "La mascota fue añadida en la posición solicitada", null), HttpStatus.OK);
+                return new ResponseEntity<>(new ResponseDTO(200, "La mascota fue añadida en la posición: "+position, null), HttpStatus.OK);
             } catch (ListDEException e) {
                 return new ResponseEntity<>(new ResponseDTO(400, "Error al añadir la mascota: " + e.getMessage(), null), HttpStatus.BAD_REQUEST);
             } catch (Exception e) {
@@ -260,14 +260,21 @@ public class ListDEController {
     }
 
     //--------------------EJERCICIO DIA 8/05/23--------------------------------
-    @GetMapping(path = "/removenodebyidentificationpet(identification)")
-    public ResponseEntity<ResponseDTO> removeNodeByIdentificationPet(@NotNull String identification) {
+    @GetMapping(path = "/removenodebyidentificationpet/{identification}")
+    public ResponseEntity<ResponseDTO> removeNodeByIdentificationPet(@PathVariable String identification) {
         try {
             listDEService.getPets().removeNodeByIdentificationPet(identification);
-            return new ResponseEntity<>(new ResponseDTO(200,
-                    "Se removió al niño por identificación", null), HttpStatus.OK);
+            return ResponseEntity.ok(new ResponseDTO(200, "Se removió el nodo por identificación", null));
         } catch (ListDEException e) {
-            return new ResponseEntity<>(new ResponseDTO(400, e.getMessage(), null), HttpStatus.BAD_REQUEST);
+            return ResponseEntity.badRequest().body(new ResponseDTO(400, e.getMessage(), null));
         }
     }
+
+
+
+
+
+
+
+
 }
