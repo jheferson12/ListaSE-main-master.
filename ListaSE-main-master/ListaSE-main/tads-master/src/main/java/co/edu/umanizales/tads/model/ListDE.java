@@ -125,7 +125,9 @@ public class ListDE {
             throw new ListDEException("Se ha producido un error al invertir la lista: " + e.getMessage());
         }
     }
-
+/*
+EL METODO DEVUELVE UNA LISTA DOBLEMENTE ENLAZADAS Y DEVUELVE UNA LISTA CON LOS OBJETOS PET
+ */
     public List<Pet> print() {
         //LISTA DE LA CLASE
         List<Pet> pets = new ArrayList<>();
@@ -145,14 +147,17 @@ public class ListDE {
     }
 
     public void insertFront(Pet data) {
+        //CREO UN NODO LLAMADO NUEVO NODO CON CLASE DATA
         NodeDE newNode = new NodeDE(data);
         if (headDE == null) {
             headDE = newNode;
         } else {
+            //ENLACES CON EL NUEVO NODO Y LA CABEZA
             newNode.setNext(headDE);
             headDE.setPrevious(newNode);
             headDE = newNode;
         }
+        //TAMAÑO AÑADE EN 1
         size++;
     }
 
@@ -457,46 +462,58 @@ public class ListDE {
 
 //ESTE CODIGO AÑADE MAS DE UNA POSICION POR EJEMPLO 40
     public void addByPosition(Pet pet, int position) throws ListDEException {
+        //SI LA POSICION ES MENOR QUE CERO O LA POSICION ES IGUAL A LA TALLA +1 POSICION IGUAL A EL TAMAÑO
         if (position <= 0 || position > size + 1) {
             position = size + 1;
         }
-
+        //NODO TEMPORAL SEA IGUAL A LA CABEZA Y CONTADOR INICIALIZO EN 1
         NodeDE temp = headDE;
         int count = 1;
-
+        //SI EL CONTADOR ES MENOR QUE LA POSICION -1Y LA MANO DERECHA DEL NODO ES DIFERENTE QUE LA CABEZA
         while (count < position - 1 && temp.getNext() != headDE) {
+            //NODO TEMPORAL ES IGUAL A EL NODO DE LA MANO DERECHA CONTADOR AUMENTA EN 1
             temp = temp.getNext();
             count++;
         }
-
+        //CREA UN NUEVO NODO CON CLASE PET
         NodeDE newNode = new NodeDE(pet);
+        //LA MANO DERECHA DEL NUEVO NODO SERIA LA MANO DERECHA DEL NUEVO NODO
         newNode.setNext(temp.getNext());
+        //LA MANO IZQUIERDA DEL NUEVO NODO SERA EL NODO TEMPORAL
         newNode.setPrevious(temp);
-
+        //SI LA MANO DERECHA DEL NODO TEMPORAL ES DIFERENTE DE NULO
         if (temp.getNext() != null) {
+            //EL NODO TEMPORAL CON SU PREVIO AGARRE AL NUEVO NODO O BUENO NEW NODE
             temp.getNext().setPrevious(newNode);
         }
-
+        //NODO TEMPORAL LA MANO DERECHA DEL NODO CAMBIARIA EL NUEVO NODO
         temp.setNext(newNode);
-
+        //EL TAMAÑO SE AÑADE EN 1
         size++;
     }
 
 
     public void addToEnd(Pet pet) {
+        //SE CREA EL NUEVO NODO CON UNA CLASE PET
         NodeDE newNode = new NodeDE(pet);
-
+        //SI LA CABEZA ESTA VACIA
         if (headDE == null) {
+            //CABEZA ES NUEVO NODO
             headDE = newNode;
         } else {
+            //EL NODO TEMPORAL SERIA LA CABEZA
             NodeDE temp = headDE;
+            //LA MANO DERECHA DEL NODO TEMPORAL ES DIFERENTE DE NULO
             while (temp.getNext() != null) {
+                //NODO TEMPORAL SERA IGUAL AL LA MANO DERECHA DEL NODO
                 temp = temp.getNext();
             }
+            //LA MANO DERECHA DEL NODO TEMPORAL ES IGUAL AL NUEVO NODO
             temp.setNext(newNode);
+            //LA MANO IZQUIERDA DEL NUEVO NODO SERIA TEMPORAL
             newNode.setPrevious(temp);
         }
-
+        //TAMAÑO AUMENTA EN 1
         size++;
     }
 
@@ -544,7 +561,7 @@ public class ListDE {
         }
         //CREAMOS UN AYUDANTE Y UN CONTADOR PARA QUE LO PONGA EN LA POSCICION INDICADA
         NodeDE temp = headDE;
-        int count = 0;
+        int count = 1;
 
         // Buscar la mascota con el ID especificado
         while (temp != null && !temp.getData().getId().equals(id)) {
@@ -576,6 +593,7 @@ public class ListDE {
         // Obtener la mascota eliminada y agregarla en la nueva posición
         addByPosition(temp.getData(), newPosition);
     }
+
 
     //-------------------CODIGO 9 OBTENER UN INFORME DE PERROS POR RANGO DE EDADES--------------------
 
@@ -633,7 +651,7 @@ public class ListDE {
                     temp = temp.getNext();
                 }
 
-                // Actualizar la cabeza de la lista original con la cabeza de la lista copia
+                // Actualizar la cabeza de la lista original con la cabeza de la lista copia,instancia
                 this.headDE = listCopy.getHeadDE();
             } else {
                 // Si la lista está vacía, lanzar una excepción

@@ -10,4 +10,7 @@ public class Location {
     private String code;
     private String name;
 
+
+
+
 }

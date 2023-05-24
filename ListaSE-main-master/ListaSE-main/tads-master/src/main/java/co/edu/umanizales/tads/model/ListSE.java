@@ -365,7 +365,7 @@ public class ListSE {
         } catch (ListSEException e) {
             throw new ListSEException("No se puede identificar la cantidad de niños " + e.getMessage());
         }
-    }
+    }//preguntr si estan bañados
 
     private int count(String code) throws ListSEException {
         //VARIABLE CONT INICIA EN 0

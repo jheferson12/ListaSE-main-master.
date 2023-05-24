@@ -1,7 +1,10 @@
 package co.edu.umanizales.tads.controller;
 import co.edu.umanizales.tads.controller.dto.PetDTO;
+import co.edu.umanizales.tads.controller.dto.PetsByLocationDTO;
+import co.edu.umanizales.tads.controller.dto.ReportPetsLocationBathedPetsDTO;
 import co.edu.umanizales.tads.controller.dto.ResponseDTO;
 import co.edu.umanizales.tads.exception.ListDEEExceptionCircular;
+import co.edu.umanizales.tads.model.ListDECircular;
 import co.edu.umanizales.tads.model.Location;
 import co.edu.umanizales.tads.model.Pet;
 import co.edu.umanizales.tads.service.ListCircularService;
@@ -10,6 +13,9 @@ import org.springframework.beans.factory.annotation.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 @RestController
@@ -136,13 +142,36 @@ public class ListDECircularController {
         return new ResponseEntity<>(new ResponseDTO(200
                 ,j,null),HttpStatus.OK);
     }
+    @GetMapping(path = "/petsbylocation")
+    public ResponseEntity<ResponseDTO> getCountPetsByLocationCode() {
+        List<PetsByLocationDTO> petsByLocationDTOList = new ArrayList<>();
+        try {
+            // Obtener la lista doblemente enlazada circular de mascotas
+            ListDECircular petsList = listCircularService.getPetsde();
 
+            if (petsList != null) {
+                // Obtener la lista de ubicaciones
+                List<Location> locations = locationService.getLocations();
 
+                for (Location loc : locations) {
+                    int count = petsList.getCountPetsByLocationCode(loc.getCode());
+                    if (count > 0) {
+                        petsByLocationDTOList.add(new PetsByLocationDTO(loc, count));
+                    }
+                }
+            }
 
+            return new ResponseEntity<>(new ResponseDTO(200, petsByLocationDTOList, null), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    @GetMapping(path = "/reportspets")
+    public ResponseEntity<ResponseDTO> getReportsPetsLocationByBathedPets() {
+            ReportPetsLocationBathedPetsDTO report = new ReportPetsLocationBathedPetsDTO(
+                    locationService.getLocationsByCodeSize(8));
+            listCircularService.getPetsde().getReportPetsByLocationByBathedPets(report);
+            return ResponseEntity.ok(new ResponseDTO(200, report, null));
 
-
-
-
-
-
+    }
 }

@@ -1,4 +1,5 @@
 package co.edu.umanizales.tads.model;
+import co.edu.umanizales.tads.controller.dto.ReportPetsLocationBathedPetsDTO;
 import co.edu.umanizales.tads.exception.ListDEEExceptionCircular;
 import lombok.*;
 
@@ -17,7 +18,6 @@ public class ListDECircular {
     private NodeDE previouslast;
     private NodeDE headDEcircular;
     private int size;
-    private NodeDE newNode;
 
     public ListDECircular() {
         nextfirst = null;
@@ -45,8 +45,7 @@ public class ListDECircular {
            CON LA CABEZA QUE TAMBIEN SEA EL NODO CABEZA Y DESPUES DE ELLO PUES SE COMIENZA A AUMENTAR EL TAMAÑO
      */
     public void add(Pet pet) throws ListDEEExceptionCircular {
-
-            if (headDEcircular != null) {
+             if (headDEcircular != null) {
                 NodeDE temp = headDEcircular;
                 do {
                     if (temp.getData().getId().equals(pet.getId())) {
@@ -163,10 +162,9 @@ public class ListDECircular {
      */
 
     public void addByPosition(Pet pet, int position) throws ListDEEExceptionCircular {
-        if (position <= 0 || position > size + 1) {
-            position = size + 1;
+        if (position <= 0) {
+            throw new ListDEEExceptionCircular("La posicion no puede ser igual o menor a cero");
         }
-
         NodeDE newNode = new NodeDE(pet);
 
         if (headDEcircular == null) {
@@ -175,35 +173,31 @@ public class ListDECircular {
             newNode.setNext(newNode);
             newNode.setPrevious(newNode);
         } else {
-            // La lista no está vacía
-            NodeDE temp = headDEcircular;
-            int count = 1;
+            if (position > size) {
+                addFinal(pet);
+            } else {
+                // La lista no está vacía
+                NodeDE temp = headDEcircular;
+                int count = 1;
 
-            while (count < position - 1 && temp.getNext() != headDEcircular) {
-                temp = temp.getNext();
-                count++;
-            }
+                while (count < position - 1 && temp.getNext() != headDEcircular) {
+                    temp = temp.getNext();
+                    count++;
+                }
 
-            newNode.setNext(temp.getNext());
-            newNode.setPrevious(temp);
-            temp.getNext().setPrevious(newNode);
-            temp.setNext(newNode);
+                newNode.setNext(temp.getNext());
+                newNode.setPrevious(temp);
+                temp.getNext().setPrevious(newNode);
+                temp.setNext(newNode);
 
-            if (position == 1) {
-                headDEcircular = newNode;
+                if (position == 1) {
+                    headDEcircular = newNode;
+                    addFirst(pet);
+                }
             }
         }
-
         size++;
     }
-
-
-
-
-
-
-
-
 
 
     //---------------BAÑAR AL PERRO---------------------------
@@ -303,23 +297,95 @@ public class ListDECircular {
 
         return -1; // Si no se encuentra la mascota en la lista
     }
+    /*public int getCountPetsByLocationCode(String code) throws ListDEEExceptionCircular {
+        try {
+            //SI EL COIGO ES IGUAL A NULO O EL CODIGO YA ESTA VACIO
+            if (code == null || code.isEmpty()) {
+                throw new ListDEEExceptionCircular("El codigo que escribio no puede estar vacio tenga cuidado ");
+            }
+            //VARIABLE INICIALIZADA EN 0
+            int count = 0;
+            //INSTANCIA ES DIFERENTE DE NULO
+            if (this.headDEcircular != null) {
+                //EL NODO ACTUAL ES LA INSTANCIA
+                NodeDE current = this.headDEcircular;
+                //EL NODO ACTUAL ES DIFERENTE DE NULO
+                while (current != null) {
+                    //SE COMPARA LA IDENTIFICACION
+                    if (current.getData().getLocation().getCode().equals(code)) {
+                        count++;
+                    }
+                    //NODO ACTUAL SERIA EL SIGUINETE DEL NODO ACTUAL
+                    current = current.getNext();
+                }
+            }
+            //RETORNE EL CONTADOR
+            return count;
+        } catch (ListDEEExceptionCircular e) {
+            throw new ListDEEExceptionCircular("Error: " + e.getMessage());
 
+        }
+    }
 
+     */
 
+    public int getCountPetsByLocationCode(String code) throws ListDEEExceptionCircular {
+        try {
+            // Verificar si el código es nulo o está vacío
+            if (code == null ) {
+                throw new ListDEEExceptionCircular("El código no puede estar vacío");
+            }
 
+            // Variables para contar la cantidad de perros bañados y no bañados
+            int countBathed = 0;
+            int countNotBathed = 0;
 
+            // Verificar si la lista está vacía
+            if (this.headDEcircular != null) {
+                // Obtener el primer nodo de la lista circular
+                NodeDE current = this.headDEcircular;
 
+                // Iterar sobre la lista circular hasta llegar al nodo inicial nuevamente
+                do {
+                    // Comparar el código de ubicación del perro con el código dado
+                    if (current.getData().getLocation().getCode().equals(code)) {
+                        // Verificar si el perro está bañado
+                        if (current.getData().isBathdog()) {
+                            countBathed++;
+                        } else {
+                            countNotBathed++;
+                        }
+                    }
 
+                    // Avanzar al siguiente nodo en la lista circular
+                    current = current.getNext();
+                } while (current != this.headDEcircular);
+            }
 
+            // Retornar la cantidad total de perros encontrados
+            return countBathed + countNotBathed;
+        } catch (ListDEEExceptionCircular e) {
+            throw new ListDEEExceptionCircular("Error: " + e.getMessage());
+        }
+    }
+    public void getReportPetsByLocationByBathedPets(ReportPetsLocationBathedPetsDTO report) {
+        try {
+            if (headDEcircular != null) {
+                NodeDE temp = headDEcircular;
 
-
-
-
-
-
-
-
-
+                do {
+                    if (temp.getData().isBathdog()) {
+                        report.updateQuantityPet(temp.getData().getLocation().getName(), true);
+                    } else {
+                        report.updateQuantityPet(temp.getData().getLocation().getName(), false);
+                    }
+                    temp = temp.getNext();
+                } while (temp != headDEcircular);
+            }
+        } catch (Exception e) {
+            System.out.println("Se ha producido un error al generar el informe: " + e.getMessage());
+        }
+    }
 
 
 

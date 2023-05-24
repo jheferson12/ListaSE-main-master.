@@ -25,6 +25,5 @@ public class Pet {
     private String id;
     private boolean bathdog;
 
-
 }
 
