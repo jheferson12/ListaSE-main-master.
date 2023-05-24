@@ -167,7 +167,7 @@ public class ListDECircularController {
         }
     }
     @GetMapping(path = "/reportspets")
-    public ResponseEntity<ResponseDTO> getReportsPetsLocationByBathedPets() {
+    public ResponseEntity<ResponseDTO> getReportsPetsLocationByBathedPets()throws ListDEEExceptionCircular {
             ReportPetsLocationBathedPetsDTO report = new ReportPetsLocationBathedPetsDTO(
                     locationService.getLocationsByCodeSize(8));
             listCircularService.getPetsde().getReportPetsByLocationByBathedPets(report);

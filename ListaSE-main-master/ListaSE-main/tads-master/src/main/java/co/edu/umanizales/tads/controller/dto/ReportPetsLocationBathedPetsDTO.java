@@ -9,6 +9,8 @@ import java.util.List;
 public class ReportPetsLocationBathedPetsDTO {
     private List<LocationBathedQuantityPetDTO> locationBathedQuantityPetDTOS;
 
+    private int total;
+
     public ReportPetsLocationBathedPetsDTO(List<Location> cities) {
         locationBathedQuantityPetDTOS = new ArrayList<>();
         for(Location location: cities){
@@ -18,21 +20,22 @@ public class ReportPetsLocationBathedPetsDTO {
     }
 
     // método actualizar
-    public void updateQuantityPet(String city,boolean bathdog){
-        for(LocationBathedQuantityPetDTO loc:locationBathedQuantityPetDTOS){
-            if(loc.getCity().equals(city)){
-                for(BathedPetsQuantityDTO bathedPetsQuantityDTO: loc.getBatheddogs()){
-                    if(bathedPetsQuantityDTO.getBathdog() == true){
-                        bathedPetsQuantityDTO.setQuantity(bathedPetsQuantityDTO.getQuantity()+1);
-                        loc.setTotal(loc.getTotal()+1);
+    public void updateQuantityPet(String city, boolean bathdog) {
+        for (LocationBathedQuantityPetDTO loc : locationBathedQuantityPetDTOS) {
+            if (loc.getCity().equals(city)) {
+                for (BathedPetsQuantityDTO bathedPetsQuantityDTO : loc.getBatheddogs()) {
+                    if (bathedPetsQuantityDTO.getBathdog() == bathdog) {
+                        bathedPetsQuantityDTO.setQuantity(bathedPetsQuantityDTO.getQuantity() + 1);
+                        loc.setTotal(loc.getTotal() + 1);
                         return;
-                    }else {
-                            bathedPetsQuantityDTO.setQuantity(bathedPetsQuantityDTO.getQuantity()+1);
-                            loc.setTotal(loc.getTotal()+1);
-                            return;
                     }
                 }
             }
         }
     }
+
+
+
+
+
 }

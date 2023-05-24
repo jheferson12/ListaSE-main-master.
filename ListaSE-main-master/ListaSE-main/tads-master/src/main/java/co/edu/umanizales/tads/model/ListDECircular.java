@@ -368,25 +368,30 @@ public class ListDECircular {
             throw new ListDEEExceptionCircular("Error: " + e.getMessage());
         }
     }
-    public void getReportPetsByLocationByBathedPets(ReportPetsLocationBathedPetsDTO report) {
-        try {
-            if (headDEcircular != null) {
-                NodeDE temp = headDEcircular;
-
-                do {
-                    if (temp.getData().isBathdog()) {
-                        report.updateQuantityPet(temp.getData().getLocation().getName(), true);
-                    } else {
-                        report.updateQuantityPet(temp.getData().getLocation().getName(), false);
-                    }
-                    temp = temp.getNext();
-                } while (temp != headDEcircular);
-            }
-        } catch (Exception e) {
-            System.out.println("Se ha producido un error al generar el informe: " + e.getMessage());
+    //-----------------------CODIGO HECHO EL DIA 23/05/23   -----------------------------------------
+    /*
+    EN ESTE METODO COMIENZO A HACER UN DTO LLAMADO "ReportPetsLocationBathedPetsDTO" QUE SE LLAMA REPORTS COMO VEMOS EN EL PARAMETRO
+    TAMBIEN COMENZE A PENSAR SOBRE OTRO DTO PERO TENIENDO EN CUENTA QUE ESTO NO RETORNA NADA ENTONCES DISEÑE UN METODO LLAMADO
+    "updateQuantityPet" QUE COMO LO DICE ES VER LA CANTIDAD ACTUALIZADA DE LA LISTA. ESO SI ESTA CREADO EN EL MISMO DTO QUE DIJE ANTERIORMENTE
+    .UNA VEZ QUE PENSE EN HACER LOS DTOS COMENZE A HACER UN METODO QUE TENGA ALGUNAS CONDICIONES TENIENDO EN CUENTA SI ESTA BAÑADO O NO
+    ENTONCES COMENZE A PREGUNTAR SI CABEZA ES DIFERENTE DE NULO DE AHI TENA ALTERNATIVAS COMO TER UN WHILE O UN DO-WHILE
+    PERO ME GUSTO EL DO-WHILE POR EL TEMA DE QUE SE VE MAS ESTRUCTURADO COMO DIJE ANTERIOEMNTE ESNTONCES DISEÑE LOS CONDICIONALES
+    SI ESTA BAÑADO O NO Y ESA PARTE BATHDOG ES BOOLEANO,RECORDEMOS QUE SE HACE ESE PROCESO MIENTRAS EL NODO AYUDANTE SEA DIFERENTE DE NULO
+    Y DE AHI SE PASA AL SIGUIENTE O BUENO PASA A SER EL MISMO VALOR PERO EL NODO AYUDANTE TOMARIA LA MONO DERECHA.
+     */
+    public void getReportPetsByLocationByBathedPets(ReportPetsLocationBathedPetsDTO reports) {
+        if (this.headDEcircular != null) {
+            NodeDE temp = this.headDEcircular;
+            do {
+                if (temp.getData().isBathdog()) {
+                    reports.updateQuantityPet(temp.getData().getLocation().getName(), true);
+                } else {
+                    reports.updateQuantityPet(temp.getData().getLocation().getName(), false);
+                }
+                temp = temp.getNext();
+            } while (temp != this.headDEcircular);
         }
     }
-
 
 
 }

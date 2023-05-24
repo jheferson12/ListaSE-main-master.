@@ -10,6 +10,7 @@ public class LocationBathedQuantityPetDTO {
     private List<BathedPetsQuantityDTO> batheddogs;
     private int total;
 
+
     public LocationBathedQuantityPetDTO(String city) {
         this.city = city;
         this.total = 0;
@@ -17,4 +18,6 @@ public class LocationBathedQuantityPetDTO {
         this.batheddogs.add(new BathedPetsQuantityDTO(true, 0));
         this.batheddogs.add(new BathedPetsQuantityDTO(false, 0));
     }
+
+
 }
